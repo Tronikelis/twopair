@@ -1,18 +1,23 @@
 {
     "name": "extension",
+    "type": "module",
     "scripts": {
-        "dev": "vite",
-        "build": "vite build"
+        "dev": "pnpm build && web-ext run --verbose",
+        "build": "pnpm popup:build && pnpm content_script:build",
+        "popup:build": "vite build -c ./vite.config.popup.ts",
+        "content_script:build": "vite build -c ./vite.config.content_script.ts"
     },
     "dependencies": {
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "web-ext": "7.6.2"
+        "webextension-polyfill": "0.10.0"
     },
     "devDependencies": {
         "@types/react": "18.2.14",
         "@types/react-dom": "18.2.6",
+        "@types/webextension-polyfill": "^0.10.0",
         "@vitejs/plugin-react": "4.0.1",
-        "vite": "4.3.9"
+        "vite": "4.3.9",
+        "web-ext": "7.6.2"
     }
 }

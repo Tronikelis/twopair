@@ -8,6 +8,16 @@
         "default_popup": "./popup/dist/index.html"
     },
 
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["./content_script/dist/index.js"],
+            "run_at": "document_idle"
+        }
+    ],
+
+    "permissions": [],
+
     "browser_specific_settings": {
         "gecko": {
             "id": "contactdonatas@gmail.com",
