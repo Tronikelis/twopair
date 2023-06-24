@@ -1,0 +1,11 @@
+{
+    "name": "watch-anything-together",
+    "version": "0.1.0",
+    "scripts": {
+        "dev": "cd extension && pnpm dev",
+        "extension:build": "cd extension && pnpm build"
+    },
+    "devDependencies": {
+        "typescript": "5.1.3"
+    }
+}
