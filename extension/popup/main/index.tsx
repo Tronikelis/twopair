@@ -9,7 +9,7 @@ function wait(ms = 1000): Promise<void> {
     });
 }
 
-export default function App() {
+export default function Main() {
     const [error, setError] = useState("");
 
     const [videos, setVideos] = useState<GetVideoElementsRes | undefined>(
