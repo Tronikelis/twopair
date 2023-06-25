@@ -2,12 +2,13 @@ import browser from "webextension-polyfill";
 
 export type MessageType = "GET_VIDEO_ELEMENTS" | "START_SYNC_VIDEO";
 
-export type GetVideoElementsData = {
-    foo: "bar";
-};
+export type GetVideoElementsData = undefined;
 
 export type GetVideoElementsRes = {
-    foo: "bar";
+    videos: {
+        id: string;
+        src: string;
+    }[];
 };
 
 export type StartSyncVideoData = {
