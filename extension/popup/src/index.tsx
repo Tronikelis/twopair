@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import browser from "webextension-polyfill";
-import { GetVideoElementsRes, sendToContent } from "../../utils/comms";
-import tryCatch from "../../utils/tryCatch";
+import { GetVideoElementsRes, sendToContent } from "~/utils/comms";
+import tryCatch from "~/utils/tryCatch";
+import { Stack, Text } from "@mantine/core";
 
 function wait(ms = 1000): Promise<void> {
     return new Promise(res => {
@@ -35,13 +35,15 @@ export default function Main() {
     }, []);
 
     return (
-        <div>
-            <p>{videos?.videos.length} videos found on this website</p>
+        <Stack p="md">
+            <Text>{videos?.videos.length} videos found on this website</Text>
             {videos?.videos && (
-                <pre>{JSON.stringify(videos.videos, null, 4)}</pre>
+                <Text component="pre">
+                    {JSON.stringify(videos.videos, null, 4)}
+                </Text>
             )}
 
-            {error && <p>Error {error}</p>}
-        </div>
+            {error && <Text component="pre">Error {error}</Text>}
+        </Stack>
     );
 }

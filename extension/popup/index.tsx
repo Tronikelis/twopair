@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Main from "./main";
+import Main from "./src";
+import { MantineProvider } from "@mantine/core";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -8,6 +9,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <React.StrictMode>
-        <Main />
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+            <Main />
+        </MantineProvider>
     </React.StrictMode>
 );

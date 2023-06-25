@@ -1,5 +1,5 @@
 import browser from "webextension-polyfill";
-import { GetVideoElementsRes, listenFromContent } from "../utils/comms";
+import { GetVideoElementsRes, listenFromContent } from "~/utils/comms";
 
 const ATTRIBUTE_ID = "__wat-id";
 
