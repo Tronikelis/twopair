@@ -10,6 +10,7 @@
         "esModuleInterop": true,
 
         "paths": {
+            "~/popup/*": ["./popup/src/*"],
             "~/*": ["./*"]
         }
     }

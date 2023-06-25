@@ -5,6 +5,7 @@ import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import Idx from "./routes/idx";
 import RoomCreate from "./routes/room_create";
 import RoomJoin from "./routes/room_join";
+import Settings from "./routes/settings";
 
 const router = createMemoryRouter([
     {
@@ -18,6 +19,10 @@ const router = createMemoryRouter([
     {
         path: "/room/join",
         element: <RoomJoin />,
+    },
+    {
+        path: "/settings",
+        element: <Settings />,
     },
 ]);
 

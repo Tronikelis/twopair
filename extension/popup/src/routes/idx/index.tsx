@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Button, Group, Stack, Title, Text } from "@mantine/core";
+import { Button, Group, Stack, Title, Text, Box } from "@mantine/core";
 import { Link } from "react-router-dom";
-import useStorage from "~/popup/src/hooks/useStorage";
+import useStorage from "~/popup/hooks/useStorage";
 
 export default function Idx() {
     const [username] = useStorage("username", "");
@@ -29,6 +29,12 @@ export default function Idx() {
                     Join room
                 </Button>
             </Group>
+
+            <Box ml="auto">
+                <Button to="/settings" color="gray" component={Link}>
+                    Settings
+                </Button>
+            </Box>
         </Stack>
     );
 }
