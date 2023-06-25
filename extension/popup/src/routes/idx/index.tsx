@@ -4,8 +4,11 @@ import { Link } from "react-router-dom";
 
 export default function Idx() {
     return (
-        <Stack spacing="xl">
-            <Title order={3}>WAT - Watch Anything Together</Title>
+        <Stack spacing="xl" justify="center" sx={{ flex: 1 }}>
+            <Title order={3} align="center">
+                WAT - Watch Anything Together
+            </Title>
+
             <Group sx={{ justifyContent: "center" }}>
                 <Button to="/room/create" component={Link}>
                     Create room
