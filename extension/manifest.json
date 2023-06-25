@@ -16,7 +16,7 @@
         }
     ],
 
-    "permissions": [],
+    "permissions": ["storage"],
 
     "browser_specific_settings": {
         "gecko": {
