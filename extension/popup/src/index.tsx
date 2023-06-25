@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack } from "@mantine/core";
+import { Stack, MantineProvider } from "@mantine/core";
 
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import Idx from "./routes/idx";
@@ -23,8 +23,10 @@ const router = createMemoryRouter([
 
 export default function Main() {
     return (
-        <Stack p="md" w={16 * 25} h={9 * 25}>
-            <RouterProvider router={router} />
-        </Stack>
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+            <Stack p="md" w={16 * 25} h={9 * 25}>
+                <RouterProvider router={router} />
+            </Stack>
+        </MantineProvider>
     );
 }
