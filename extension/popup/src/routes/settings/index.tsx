@@ -1,5 +1,6 @@
-import { Input, Stack, TextInput, Textarea, Title } from "@mantine/core";
+import { Group, Input, Stack, TextInput, Textarea, Title } from "@mantine/core";
 import React from "react";
+import GoBack from "~/popup/components/GoBack";
 import useStorage from "~/popup/hooks/useStorage";
 
 export default function Settings() {
@@ -7,7 +8,10 @@ export default function Settings() {
 
     return (
         <Stack>
-            <Title order={3}>Settings</Title>
+            <Group>
+                <GoBack />
+                <Title order={3}>Settings</Title>
+            </Group>
 
             <TextInput
                 label="Username"
