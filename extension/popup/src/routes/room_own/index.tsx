@@ -6,12 +6,7 @@ import useStorage from "~/popup/hooks/useStorage";
 import urlbat from "urlbat";
 import { STORAGE_OWN_ROOM_ID } from "~/popup/config/const";
 import browser from "webextension-polyfill";
-
-function genId(): string {
-    const array = new Uint8Array(4);
-    crypto.getRandomValues(array);
-    return array.join("");
-}
+import { nanoid } from "nanoid";
 
 export default function RoomOwn() {
     const navigate = useNavigate();
@@ -19,7 +14,7 @@ export default function RoomOwn() {
     const [ownRoomId] = useStorage(STORAGE_OWN_ROOM_ID, "");
 
     async function onGenerateNew() {
-        const id = genId();
+        const id = nanoid(8);
         const url = urlbat("/room/:id", {
             id,
         });

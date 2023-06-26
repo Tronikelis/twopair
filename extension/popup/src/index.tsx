@@ -1,12 +1,14 @@
 import React from "react";
 import { Stack, MantineProvider } from "@mantine/core";
-
+import browser from "webextension-polyfill";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import Idx from "./routes/idx";
-import RoomCreate from "./routes/room_own";
+import RoomOwn from "./routes/room_own";
 import RoomJoin from "./routes/room_join";
 import Settings from "./routes/settings";
 import RoomId from "./routes/room_@id";
+import { STORAGE_USER_ID } from "./config/const";
+import { nanoid } from "nanoid";
 
 const router = createMemoryRouter([
     {
@@ -15,7 +17,7 @@ const router = createMemoryRouter([
     },
     {
         path: "/room/own",
-        element: <RoomCreate />,
+        element: <RoomOwn />,
     },
     {
         path: "/room/join",
@@ -30,6 +32,15 @@ const router = createMemoryRouter([
         element: <RoomId />,
     },
 ]);
+
+(async () => {
+    const exists = (await browser.storage.local.get(STORAGE_USER_ID))[
+        STORAGE_USER_ID
+    ] as string | undefined;
+
+    if (exists) return;
+    await browser.storage.local.set({ [STORAGE_USER_ID]: nanoid() });
+})();
 
 export default function Main() {
     return (
