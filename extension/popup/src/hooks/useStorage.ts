@@ -15,7 +15,6 @@ export default function useStorage<T>(key: string, def: T) {
             const change = changes[key];
 
             if (!change?.newValue) return;
-            // don't rerender unnecessarily
             if (change.newValue === stateRef.current) return;
 
             setState(change.newValue);
