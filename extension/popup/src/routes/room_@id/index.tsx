@@ -1,4 +1,4 @@
-import { Group, Stack, Text, Title } from "@mantine/core";
+import { Box, Group, Stack, Text, Title } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import browser from "webextension-polyfill";
@@ -13,6 +13,7 @@ import {
     Room,
 } from "backend/src/types/socket.io";
 import useStorage from "~/popup/hooks/useStorage";
+import { GetVideoElementsRes, sendToContent } from "~/utils/comms";
 
 export default function RoomId() {
     const { id } = useParams();
@@ -21,6 +22,7 @@ export default function RoomId() {
     const [username] = useStorage(STORAGE_USERNAME, "unknown");
 
     const [room, setRoom] = useState<Room | undefined>(undefined);
+    const [videos, setVideos] = useState<GetVideoElementsRes["videos"]>([]);
 
     useEffect(() => {
         if (!id || !userId || !username) return;
@@ -44,6 +46,14 @@ export default function RoomId() {
         };
     }, [id, userId]);
 
+    // get videos
+    useEffect(() => {
+        (async () => {
+            const videos = await sendToContent("GET_VIDEO_ELEMENTS", undefined);
+            setVideos(videos.videos);
+        })();
+    }, []);
+
     return (
         <Stack>
             <Group>
@@ -51,7 +61,20 @@ export default function RoomId() {
                 <Title order={3}>Room id: {id}</Title>
             </Group>
 
-            <Text component="pre">{room && JSON.stringify(room, null, 4)}</Text>
+            <Group>
+                <Stack>
+                    {videos && <Text>videos found: {videos.length}</Text>}
+
+                    {room?.playing &&
+                        videos &&
+                        videos.map(x => (
+                            <Box>
+                                <Text>id: {x.id}</Text>
+                                <Text>src: {x.src}</Text>
+                            </Box>
+                        ))}
+                </Stack>
+            </Group>
         </Stack>
     );
 }
