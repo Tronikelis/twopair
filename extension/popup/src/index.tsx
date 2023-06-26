@@ -33,6 +33,7 @@ const router = createMemoryRouter([
     },
 ]);
 
+// set a persistent user id
 (async () => {
     const exists = (await browser.storage.local.get(STORAGE_USER_ID))[
         STORAGE_USER_ID

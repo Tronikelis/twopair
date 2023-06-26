@@ -2,18 +2,20 @@
     "name": "extension",
     "type": "module",
     "scripts": {
-        "dev": "pnpm build && web-ext run --verbose",
+        "dev": "pnpm build && web-ext run --verbose --devtools",
         "build": "pnpm popup:build && pnpm content_script:build",
         "popup:build": "vite build -c ./vite.config.popup.ts",
         "content_script:build": "vite build -c ./vite.config.content_script.ts"
     },
     "dependencies": {
+        "backend": "workspace:*",
         "@emotion/react": "11.11.1",
         "@mantine/core": "6.0.14",
         "@mantine/hooks": "6.0.14",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-router-dom": "6.14.0",
+        "socket.io-client": "4.7.0",
         "urlbat": "1.2.3",
         "webextension-polyfill": "0.10.0"
     },

@@ -1,4 +1,13 @@
 {
     "name": "backend",
-    "dependencies": {}
+    "type": "module",
+    "scripts": {
+        "dev": "tsx --tsconfig ./tsconfig.json ./src/index.ts"
+    },
+    "dependencies": {
+        "socket.io": "4.7.0"
+    },
+    "devDependencies": {
+        "tsx": "3.12.7"
+    }
 }

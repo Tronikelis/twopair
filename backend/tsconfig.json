@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "lib": ["ESNext"],
+        "module": "ESNext",
+        "moduleResolution": "Node16",
+        "esModuleInterop": true,
+
+        "paths": {
+            "~/*": ["./src/*"]
+        }
+    }
+}
