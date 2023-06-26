@@ -1,6 +1,6 @@
 import { Stack, Title, Text, Group, Button } from "@mantine/core";
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoBack from "~/popup/components/GoBack";
 import useStorage from "~/popup/hooks/useStorage";
 import urlbat from "urlbat";
@@ -14,8 +14,19 @@ function genId(): string {
 }
 
 export default function RoomOwn() {
-    const newRoomId = useRef(genId());
+    const navigate = useNavigate();
+
     const [ownRoomId] = useStorage(STORAGE_OWN_ROOM_ID, "");
+
+    async function onGenerateNew() {
+        const id = genId();
+        const url = urlbat("/room/:id", {
+            id,
+        });
+
+        await browser.storage.local.set({ [STORAGE_OWN_ROOM_ID]: id });
+        navigate(url);
+    }
 
     return (
         <Stack>
@@ -26,15 +37,7 @@ export default function RoomOwn() {
 
             <Stack mt="md">
                 <Group sx={{ justifyContent: "center" }}>
-                    <Button
-                        to={urlbat("/room/:roomId", {
-                            roomId: newRoomId.current,
-                            own: true,
-                        })}
-                        component={Link}
-                    >
-                        Generate new
-                    </Button>
+                    <Button onClick={onGenerateNew}>Generate new</Button>
 
                     {ownRoomId && (
                         <Button
