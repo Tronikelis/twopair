@@ -66,7 +66,6 @@ export default function RoomId() {
                     {videos && <Text>videos found: {videos.length}</Text>}
 
                     {room?.playing &&
-                        videos &&
                         videos.map(x => (
                             <Box>
                                 <Text>id: {x.id}</Text>
