@@ -1,10 +1,11 @@
 import { Group, Input, Stack, TextInput, Textarea, Title } from "@mantine/core";
 import React from "react";
 import GoBack from "~/popup/components/GoBack";
+import { STORAGE_USERNAME } from "~/popup/config/const";
 import useStorage from "~/popup/hooks/useStorage";
 
 export default function Settings() {
-    const [username, setUsername] = useStorage("username", "");
+    const [username, setUsername] = useStorage(STORAGE_USERNAME, "");
 
     return (
         <Stack>

@@ -1,22 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import browser from "webextension-polyfill";
-import useEffectChange from "./useEffectChange";
+import { useDidUpdate } from "@mantine/hooks";
 
 export default function useStorage<T>(key: string, def: T) {
     const [state, setState] = useState(def);
+
+    const stateRef = useRef(state);
+    stateRef.current = state;
 
     useEffect(() => {
         function onChange(
             changes: browser.Storage.StorageAreaOnChangedChangesType
         ) {
             const change = changes[key];
-            if (!change) return;
 
-            setState(change.newValue as T);
+            if (!change?.newValue) return;
+            // don't rerender unnecessarily
+            if (change.newValue === stateRef.current) return;
+
+            setState(change.newValue);
         }
 
         browser.storage.local.onChanged.addListener(onChange);
-        return () => browser.storage.local.onChanged.removeListener(onChange);
+        return () => {
+            browser.storage.local.onChanged.removeListener(onChange);
+        };
     }, []);
 
     useEffect(() => {
@@ -25,12 +33,12 @@ export default function useStorage<T>(key: string, def: T) {
                 | T
                 | undefined;
 
-            if (!value) return;
+            if (!value || value === stateRef.current) return;
             setState(value);
         })();
     }, []);
 
-    useEffectChange(() => {
+    useDidUpdate(() => {
         browser.storage.local.set({ [key]: state });
     }, [state]);
 

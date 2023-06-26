@@ -3,9 +3,10 @@ import { Stack, MantineProvider } from "@mantine/core";
 
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import Idx from "./routes/idx";
-import RoomCreate from "./routes/room_create";
+import RoomCreate from "./routes/room_own";
 import RoomJoin from "./routes/room_join";
 import Settings from "./routes/settings";
+import RoomId from "./routes/room_@id";
 
 const router = createMemoryRouter([
     {
@@ -13,7 +14,7 @@ const router = createMemoryRouter([
         element: <Idx />,
     },
     {
-        path: "/room/create",
+        path: "/room/own",
         element: <RoomCreate />,
     },
     {
@@ -23,6 +24,10 @@ const router = createMemoryRouter([
     {
         path: "/settings",
         element: <Settings />,
+    },
+    {
+        path: "/room/:id",
+        element: <RoomId />,
     },
 ]);
 
