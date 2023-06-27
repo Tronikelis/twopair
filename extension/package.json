@@ -2,10 +2,10 @@
     "name": "extension",
     "type": "module",
     "scripts": {
-        "dev": "pnpm build && web-ext run --verbose --devtools",
-        "build": "pnpm popup:build && pnpm content_script:build",
-        "popup:build": "vite build -c ./vite.config.popup.ts",
-        "content_script:build": "vite build -c ./vite.config.content_script.ts"
+        "dev": "pnpm build:dev && web-ext run --verbose --devtools",
+        "build:dev": "pnpm popup:build:dev && pnpm content_script:build:dev",
+        "popup:build:dev": "vite build -c ./vite.config.popup.ts --mode development",
+        "content_script:build:dev": "vite build -c ./vite.config.content_script.ts --mode development"
     },
     "dependencies": {
         "backend": "workspace:*",
