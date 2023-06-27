@@ -1,35 +1,17 @@
 import browser from "webextension-polyfill";
-import { GetVideoElementsRes, listenFromContent } from "~/utils/comms";
+import { GetVideoElementsRes, listenFromContent } from "~/comms";
 
-const ATTRIBUTE_ID = "__wat-id";
+import getVideoElements from "./getVideoElements";
+import joinRoom from "./joinRoom";
+import { JoinRoomClient } from "backend/src/types/socket.io";
 
-function genId(): string {
-    return Math.random().toString().split(".").at(-1) as string;
-}
-
-function getVideoElements(): GetVideoElementsRes {
-    const videos = Array.from(document.querySelectorAll("video")).filter(
-        x => x.src
-    );
-
-    for (const video of videos) {
-        if (!video.getAttribute(ATTRIBUTE_ID)) {
-            video.setAttribute(ATTRIBUTE_ID, genId());
-        }
-    }
-
-    return {
-        videos: videos.map(video => ({
-            id: video.getAttribute(ATTRIBUTE_ID) as string,
-            src: video.src,
-        })),
-    };
-}
-
-listenFromContent(async (type, data, sendResponse) => {
+listenFromContent(async (type, data) => {
     switch (type) {
         case "GET_VIDEO_ELEMENTS":
-            sendResponse(getVideoElements());
-            break;
+            return getVideoElements();
+
+        case "JOIN_ROOM":
+            // todo: ERROR HANDLING
+            return await joinRoom(data as JoinRoomClient);
     }
 });

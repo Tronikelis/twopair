@@ -13,7 +13,7 @@ import {
     Room,
 } from "backend/src/types/socket.io";
 import useStorage from "~/popup/hooks/useStorage";
-import { GetVideoElementsRes, sendToContent } from "~/utils/comms";
+import { GetVideoElementsRes, sendToContent } from "~/comms";
 
 export default function RoomId() {
     const { id } = useParams();
@@ -27,24 +27,18 @@ export default function RoomId() {
     useEffect(() => {
         if (!id || !userId || !username) return;
 
-        console.log("EMITTING");
+        (async () => {
+            const { room } = await sendToContent("JOIN_ROOM", {
+                id,
+                user: {
+                    id: userId,
+                    username,
+                },
+            });
 
-        socket.emit(JOIN_ROOM, {
-            id,
-            user: {
-                id: userId,
-                username,
-            },
-        } satisfies JoinRoomClient);
-
-        socket.on(JOIN_ROOM, ({ room }: JoinRoomServer) => {
             setRoom(room);
-        });
-
-        return () => {
-            socket.offAny();
-        };
-    }, [id, userId]);
+        })();
+    }, [id, userId, username]);
 
     // get videos
     useEffect(() => {
@@ -65,13 +59,22 @@ export default function RoomId() {
                 <Stack>
                     {videos && <Text>videos found: {videos.length}</Text>}
 
-                    {room?.playing &&
+                    {videos &&
                         videos.map(x => (
                             <Box>
                                 <Text>id: {x.id}</Text>
                                 <Text>src: {x.src}</Text>
                             </Box>
                         ))}
+                </Stack>
+
+                <Stack>
+                    <Text>Room: {room ? "OK ✅" : "Loading..."}</Text>
+                    {room && (
+                        <Text component="pre">
+                            {JSON.stringify(room, null, 2)}
+                        </Text>
+                    )}
                 </Stack>
             </Group>
         </Stack>
