@@ -4,7 +4,6 @@ import { useParams, useSearchParams } from "react-router-dom";
 import browser from "webextension-polyfill";
 import GoBack from "~/popup/components/GoBack";
 import { STORAGE_USERNAME, STORAGE_USER_ID } from "~/popup/config/const";
-import { socket } from "~/popup/socket.io";
 
 import { JOIN_ROOM } from "backend/src/config/events";
 import {

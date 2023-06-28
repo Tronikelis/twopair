@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 import { JoinRoomClient, JoinRoomServer } from "backend/src/types/socket.io";
 
 export type MessageType = "GET_VIDEO_ELEMENTS" | "JOIN_ROOM";
