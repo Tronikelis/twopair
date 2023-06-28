@@ -8,6 +8,7 @@ export default function getVideoElements(): GetVideoElementsRes {
         x => x.src
     );
 
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=344341
     // for (const item of Array.from(document.querySelectorAll("iframe"))) {
     //     const x = Array.from(
     //         item.contentDocument?.body.querySelectorAll("video") || []
