@@ -2,14 +2,17 @@
     "name": "watch-anything-together",
     "version": "0.1.0",
     "scripts": {
-        "dev": "concurrently \"cd extension && pnpm dev\" \"cd backend && pnpm dev\" --kill-others",
-        "extension:build": "cd extension && pnpm build"
-    },
-    "devDependencies": {
-        "typescript": "5.1.3",
-        "concurrently": "8.2.0"
+        "dev": "concurrently \"pnpm extension:browser:dev\" \"nodemon\" --kill-others",
+        "extension:build:dev": "cd extension && pnpm build:dev",
+        "extension:browser:dev": "cd extension && web-ext run --verbose --devtools"
     },
     "dependencies": {
         "nanoid": "4.0.2"
+    },
+    "devDependencies": {
+        "concurrently": "8.2.0",
+        "nodemon": "2.0.22",
+        "typescript": "5.1.5",
+        "web-ext": "7.6.2"
     }
 }
