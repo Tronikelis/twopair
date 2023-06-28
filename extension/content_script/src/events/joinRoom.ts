@@ -1,4 +1,4 @@
-import { socket } from "./socket.io";
+import { socket } from "../socket.io";
 
 import { JOIN_ROOM } from "backend/src/config/events";
 import { JoinRoomClient, JoinRoomServer } from "backend/src/types/socket.io";

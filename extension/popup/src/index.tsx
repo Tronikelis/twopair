@@ -9,6 +9,7 @@ import Settings from "./routes/settings";
 import RoomId from "./routes/room_@id";
 import { STORAGE_USERNAME, STORAGE_USER_ID } from "./config/const";
 import { nanoid } from "nanoid";
+import { setDefaults } from "./util/storage";
 
 const router = createMemoryRouter([
     {
@@ -33,25 +34,7 @@ const router = createMemoryRouter([
     },
 ]);
 
-// set a persistent user id
-(async () => {
-    const exists = (await browser.storage.local.get(STORAGE_USER_ID))[
-        STORAGE_USER_ID
-    ] as string | undefined;
-
-    if (exists) return;
-    await browser.storage.local.set({ [STORAGE_USER_ID]: nanoid() });
-})();
-
-// set a default username
-(async () => {
-    const exists = (await browser.storage.local.get(STORAGE_USERNAME))[
-        STORAGE_USERNAME
-    ] as string | undefined;
-
-    if (exists) return;
-    await browser.storage.local.set({ [STORAGE_USERNAME]: nanoid(4) });
-})();
+setDefaults();
 
 export default function Main() {
     return (

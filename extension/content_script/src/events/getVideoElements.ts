@@ -1,7 +1,7 @@
 import { GetVideoElementsRes } from "~/comms";
 import { nanoid } from "nanoid";
 
-import { VIDEO_ATTR_ID } from "./config/const";
+import { VIDEO_ATTR_ID } from "../config/const";
 
 export default function getVideoElements(): GetVideoElementsRes {
     const videos = Array.from(document.querySelectorAll("video")).filter(

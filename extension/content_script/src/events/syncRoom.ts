@@ -1,6 +1,6 @@
 import { SyncRoomClient, SyncRoomServer } from "backend/src/types/socket.io";
-import { socket } from "./socket.io";
-import { SYNC_MARGIN, VIDEO_ATTR_ID } from "./config/const";
+import { socket } from "../socket.io";
+import { SYNC_MARGIN, VIDEO_ATTR_ID } from "../config/const";
 
 import { syncingVideoId } from "./setSyncingVideo";
 import { SYNC_ROOM } from "backend/src/config/events";

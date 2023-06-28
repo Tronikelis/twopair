@@ -5,11 +5,11 @@ import {
     listenFromContent,
 } from "~/comms";
 
-import getVideoElements from "./getVideoElements";
-import joinRoom from "./joinRoom";
+import getVideoElements from "./events/getVideoElements";
+import joinRoom from "./events/joinRoom";
 import { JoinRoomClient, SyncRoomClient } from "backend/src/types/socket.io";
-import syncRoom from "./syncRoom";
-import setSyncingVideo from "./setSyncingVideo";
+import syncRoom from "./events/syncRoom";
+import setSyncingVideo from "./events/setSyncingVideo";
 
 listenFromContent(async (type, data) => {
     switch (type) {
