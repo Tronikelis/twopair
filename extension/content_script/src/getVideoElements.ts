@@ -1,7 +1,7 @@
 import { GetVideoElementsRes } from "~/comms";
 import { nanoid } from "nanoid";
 
-const ATTRIBUTE_ID = "__wat-id";
+import { VIDEO_ATTR_ID } from "./config/const";
 
 export default function getVideoElements(): GetVideoElementsRes {
     const videos = Array.from(document.querySelectorAll("video")).filter(
@@ -20,17 +20,17 @@ export default function getVideoElements(): GetVideoElementsRes {
     // }
 
     for (const video of videos) {
-        if (!video.getAttribute(ATTRIBUTE_ID)) {
-            video.setAttribute(ATTRIBUTE_ID, nanoid(4));
+        if (!video.getAttribute(VIDEO_ATTR_ID)) {
+            video.setAttribute(VIDEO_ATTR_ID, nanoid(4));
         }
     }
 
     return {
         videos: videos.map(video => ({
-            id: video.getAttribute(ATTRIBUTE_ID) as string,
+            id: video.getAttribute(VIDEO_ATTR_ID) as string,
             src: video.src,
             playing: !video.paused,
-            time: Math.floor(video.currentTime),
+            time: video.currentTime,
         })),
     };
 }

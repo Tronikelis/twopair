@@ -1,8 +1,6 @@
 import { Server } from "socket.io";
-import { GET_ROOM, JOIN_ROOM, SYNC_ROOM } from "./config/events.js";
+import { JOIN_ROOM, SYNC_ROOM } from "./config/events.js";
 import {
-    GetRoomClient,
-    GetRoomServer,
     JoinRoomClient,
     JoinRoomServer,
     Room,
@@ -35,6 +33,7 @@ io.on("connection", socket => {
         socket.join(socketRoomPrefix(id));
 
         let room: Room = {
+            id,
             playing: false,
             time: 0,
             users: [user],
@@ -55,22 +54,19 @@ io.on("connection", socket => {
         socket.emit(JOIN_ROOM, { room } satisfies JoinRoomServer);
     });
 
-    socket.on(GET_ROOM, ({ id }: GetRoomClient) => {
-        console.log(GET_ROOM);
-        console.log({ id });
-
-        socket.emit(GET_ROOM, {
-            room: db.get(id) || null,
-        } satisfies GetRoomServer);
-    });
-
-    socket.on(SYNC_ROOM, ({ id, playing, time }: SyncRoomClient) => {
+    socket.on(SYNC_ROOM, ({ roomId, ...rest }: SyncRoomClient) => {
         console.log(SYNC_ROOM);
-        console.log({ id, playing, time });
+        console.log({ roomId, ...rest });
 
-        io.to(socketRoomPrefix(id)).emit(SYNC_ROOM, {
-            playing,
-            time,
+        const room = db.get(roomId);
+        if (!room) return;
+
+        room.playing = rest.playing;
+        room.time = rest.time;
+
+        io.to(socketRoomPrefix(roomId)).emit(SYNC_ROOM, {
+            roomId,
+            ...rest,
         } satisfies SyncRoomServer);
     });
 });

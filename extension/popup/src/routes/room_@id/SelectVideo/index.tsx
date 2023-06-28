@@ -4,13 +4,19 @@ import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import { sendToContent, GetVideoElementsRes } from "~/comms";
 import useInterval from "~/popup/hooks/useInterval";
 import useFnRef from "~/popup/hooks/useFnRef";
+import useStorage from "~/popup/hooks/useStorage";
+import { STORAGE_USER_ID } from "~/popup/config/const";
+import { useParams } from "react-router-dom";
 
 export default function SelectVideo() {
-    const [loading, setLoading] = useState(true);
+    const { id: roomId } = useParams();
 
+    const [loading, setLoading] = useState(true);
     const [videosFound, setVideosFound] = useState<
         GetVideoElementsRes["videos"]
     >([]);
+
+    const [userId] = useStorage(STORAGE_USER_ID, "");
 
     const getVideoElements = useFnRef(async () => {
         const { videos } = await sendToContent("GET_VIDEO_ELEMENTS", undefined);
@@ -20,6 +26,12 @@ export default function SelectVideo() {
 
     useEffectAsync(getVideoElements, []);
     useInterval(getVideoElements, 1e3);
+
+    async function onSyncVideo(videoId: string) {
+        if (!roomId || !userId) return;
+        await sendToContent("SET_SYNCING_VIDEO", { videoId });
+        await sendToContent("SYNC_ROOM", { fromUserId: userId, roomId });
+    }
 
     return (
         <Stack>
@@ -34,7 +46,8 @@ export default function SelectVideo() {
                 <Paper withBorder p="xs" key={id}>
                     <Stack spacing="xs">
                         <Text>
-                            {playing ? "⏩ Playing" : "⏸️ Paused"} at {time}s
+                            {playing ? "⏩ Playing" : "⏸️ Paused"} at{" "}
+                            {Math.floor(time)}s
                         </Text>
 
                         <Text>
@@ -51,7 +64,9 @@ export default function SelectVideo() {
                             <Text span> {src}</Text>
                         </Text>
 
-                        <Button size="sm">Sync</Button>
+                        <Button size="sm" onClick={() => onSyncVideo(id)}>
+                            Sync
+                        </Button>
                     </Stack>
                 </Paper>
             ))}

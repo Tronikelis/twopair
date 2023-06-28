@@ -1,4 +1,5 @@
 export interface Room {
+    id: string;
     playing: boolean;
     time: number;
     users: User[];
@@ -18,16 +19,9 @@ export interface JoinRoomServer {
     room: Room;
 }
 
-export type SyncRoomServer = Pick<Room, "playing" | "time">;
-
-export type SyncRoomClient = {
-    id: string;
-} & Pick<Room, "playing" | "time">;
-
-export interface GetRoomClient {
-    id: string;
+export interface SyncRoomClient extends Pick<Room, "playing" | "time"> {
+    roomId: string;
+    fromUserId: string;
 }
 
-export interface GetRoomServer {
-    room: Room | null;
-}
+export type SyncRoomServer = SyncRoomClient;

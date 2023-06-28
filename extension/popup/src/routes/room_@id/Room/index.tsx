@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { sendToContent } from "~/comms";
 import { STORAGE_USERNAME, STORAGE_USER_ID } from "~/popup/config/const";
 import useEffectAsync from "~/popup/hooks/useEffectAsync";
+import useFnRef from "~/popup/hooks/useFnRef";
+import useInterval from "~/popup/hooks/useInterval";
 import useStorage from "~/popup/hooks/useStorage";
 
 export default function Room() {
@@ -18,7 +20,7 @@ export default function Room() {
     const [userId] = useStorage(STORAGE_USER_ID, "");
     const [username] = useStorage(STORAGE_USERNAME, "");
 
-    useEffectAsync(async () => {
+    const joinRoom = useFnRef(async () => {
         if (!id || !userId) return;
 
         const { room } = await sendToContent("JOIN_ROOM", {
@@ -31,11 +33,17 @@ export default function Room() {
 
         setLoading(false);
         setRoom(room);
-    }, [id, userId]);
+    });
+
+    useEffectAsync(joinRoom, [id, userId]);
+    useInterval(joinRoom, 1e3);
 
     return (
         <Stack>
-            <Title order={5}>Room {loading ? ", loading..." : ""}</Title>
+            <Box>
+                <Title order={5}>Room {loading ? ", loading..." : ""}</Title>
+                <Text>{id}</Text>
+            </Box>
 
             <Paper p="xs" withBorder>
                 <Stack spacing="xs">
