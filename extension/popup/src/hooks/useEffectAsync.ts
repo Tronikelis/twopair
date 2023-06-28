@@ -7,7 +7,10 @@ export default function useEffectAsync(
 ) {
     const effect = useFnRef(_effect);
 
-    useEffect(() => {
-        effect();
-    }, [...(deps || []), effect]);
+    useEffect(
+        () => {
+            effect();
+        },
+        deps ? [...deps, effect] : undefined
+    );
 }

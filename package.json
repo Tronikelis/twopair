@@ -2,7 +2,8 @@
     "name": "watch-anything-together",
     "version": "0.1.0",
     "scripts": {
-        "dev": "concurrently \"pnpm extension:browser:dev\" \"nodemon\" --kill-others",
+        "dev": "concurrently \"pnpm backend:dev\" \"pnpm extension:browser:dev\" \"nodemon\" --kill-others",
+        "backend:dev": "cd backend && pnpm dev",
         "extension:build:dev": "cd extension && pnpm build:dev",
         "extension:browser:dev": "cd extension && web-ext run --verbose --devtools"
     },
