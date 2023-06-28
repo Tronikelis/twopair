@@ -8,6 +8,8 @@ export interface GetVideoElementsRes {
     videos: {
         id: string;
         src: string;
+        playing: boolean;
+        time: number;
     }[];
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Group, Stack, Title } from "@mantine/core";
+import { Box, Group, Stack, Title } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import GoBack from "~/popup/components/GoBack";
 
@@ -16,7 +16,10 @@ export default function RoomId() {
             </Group>
 
             <Group>
-                <SelectVideo />
+                <Box sx={{ flex: 0.7 }}>
+                    <SelectVideo />
+                </Box>
+                <Box sx={{ flex: 0.3 }} />
             </Group>
         </Stack>
     );

@@ -46,7 +46,7 @@ const router = createMemoryRouter([
 export default function Main() {
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
-            <Stack p="md" w={16 * 25} h={9 * 25}>
+            <Stack p="md" w={16 * 30} h={9 * 30} sx={{ overflow: "auto" }}>
                 <RouterProvider router={router} />
             </Stack>
         </MantineProvider>

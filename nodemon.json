@@ -1,7 +1,8 @@
 {
     "$schema": "https://json.schemastore.org/nodemon.json",
     "verbose": true,
-    "ignore": ["**/*.{js,cjs,mjs}", "**/node_modules", "**/dist"],
-    "watch": ["./backend/**/*.ts", "./extension/**/*.ts"],
-    "exec": "pnpm extension:build:dev"
+    "ignore": ["**/node_modules/*", "**/dist/*"],
+    "watch": ["./backend/*", "./extension/*"],
+    "exec": "pnpm extension:build:dev",
+    "ext": "ts,tsx"
 }
