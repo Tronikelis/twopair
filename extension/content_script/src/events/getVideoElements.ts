@@ -1,12 +1,11 @@
-import { GetVideoElementsRes } from "~/comms";
 import { nanoid } from "nanoid";
+
+import { GetVideoElementsRes } from "~/comms";
 
 import { VIDEO_ATTR_ID } from "../config/const";
 
 export default function getVideoElements(): GetVideoElementsRes {
-    const videos = Array.from(document.querySelectorAll("video")).filter(
-        x => x.src
-    );
+    const videos = Array.from(document.querySelectorAll("video")).filter(x => x.src);
 
     // https://bugs.chromium.org/p/chromium/issues/detail?id=344341
     // for (const item of Array.from(document.querySelectorAll("iframe"))) {

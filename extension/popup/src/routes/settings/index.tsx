@@ -1,5 +1,6 @@
-import { Group, Input, Stack, TextInput, Textarea, Title } from "@mantine/core";
+import { Group, Input, Stack, Textarea, TextInput, Title } from "@mantine/core";
 import React from "react";
+
 import GoBack from "~/popup/components/GoBack";
 import { STORAGE_USERNAME } from "~/popup/config/const";
 import useStorage from "~/popup/hooks/useStorage";

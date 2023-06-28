@@ -1,6 +1,6 @@
+import { useDidUpdate } from "@mantine/hooks";
 import { useEffect, useRef, useState } from "react";
 import browser from "webextension-polyfill";
-import { useDidUpdate } from "@mantine/hooks";
 
 export default function useStorage<T>(key: string, def: T) {
     const [state, setState] = useState(def);
@@ -9,9 +9,7 @@ export default function useStorage<T>(key: string, def: T) {
     stateRef.current = state;
 
     useEffect(() => {
-        function onChange(
-            changes: browser.Storage.StorageAreaOnChangedChangesType
-        ) {
+        function onChange(changes: browser.Storage.StorageAreaOnChangedChangesType) {
             const change = changes[key];
 
             if (!change?.newValue) return;
@@ -28,9 +26,7 @@ export default function useStorage<T>(key: string, def: T) {
 
     useEffect(() => {
         (async () => {
-            const value = (await browser.storage.local.get(key))[key] as
-                | T
-                | undefined;
+            const value = (await browser.storage.local.get(key))[key] as T | undefined;
 
             if (!value || value === stateRef.current) return;
             setState(value);

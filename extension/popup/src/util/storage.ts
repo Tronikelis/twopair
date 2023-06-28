@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import browser from "webextension-polyfill";
+
 import { STORAGE_USER_ID, STORAGE_USERNAME } from "../config/const";
 
 export async function setDefaults() {

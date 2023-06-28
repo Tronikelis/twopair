@@ -2,8 +2,9 @@ import { Box, Paper, Stack, Text, Title } from "@mantine/core";
 import { JoinRoomServer } from "backend/src/types/socket.io";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+
 import { sendToContent } from "~/comms";
-import { STORAGE_USERNAME, STORAGE_USER_ID } from "~/popup/config/const";
+import { STORAGE_USER_ID, STORAGE_USERNAME } from "~/popup/config/const";
 import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import useFnRef from "~/popup/hooks/useFnRef";
 import useInterval from "~/popup/hooks/useInterval";
@@ -13,9 +14,7 @@ export default function Room() {
     const { id } = useParams();
 
     const [loading, setLoading] = useState(true);
-    const [room, setRoom] = useState<JoinRoomServer["room"] | undefined>(
-        undefined
-    );
+    const [room, setRoom] = useState<JoinRoomServer["room"] | undefined>(undefined);
 
     const [userId] = useStorage(STORAGE_USER_ID, "");
     const [username] = useStorage(STORAGE_USERNAME, "");
@@ -49,14 +48,10 @@ export default function Room() {
                 <Stack spacing="xs">
                     {room && (
                         <>
-                            <Text>
-                                People:{" "}
-                                {room.users.map(x => x.username).join(", ")}
-                            </Text>
+                            <Text>People: {room.users.map(x => x.username).join(", ")}</Text>
 
                             <Text>
-                                {room.playing ? "Playing" : "Paused"} at{" "}
-                                {room.time}s
+                                {room.playing ? "Playing" : "Paused"} at {room.time}s
                             </Text>
                         </>
                     )}

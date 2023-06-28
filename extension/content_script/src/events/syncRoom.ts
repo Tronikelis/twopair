@@ -1,10 +1,12 @@
+import { SYNC_ROOM } from "backend/src/config/events";
 import { SyncRoomClient, SyncRoomServer } from "backend/src/types/socket.io";
-import { socket } from "../socket.io";
+
+import { SyncRoomData } from "~/comms";
+
 import { SYNC_MARGIN, VIDEO_ATTR_ID } from "../config/const";
+import { socket } from "../socket.io";
 
 import { syncingVideoId } from "./setSyncingVideo";
-import { SYNC_ROOM } from "backend/src/config/events";
-import { SyncRoomData } from "~/comms";
 
 function getVideoElement(): HTMLVideoElement | undefined {
     const video = document.querySelector<HTMLVideoElement>(

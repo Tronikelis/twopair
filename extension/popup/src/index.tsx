@@ -1,14 +1,15 @@
-import React from "react";
-import { Stack, MantineProvider } from "@mantine/core";
-import browser from "webextension-polyfill";
-import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import Idx from "./routes/idx";
-import RoomOwn from "./routes/room_own";
-import RoomJoin from "./routes/room_join";
-import Settings from "./routes/settings";
-import RoomId from "./routes/room_@id";
-import { STORAGE_USERNAME, STORAGE_USER_ID } from "./config/const";
+import { MantineProvider, Stack } from "@mantine/core";
 import { nanoid } from "nanoid";
+import React from "react";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import browser from "webextension-polyfill";
+
+import { STORAGE_USER_ID, STORAGE_USERNAME } from "./config/const";
+import Idx from "./routes/idx";
+import RoomId from "./routes/room_@id";
+import RoomJoin from "./routes/room_join";
+import RoomOwn from "./routes/room_own";
+import Settings from "./routes/settings";
 import { setDefaults } from "./util/storage";
 
 const router = createMemoryRouter([

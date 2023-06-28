@@ -1,7 +1,8 @@
 import { Button, Group, Stack, TextInput, Title } from "@mantine/core";
-import React, { useState, ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
+
 import GoBack from "~/popup/components/GoBack";
 
 export default function RoomJoin() {

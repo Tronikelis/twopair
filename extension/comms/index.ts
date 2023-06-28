@@ -1,5 +1,6 @@
 import browser from "webextension-polyfill";
-import type { MessageType, Data, Res } from "./types";
+
+import type { Data, MessageType, Res } from "./types";
 
 export type * from "./types";
 

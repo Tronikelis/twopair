@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+
 import { JOIN_ROOM, SYNC_ROOM } from "./config/events.js";
 import {
     JoinRoomClient,

@@ -1,11 +1,9 @@
-import { socket } from "../socket.io";
-
 import { JOIN_ROOM } from "backend/src/config/events";
 import { JoinRoomClient, JoinRoomServer } from "backend/src/types/socket.io";
 
-export default async function joinRoom(
-    input: JoinRoomClient
-): Promise<JoinRoomServer> {
+import { socket } from "../socket.io";
+
+export default async function joinRoom(input: JoinRoomClient): Promise<JoinRoomServer> {
     // socket.off needs the same reference, probably
     let cb: (...args: any) => void = () => {};
     const room = new Promise<JoinRoomServer>((resolve, reject) => {
