@@ -11,7 +11,6 @@ export type MessageType =
 export interface GetVideoElementsRes {
     videos: {
         id: string;
-        src: string;
         time: number;
         playing: boolean;
         syncing: boolean;

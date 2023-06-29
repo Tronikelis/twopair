@@ -30,7 +30,6 @@ export default function getVideoElements(_input: GetVideoElementsData): GetVideo
     return {
         videos: videos.map(video => ({
             id: video.getAttribute(VIDEO_ATTR_ID) as string,
-            src: video.src,
             playing: !video.paused,
             time: video.currentTime,
             syncing: video.getAttribute(VIDEO_ATTR_IS_SYNCING) === "true",

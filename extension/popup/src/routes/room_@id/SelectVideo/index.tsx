@@ -54,25 +54,11 @@ export default function SelectVideo() {
                 </Button>
             )}
 
-            {videos.map(({ id, playing, src, time }) => (
+            {videos.map(({ id, playing, time }) => (
                 <Paper withBorder p="xs" key={id}>
                     <Stack spacing="xs">
                         <Text>
                             {playing ? "⏩ Playing" : "⏸️ Paused"} at {Math.floor(time)}s
-                        </Text>
-
-                        <Text>
-                            <Text span weight={600}>
-                                id:
-                            </Text>
-                            <Text span> {id}</Text>
-                        </Text>
-
-                        <Text>
-                            <Text span weight={600}>
-                                src:
-                            </Text>
-                            <Text span> {src}</Text>
                         </Text>
 
                         <Button size="sm" onClick={() => onSyncVideo(id)} disabled={isSyncing}>
