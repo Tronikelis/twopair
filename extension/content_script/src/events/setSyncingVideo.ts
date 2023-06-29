@@ -12,10 +12,18 @@ import { SYNC_MARGIN, VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../conf
 import { socket } from "../socket.io";
 import getVideoElement from "../utils/getVideoElement";
 
-async function joinRoom(input: JoinRoomClient): Promise<JoinRoomServer> {
-    const response = (await socket
-        .timeout(5e3)
-        .emitWithAck(JOIN_ROOM_ACK, input satisfies JoinRoomClient)) as JoinRoomServer;
+async function joinRoom(
+    input: JoinRoomClient,
+    video: HTMLVideoElement
+): Promise<JoinRoomServer> {
+    const response = (await socket.emitWithAck(
+        JOIN_ROOM_ACK,
+        input satisfies JoinRoomClient
+    )) as JoinRoomServer;
+
+    // sync up when joining the room
+    video.currentTime = response.room.time;
+    response.room.playing ? void video.play() : video.pause();
 
     return response;
 }
@@ -30,7 +38,7 @@ export const references = {
 function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
     socket.off(SYNC_ROOM, references.onSyncRoom);
     references.onSyncRoom = ({ playing, time }: SyncRoomServer) => {
-        if (playing !== !video.paused) {
+        if (playing === video.paused) {
             playing ? void video.play() : video.pause();
         }
         if (Math.abs(video.currentTime - time) > SYNC_MARGIN) {
@@ -66,7 +74,7 @@ export default async function setSyncingVideo(
 
     video.setAttribute(VIDEO_ATTR_IS_SYNCING, "true");
 
-    const room = await joinRoom({ id: input.roomId, user: input.user });
+    const room = await joinRoom({ id: input.roomId, user: input.user }, video);
     syncRoom(input, video);
 
     return room;

@@ -1,13 +1,11 @@
 import { Box, Button, Paper, Stack, Text, Title } from "@mantine/core";
 import { useSetAtom } from "jotai";
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { GetVideoElementsRes, sendToContent } from "~/comms";
+import { sendToContent } from "~/comms";
 import { STORAGE_USER_ID, STORAGE_USERNAME } from "~/popup/config/const";
-import useEffectAsync from "~/popup/hooks/useEffectAsync";
-import useFnRef from "~/popup/hooks/useFnRef";
-import useInterval from "~/popup/hooks/useInterval";
+import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
 
 import { roomAtom } from "../store";
@@ -18,22 +16,10 @@ export default function SelectVideo() {
 
     const setRoom = useSetAtom(roomAtom);
 
-    const [videosFound, setVideosFound] = useState<GetVideoElementsRes["videos"]>([]);
+    const { videos, isSyncing } = useGetVideoElements();
 
     const [userId] = useStorage(STORAGE_USER_ID, "");
     const [username] = useStorage(STORAGE_USERNAME, "");
-
-    const getVideoElements = useFnRef(async () => {
-        const { videos } = await sendToContent("GET_VIDEO_ELEMENTS", undefined);
-        setVideosFound(videos);
-    });
-
-    useEffectAsync(getVideoElements, []);
-    useInterval(getVideoElements, 1e3);
-
-    const isSyncing = useMemo(() => {
-        return !!videosFound.find(x => x.syncing);
-    }, [videosFound]);
 
     async function onSyncVideo(videoId: string) {
         if (!roomId || !userId || !username) return;
@@ -59,7 +45,7 @@ export default function SelectVideo() {
         <Stack>
             <Box>
                 <Title order={5}>Select Video</Title>
-                <Text>{videosFound.length} videos found</Text>
+                <Text>{videos.length} videos found</Text>
             </Box>
 
             {isSyncing && (
@@ -68,7 +54,7 @@ export default function SelectVideo() {
                 </Button>
             )}
 
-            {videosFound.map(({ id, playing, src, time }) => (
+            {videos.map(({ id, playing, src, time }) => (
                 <Paper withBorder p="xs" key={id}>
                     <Stack spacing="xs">
                         <Text>

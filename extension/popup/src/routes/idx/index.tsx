@@ -1,12 +1,20 @@
-import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
-import React, { useEffect } from "react";
+import { Button, Group, Stack, Text, Title } from "@mantine/core";
+import React from "react";
 import { Link } from "react-router-dom";
 
+import { sendToContent } from "~/comms";
 import { STORAGE_USERNAME } from "~/popup/config/const";
+import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
 
 export default function Idx() {
     const [username] = useStorage(STORAGE_USERNAME, "");
+
+    const { isSyncing } = useGetVideoElements();
+
+    async function onUnsync() {
+        await sendToContent("UNSYNC_VIDEO", undefined);
+    }
 
     return (
         <Stack spacing="xl" justify="center" sx={{ flex: 1 }}>
@@ -32,11 +40,15 @@ export default function Idx() {
                 </Button>
             </Group>
 
-            <Box ml="auto">
+            <Group ml="auto">
+                <Button variant="light" color="red" onClick={onUnsync} disabled={!isSyncing}>
+                    Unsync
+                </Button>
+
                 <Button to="/settings" color="gray" component={Link}>
                     Settings
                 </Button>
-            </Box>
+            </Group>
         </Stack>
     );
 }
