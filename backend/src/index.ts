@@ -24,14 +24,19 @@ function socketRoomPrefix(id: string): string {
 io.on("connection", socket => {
     console.log("socket joined !");
 
-    socket.on(JOIN_ROOM, ({ id, user }: JoinRoomClient) => {
+    socket.on(JOIN_ROOM, async ({ id, user }: JoinRoomClient) => {
         console.log(JOIN_ROOM);
         console.log({
             id,
             user,
         });
 
-        socket.join(socketRoomPrefix(id));
+        await Promise.all(
+            Array.from(socket.rooms)
+                .filter(room => room.startsWith(socketRoomPrefix("")))
+                .map(async room => await socket.leave(room))
+        );
+        await socket.join(socketRoomPrefix(id));
 
         let room: Room = {
             id,

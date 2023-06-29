@@ -1,5 +1,5 @@
 import { Button, Group, Stack, TextInput, Title } from "@mantine/core";
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 
@@ -9,10 +9,6 @@ export default function RoomJoin() {
     const navigate = useNavigate();
 
     const [id, setId] = useState("");
-
-    function onChangeInput(e: ChangeEvent<HTMLInputElement>) {
-        setId(e.target.value);
-    }
 
     function onJoin() {
         if (!id) return;
@@ -32,7 +28,7 @@ export default function RoomJoin() {
                     label="Id"
                     placeholder="Enter Id"
                     value={id}
-                    onChange={onChangeInput}
+                    onChange={e => setId(e.target.value)}
                 />
 
                 <Button onClick={onJoin} sx={{ alignSelf: "flex-end" }}>

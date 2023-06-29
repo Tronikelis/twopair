@@ -45,17 +45,20 @@ export default function Room() {
             </Box>
 
             <Paper p="xs" withBorder>
-                <Stack spacing="xs">
-                    {room && (
-                        <>
-                            <Text>People: {room.users.map(x => x.username).join(", ")}</Text>
+                {room && (
+                    <Stack spacing="xs">
+                        <Text>People: {room.users.map(x => x.username).join(", ")}</Text>
 
-                            <Text>
-                                {room.playing ? "Playing" : "Paused"} at {room.time}s
+                        <Text>
+                            <Text span weight={600}>
+                                Last sync:{" "}
                             </Text>
-                        </>
-                    )}
-                </Stack>
+                            <Text span>
+                                {room.playing ? "Played" : "Paused"} at {room.time}s
+                            </Text>
+                        </Text>
+                    </Stack>
+                )}
             </Paper>
         </Stack>
     );

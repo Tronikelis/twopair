@@ -1,11 +1,6 @@
 /// <reference types="vite/client" />
 
-import {
-    JoinRoomClient,
-    JoinRoomServer,
-    SyncRoomClient,
-    SyncRoomServer,
-} from "backend/src/types/socket.io";
+import { JoinRoomClient, JoinRoomServer, SyncRoomClient } from "backend/src/types/socket.io";
 
 export type MessageType =
     | "GET_VIDEO_ELEMENTS"
@@ -17,8 +12,9 @@ export interface GetVideoElementsRes {
     videos: {
         id: string;
         src: string;
-        playing: boolean;
         time: number;
+        playing: boolean;
+        syncing: boolean;
     }[];
 }
 

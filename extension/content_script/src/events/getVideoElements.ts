@@ -4,6 +4,8 @@ import { GetVideoElementsRes } from "~/comms";
 
 import { VIDEO_ATTR_ID } from "../config/const";
 
+import { syncingVideoId } from "./setSyncingVideo";
+
 export default function getVideoElements(): GetVideoElementsRes {
     const videos = Array.from(document.querySelectorAll("video")).filter(x => x.src);
 
@@ -30,6 +32,7 @@ export default function getVideoElements(): GetVideoElementsRes {
             src: video.src,
             playing: !video.paused,
             time: video.currentTime,
+            syncing: video.getAttribute(VIDEO_ATTR_ID) === syncingVideoId,
         })),
     };
 }

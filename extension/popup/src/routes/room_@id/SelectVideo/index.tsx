@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Stack, Text, Title } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { GetVideoElementsRes, sendToContent } from "~/comms";
@@ -26,10 +26,18 @@ export default function SelectVideo() {
     useEffectAsync(getVideoElements, []);
     useInterval(getVideoElements, 1e3);
 
+    const isSyncing = useMemo(() => {
+        return !!videosFound.find(x => x.syncing);
+    }, [videosFound]);
+
     async function onSyncVideo(videoId: string) {
         if (!roomId || !userId) return;
         await sendToContent("SET_SYNCING_VIDEO", { videoId });
         await sendToContent("SYNC_ROOM", { fromUserId: userId, roomId });
+    }
+
+    async function onUnsyncVideo() {
+        await sendToContent("SET_SYNCING_VIDEO", { videoId: "" });
     }
 
     return (
@@ -38,6 +46,12 @@ export default function SelectVideo() {
                 <Title order={5}>Select Video{loading ? ", loading..." : ""}</Title>
                 <Text>{videosFound.length} videos found</Text>
             </Box>
+
+            {isSyncing && (
+                <Button variant="light" color="red" onClick={onUnsyncVideo}>
+                    Unsync
+                </Button>
+            )}
 
             {videosFound.map(({ id, playing, src, time }) => (
                 <Paper withBorder p="xs" key={id}>
@@ -60,7 +74,7 @@ export default function SelectVideo() {
                             <Text span> {src}</Text>
                         </Text>
 
-                        <Button size="sm" onClick={() => onSyncVideo(id)}>
+                        <Button size="sm" onClick={() => onSyncVideo(id)} disabled={isSyncing}>
                             Sync
                         </Button>
                     </Stack>
