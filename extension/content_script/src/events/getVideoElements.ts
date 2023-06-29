@@ -2,9 +2,7 @@ import { nanoid } from "nanoid";
 
 import { GetVideoElementsRes } from "~/comms";
 
-import { VIDEO_ATTR_ID } from "../config/const";
-
-import { syncingVideoId } from "./setSyncingVideo";
+import { VIDEO_ATTR_ID, VIDEO_ATTR_IS_SYNCING } from "../config/const";
 
 export default function getVideoElements(): GetVideoElementsRes {
     const videos = Array.from(document.querySelectorAll("video")).filter(x => x.src);
@@ -24,6 +22,9 @@ export default function getVideoElements(): GetVideoElementsRes {
         if (!video.getAttribute(VIDEO_ATTR_ID)) {
             video.setAttribute(VIDEO_ATTR_ID, nanoid(4));
         }
+        if (!video.getAttribute(VIDEO_ATTR_IS_SYNCING)) {
+            video.setAttribute(VIDEO_ATTR_IS_SYNCING, "false");
+        }
     }
 
     return {
@@ -32,7 +33,7 @@ export default function getVideoElements(): GetVideoElementsRes {
             src: video.src,
             playing: !video.paused,
             time: video.currentTime,
-            syncing: video.getAttribute(VIDEO_ATTR_ID) === syncingVideoId,
+            syncing: video.getAttribute(VIDEO_ATTR_IS_SYNCING) === "true",
         })),
     };
 }

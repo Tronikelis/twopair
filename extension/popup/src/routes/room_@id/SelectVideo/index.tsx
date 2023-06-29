@@ -1,25 +1,30 @@
 import { Box, Button, Paper, Stack, Text, Title } from "@mantine/core";
+import { useSetAtom } from "jotai";
 import React, { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { GetVideoElementsRes, sendToContent } from "~/comms";
-import { STORAGE_USER_ID } from "~/popup/config/const";
+import { STORAGE_USER_ID, STORAGE_USERNAME } from "~/popup/config/const";
 import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import useFnRef from "~/popup/hooks/useFnRef";
 import useInterval from "~/popup/hooks/useInterval";
 import useStorage from "~/popup/hooks/useStorage";
 
+import { roomAtom } from "../store";
+
 export default function SelectVideo() {
     const { id: roomId } = useParams();
+    const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(true);
+    const setRoom = useSetAtom(roomAtom);
+
     const [videosFound, setVideosFound] = useState<GetVideoElementsRes["videos"]>([]);
 
     const [userId] = useStorage(STORAGE_USER_ID, "");
+    const [username] = useStorage(STORAGE_USERNAME, "");
 
     const getVideoElements = useFnRef(async () => {
         const { videos } = await sendToContent("GET_VIDEO_ELEMENTS", undefined);
-        setLoading(false);
         setVideosFound(videos);
     });
 
@@ -31,19 +36,29 @@ export default function SelectVideo() {
     }, [videosFound]);
 
     async function onSyncVideo(videoId: string) {
-        if (!roomId || !userId) return;
-        await sendToContent("SET_SYNCING_VIDEO", { videoId });
-        await sendToContent("SYNC_ROOM", { fromUserId: userId, roomId });
+        if (!roomId || !userId || !username) return;
+
+        const room = await sendToContent("SET_SYNCING_VIDEO", {
+            roomId,
+            videoId,
+            user: {
+                id: userId,
+                username,
+            },
+        });
+
+        setRoom(room.room);
     }
 
     async function onUnsyncVideo() {
-        await sendToContent("SET_SYNCING_VIDEO", { videoId: "" });
+        await sendToContent("UNSYNC_VIDEO", undefined);
+        navigate("/", { replace: true });
     }
 
     return (
         <Stack>
             <Box>
-                <Title order={5}>Select Video{loading ? ", loading..." : ""}</Title>
+                <Title order={5}>Select Video</Title>
                 <Text>{videosFound.length} videos found</Text>
             </Box>
 

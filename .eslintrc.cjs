@@ -14,25 +14,17 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:prettier/recommended",
     ],
-    plugins: [
-        "react",
-        "react-hooks",
-        "@typescript-eslint",
-        "prettier",
-        "simple-import-sort",
-    ],
+    plugins: ["react", "react-hooks", "@typescript-eslint", "prettier", "simple-import-sort"],
     rules: {
         // disabled type-required rules
-        "@typescript-eslint/no-misused-promises": [
-            "error",
-            { checksVoidReturn: false },
-        ],
+        "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: false }],
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/no-unsafe-argument": "off",
         "@typescript-eslint/unbound-method": "off",
 
         // disabled recommended rules
+        "no-unused-vars": "off",
         "react/prop-types": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "react/display-name": "off",
@@ -43,6 +35,7 @@ module.exports = {
         "@typescript-eslint/indent": "off",
 
         // manually enabled rules
+        "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
         "object-curly-spacing": ["error", "always"],
         "comma-dangle": [
             "error",
@@ -101,10 +94,7 @@ module.exports = {
         ecmaVersion: "latest",
 
         tsconfigRootDir: __dirname,
-        project: [
-            "./backend/tsconfig.json",
-            "./extension/tsconfig.json",
-        ],
+        project: ["./backend/tsconfig.json", "./extension/tsconfig.json"],
     },
     env: {
         es2021: true,

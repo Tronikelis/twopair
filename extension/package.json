@@ -7,10 +7,11 @@
         "content_script:build:dev": "vite build -c ./vite.config.content_script.ts --mode development"
     },
     "dependencies": {
-        "backend": "workspace:*",
         "@emotion/react": "11.11.1",
         "@mantine/core": "6.0.15",
         "@mantine/hooks": "6.0.15",
+        "backend": "workspace:*",
+        "jotai": "2.2.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-router-dom": "6.14.0",
