@@ -1,6 +1,6 @@
-import { Button, Group, Stack, Text, Title } from "@mantine/core";
+import { Button, Group, Stack, Title } from "@mantine/core";
 import { nanoid } from "nanoid";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";

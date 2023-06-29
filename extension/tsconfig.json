@@ -8,6 +8,7 @@
         "moduleResolution": "Bundler",
         "jsx": "react",
         "esModuleInterop": true,
+        "noEmit": true,
 
         "paths": {
             "~/popup/*": ["./popup/src/*"],

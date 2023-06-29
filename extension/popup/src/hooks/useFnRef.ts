@@ -1,13 +1,13 @@
 import { useCallback, useRef } from "react";
 
-export type AnyFunction = (...params: any) => any;
+export type AnyFn = (...params: any) => any;
 
 /**
  * uses a ref to always call the latest function without stale closure variables, just pass a function to this
  * the returned function is **useEffect dependency SAFE**
  * @link https://tronikelis.github.io/posts/use-fn-ref/
  */
-export default function useFnRef<T extends AnyFunction | undefined>(fn: T): T {
+export default function useFnRef<T extends AnyFn | undefined>(fn: T): T {
     const fnRef = useRef(fn);
     fnRef.current = fn;
 

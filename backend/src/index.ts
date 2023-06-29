@@ -1,13 +1,17 @@
 import { Server } from "socket.io";
 
-import { JOIN_ROOM, SYNC_ROOM } from "./config/events.js";
+import { JOIN_ROOM_ACK, LEAVE_ROOM_ACK, SYNC_ROOM } from "./config/events.js";
 import {
     JoinRoomClient,
     JoinRoomServer,
+    LeaveRoomClient,
+    LeaveRoomServer,
     Room,
     SyncRoomClient,
     SyncRoomServer,
 } from "./types/socket.io.js";
+
+type SocketAck<T = undefined> = (input: T) => void;
 
 const io = new Server({
     cors: {
@@ -17,64 +21,70 @@ const io = new Server({
 
 const db = new Map<string, Room>();
 
-function socketRoomPrefix(id: string): string {
-    return `socket_room:${id}`;
-}
-
 io.on("connection", socket => {
     console.log("socket joined !");
 
-    socket.on(JOIN_ROOM, async ({ id, user }: JoinRoomClient) => {
-        console.log(JOIN_ROOM);
-        console.log({
-            id,
-            user,
-        });
+    socket.on(
+        JOIN_ROOM_ACK,
+        async ({ id, user }: JoinRoomClient, ack: SocketAck<JoinRoomServer>) => {
+            console.log(JOIN_ROOM_ACK);
+            console.log({
+                id,
+                user,
+            });
 
-        await Promise.all(
-            Array.from(socket.rooms)
-                .filter(room => room.startsWith(socketRoomPrefix("")))
-                .map(async room => await socket.leave(room))
-        );
-        await socket.join(socketRoomPrefix(id));
+            await socket.join(id);
 
-        let room: Room = {
-            id,
-            playing: false,
-            time: 0,
-            users: [user],
-        };
+            let room: Room = {
+                id,
+                playing: false,
+                time: 0,
+                users: [user],
+            };
 
-        const roomInDb = db.get(id);
+            const roomInDb = db.get(id);
 
-        if (!roomInDb) {
-            db.set(id, room);
-        } else {
-            if (!roomInDb.users.find(x => x.id === user.id)) {
-                roomInDb.users.push(user);
+            if (!roomInDb) {
+                db.set(id, room);
+            } else {
+                if (!roomInDb.users.find(x => x.id === user.id)) {
+                    roomInDb.users.push(user);
+                }
+
+                room = { ...roomInDb };
             }
 
-            room = { ...roomInDb };
+            ack({ room });
         }
+    );
 
-        socket.emit(JOIN_ROOM, { room } satisfies JoinRoomServer);
-    });
-
-    socket.on(SYNC_ROOM, ({ roomId, ...rest }: SyncRoomClient) => {
+    socket.on(SYNC_ROOM, ({ roomId, playing, time }: SyncRoomClient) => {
         console.log(SYNC_ROOM);
-        console.log({ roomId, ...rest });
+        console.log({ roomId, playing, time });
 
         const room = db.get(roomId);
         if (!room) return;
 
-        room.playing = rest.playing;
-        room.time = rest.time;
+        room.playing = playing;
+        room.time = time;
 
-        io.to(socketRoomPrefix(roomId)).emit(SYNC_ROOM, {
-            roomId,
-            ...rest,
+        // excludes the socket that is sending this event
+        socket.broadcast.to(roomId).emit(SYNC_ROOM, {
+            playing: room.playing,
+            time: room.time,
         } satisfies SyncRoomServer);
     });
+
+    socket.on(
+        LEAVE_ROOM_ACK,
+        async (_args: LeaveRoomClient, ack: SocketAck<LeaveRoomServer>) => {
+            await Promise.all(
+                Array.from(socket.rooms).map(async room => await socket.leave(room))
+            );
+
+            ack(undefined);
+        }
+    );
 });
 
 io.listen(3000);

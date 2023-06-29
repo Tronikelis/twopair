@@ -1,50 +1,51 @@
 import { Box, Button, Paper, Stack, Text, Title } from "@mantine/core";
-import React, { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useSetAtom } from "jotai";
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { GetVideoElementsRes, sendToContent } from "~/comms";
-import { STORAGE_USER_ID } from "~/popup/config/const";
-import useEffectAsync from "~/popup/hooks/useEffectAsync";
-import useFnRef from "~/popup/hooks/useFnRef";
-import useInterval from "~/popup/hooks/useInterval";
+import { sendToContent } from "~/comms";
+import { STORAGE_USER_ID, STORAGE_USERNAME } from "~/popup/config/const";
+import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
+
+import { roomAtom } from "../store";
 
 export default function SelectVideo() {
     const { id: roomId } = useParams();
+    const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(true);
-    const [videosFound, setVideosFound] = useState<GetVideoElementsRes["videos"]>([]);
+    const setRoom = useSetAtom(roomAtom);
+
+    const { videos, isSyncing } = useGetVideoElements();
 
     const [userId] = useStorage(STORAGE_USER_ID, "");
-
-    const getVideoElements = useFnRef(async () => {
-        const { videos } = await sendToContent("GET_VIDEO_ELEMENTS", undefined);
-        setLoading(false);
-        setVideosFound(videos);
-    });
-
-    useEffectAsync(getVideoElements, []);
-    useInterval(getVideoElements, 1e3);
-
-    const isSyncing = useMemo(() => {
-        return !!videosFound.find(x => x.syncing);
-    }, [videosFound]);
+    const [username] = useStorage(STORAGE_USERNAME, "");
 
     async function onSyncVideo(videoId: string) {
-        if (!roomId || !userId) return;
-        await sendToContent("SET_SYNCING_VIDEO", { videoId });
-        await sendToContent("SYNC_ROOM", { fromUserId: userId, roomId });
+        if (!roomId || !userId || !username) return;
+
+        const room = await sendToContent("SET_SYNCING_VIDEO", {
+            roomId,
+            videoId,
+            user: {
+                id: userId,
+                username,
+            },
+        });
+
+        setRoom(room.room);
     }
 
     async function onUnsyncVideo() {
-        await sendToContent("SET_SYNCING_VIDEO", { videoId: "" });
+        await sendToContent("UNSYNC_VIDEO", undefined);
+        navigate("/", { replace: true });
     }
 
     return (
         <Stack>
             <Box>
-                <Title order={5}>Select Video{loading ? ", loading..." : ""}</Title>
-                <Text>{videosFound.length} videos found</Text>
+                <Title order={5}>Select Video</Title>
+                <Text>{videos.length} videos found</Text>
             </Box>
 
             {isSyncing && (
@@ -53,7 +54,7 @@ export default function SelectVideo() {
                 </Button>
             )}
 
-            {videosFound.map(({ id, playing, src, time }) => (
+            {videos.map(({ id, playing, src, time }) => (
                 <Paper withBorder p="xs" key={id}>
                     <Stack spacing="xs">
                         <Text>

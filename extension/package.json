@@ -7,10 +7,11 @@
         "content_script:build:dev": "vite build -c ./vite.config.content_script.ts --mode development"
     },
     "dependencies": {
-        "backend": "workspace:*",
         "@emotion/react": "11.11.1",
         "@mantine/core": "6.0.15",
         "@mantine/hooks": "6.0.15",
+        "backend": "workspace:*",
+        "jotai": "2.2.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-router-dom": "6.14.0",
@@ -21,7 +22,7 @@
     "devDependencies": {
         "@types/react": "18.2.14",
         "@types/react-dom": "18.2.6",
-        "@types/webextension-polyfill": "0.10.0",
+        "@types/webextension-polyfill": "0.10.1",
         "@vitejs/plugin-react": "4.0.1",
         "vite": "4.3.9",
         "vite-tsconfig-paths": "4.2.0"

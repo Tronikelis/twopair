@@ -21,7 +21,10 @@ export interface JoinRoomServer {
 
 export interface SyncRoomClient extends Pick<Room, "playing" | "time"> {
     roomId: string;
-    fromUserId: string;
 }
 
-export type SyncRoomServer = SyncRoomClient;
+export type SyncRoomServer = Pick<Room, "playing" | "time">;
+
+export type LeaveRoomClient = undefined;
+
+export type LeaveRoomServer = undefined;
