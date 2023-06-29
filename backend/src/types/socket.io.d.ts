@@ -28,3 +28,11 @@ export type SyncRoomServer = Pick<Room, "playing" | "time">;
 export type LeaveRoomClient = undefined;
 
 export type LeaveRoomServer = undefined;
+
+export interface GetRoomServer {
+    room: Room | undefined;
+}
+
+export interface GetRoomClient {
+    roomId: string;
+}

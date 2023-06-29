@@ -1,7 +1,9 @@
 import { Server } from "socket.io";
 
-import { JOIN_ROOM_ACK, LEAVE_ROOM_ACK, SYNC_ROOM } from "./config/events.js";
+import { GET_ROOM_ACK, JOIN_ROOM_ACK, LEAVE_ROOM_ACK, SYNC_ROOM } from "./config/events.js";
 import {
+    GetRoomClient,
+    GetRoomServer,
     JoinRoomClient,
     JoinRoomServer,
     LeaveRoomClient,
@@ -78,6 +80,8 @@ io.on("connection", socket => {
     socket.on(
         LEAVE_ROOM_ACK,
         async (_args: LeaveRoomClient, ack: SocketAck<LeaveRoomServer>) => {
+            console.log(LEAVE_ROOM_ACK);
+
             await Promise.all(
                 Array.from(socket.rooms).map(async room => await socket.leave(room))
             );
@@ -85,6 +89,14 @@ io.on("connection", socket => {
             ack(undefined);
         }
     );
+
+    socket.on(GET_ROOM_ACK, ({ roomId }: GetRoomClient, ack: SocketAck<GetRoomServer>) => {
+        console.log(GET_ROOM_ACK);
+        console.log({ roomId });
+
+        const room = db.get(roomId) || undefined;
+        ack({ room });
+    });
 });
 
 io.listen(3000);

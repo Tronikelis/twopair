@@ -1,10 +1,10 @@
 import { nanoid } from "nanoid";
 
-import { GetVideoElementsRes } from "~/comms";
+import { GetVideoElementsData, GetVideoElementsRes } from "~/comms";
 
 import { VIDEO_ATTR_ID, VIDEO_ATTR_IS_SYNCING } from "../config/const";
 
-export default function getVideoElements(): GetVideoElementsRes {
+export default function getVideoElements(_input: GetVideoElementsData): GetVideoElementsRes {
     const videos = Array.from(document.querySelectorAll("video")).filter(x => x.src);
 
     // https://bugs.chromium.org/p/chromium/issues/detail?id=344341

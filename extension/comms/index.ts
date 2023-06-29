@@ -23,7 +23,7 @@ export async function sendToContent<Type extends MessageType>(
 export function listenFromContent<Type extends MessageType>(
     cb: (type: Type, data: Data[Type]) => Promise<Res[Type]>
 ) {
-    browser.runtime.onMessage.addListener(async ({ type, data }, _sender) => {
+    browser.runtime.onMessage.addListener(async ({ type, data }) => {
         // Rather than receiving a sendResponse callback to send a response,
         // onMessage listeners simply return a Promise whose resolution value is used as a reply.
         return await cb(type, data);
