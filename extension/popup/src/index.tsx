@@ -1,10 +1,9 @@
 import { MantineProvider, Stack } from "@mantine/core";
-import { nanoid } from "nanoid";
 import React from "react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import browser from "webextension-polyfill";
 
-import { STORAGE_USER_ID, STORAGE_USERNAME } from "./config/const";
+import noop from "~/utils/noop";
+
 import Idx from "./routes/idx";
 import RoomId from "./routes/room_@id";
 import RoomJoin from "./routes/room_join";
@@ -35,7 +34,7 @@ const router = createMemoryRouter([
     },
 ]);
 
-setDefaults();
+setDefaults().catch(noop);
 
 export default function Main() {
     return (

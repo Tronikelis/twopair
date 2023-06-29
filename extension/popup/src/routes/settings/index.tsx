@@ -1,4 +1,4 @@
-import { Group, Input, Stack, Textarea, TextInput, Title } from "@mantine/core";
+import { Group, Stack, TextInput, Title } from "@mantine/core";
 import React from "react";
 
 import GoBack from "~/popup/components/GoBack";

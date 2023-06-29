@@ -58,15 +58,15 @@ io.on("connection", socket => {
         }
     );
 
-    socket.on(SYNC_ROOM, ({ roomId, ...rest }: SyncRoomClient) => {
+    socket.on(SYNC_ROOM, ({ roomId, playing, time }: SyncRoomClient) => {
         console.log(SYNC_ROOM);
-        console.log({ roomId, ...rest });
+        console.log({ roomId, playing, time });
 
         const room = db.get(roomId);
         if (!room) return;
 
-        room.playing = rest.playing;
-        room.time = rest.time;
+        room.playing = playing;
+        room.time = time;
 
         // excludes the socket that is sending this event
         socket.broadcast.to(roomId).emit(SYNC_ROOM, {

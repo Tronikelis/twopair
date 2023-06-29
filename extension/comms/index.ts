@@ -16,7 +16,7 @@ export async function sendToContent<Type extends MessageType>(
     const tab = tabs[0];
     if (!tab?.id) throw new Error("did not found active tab");
 
-    const res = await browser.tabs.sendMessage(tab.id, { type, data });
+    const res = (await browser.tabs.sendMessage(tab.id, { type, data })) as Res[Type];
     return res;
 }
 

@@ -7,6 +7,7 @@ import {
 } from "backend/src/types/socket.io";
 
 import { SetSyncingVideoData, SetSyncingVideoRes } from "~/comms";
+import noop from "~/utils/noop";
 
 import { SYNC_MARGIN, VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../config/const";
 import { socket } from "../socket.io";
@@ -28,11 +29,11 @@ async function joinRoom(
     return response;
 }
 
+type AnyFn = (...args: any) => void;
+
 export const references = {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onSyncRoom: (() => {}) as (...args: any) => void,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onSyncVideo: (() => {}) as (...args: any) => void,
+    onSyncRoom: noop as AnyFn,
+    onSyncVideo: noop as AnyFn,
 };
 
 function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
@@ -54,9 +55,8 @@ function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
 
     references.onSyncVideo = () => {
         socket.emit(SYNC_ROOM, {
-            fromUserId: input.user.id,
-            playing: !video.paused,
             roomId: input.roomId,
+            playing: !video.paused,
             time: video.currentTime,
         } satisfies SyncRoomClient);
     };
