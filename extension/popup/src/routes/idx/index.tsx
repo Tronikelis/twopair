@@ -22,14 +22,7 @@ export default function Idx() {
                 WAT - Watch Anything Together
             </Title>
 
-            <Text align="center">
-                Welcome{" "}
-                {username || (
-                    <Text span italic>
-                        change name in settings
-                    </Text>
-                )}
-            </Text>
+            <Text align="center">Welcome {username}</Text>
 
             <Group sx={{ justifyContent: "center" }}>
                 <Button to="/room/own" component={Link}>
