@@ -8,6 +8,9 @@
         "extension:build:dev": "cd extension && pnpm build:dev",
         "extension:browser:dev": "cd extension && web-ext run --verbose --devtools"
     },
+    "engines": {
+        "node": ">=18"
+    },
     "dependencies": {
         "nanoid": "4.0.2"
     },

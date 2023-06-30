@@ -5,15 +5,21 @@ import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
 import GoBack from "~/popup/components/GoBack";
-import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
+import { ROOM_ID_LEN, STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 
 export default function RoomJoin() {
     const navigate = useNavigate();
 
+    const [error, setError] = useState("");
     const [id, setId] = useState("");
 
     async function onJoin() {
         if (!id) return;
+
+        if (id.length < ROOM_ID_LEN) {
+            setError(`ids have at least ${ROOM_ID_LEN} characters`);
+            return;
+        }
 
         await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: id });
         const url = urlbat("/room/:id", { id });
@@ -29,6 +35,7 @@ export default function RoomJoin() {
 
             <Stack mt="md">
                 <TextInput
+                    error={error}
                     label="Id"
                     placeholder="Enter Id"
                     value={id}

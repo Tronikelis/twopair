@@ -12,6 +12,7 @@ import {
     SyncRoomClient,
     SyncRoomServer,
 } from "./types/socket.io.js";
+import LRU from "./utils/lru.js";
 
 type SocketAck<T = undefined> = (input: T) => void;
 
@@ -21,7 +22,7 @@ const io = new Server({
     },
 });
 
-const db = new Map<string, Room>();
+const db = new LRU<string, Room>(5e3);
 
 io.on("connection", socket => {
     console.log("socket joined !");
@@ -49,14 +50,16 @@ io.on("connection", socket => {
             if (!roomInDb) {
                 db.set(id, room);
             } else {
-                if (!roomInDb.users.find(x => x.id === user.id)) {
-                    roomInDb.users.push(user);
+                const roomClone = structuredClone(roomInDb);
+                if (!roomClone.users.find(x => x.id === user.id)) {
+                    roomClone.users.push(user);
                 }
 
-                room = { ...roomInDb };
+                db.set(id, roomClone);
+                room = roomClone;
             }
 
-            ack({ room });
+            ack({ room: room });
         }
     );
 
@@ -67,13 +70,15 @@ io.on("connection", socket => {
         const room = db.get(roomId);
         if (!room) return;
 
-        room.playing = playing;
-        room.time = time;
+        const roomClone = structuredClone(room);
+        roomClone.playing = playing;
+        roomClone.time = time;
+        db.set(roomId, roomClone);
 
         // excludes the socket that is sending this event
         socket.broadcast.to(roomId).emit(SYNC_ROOM, {
-            playing: room.playing,
-            time: room.time,
+            playing,
+            time,
         } satisfies SyncRoomServer);
     });
 

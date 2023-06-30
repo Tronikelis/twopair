@@ -6,7 +6,7 @@ import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
 import { sendToContent } from "~/comms";
-import { STORAGE_LAST_ROOM_ID, STORAGE_USERNAME } from "~/popup/config/const";
+import { ROOM_ID_LEN, STORAGE_LAST_ROOM_ID, STORAGE_USERNAME } from "~/popup/config/const";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
 
@@ -23,7 +23,7 @@ export default function Idx() {
     }
 
     async function onNewRoom() {
-        const id = nanoid(4);
+        const id = nanoid(ROOM_ID_LEN);
 
         const url = urlbat("/room/:id", { id });
         await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: id });

@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Stack, Text, Title } from "@mantine/core";
 import { useSetAtom } from "jotai";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { sendToContent } from "~/comms";
 import { STORAGE_USER_ID, STORAGE_USERNAME } from "~/popup/config/const";
@@ -12,7 +12,6 @@ import { roomAtom } from "../store";
 
 export default function SelectVideo() {
     const { id: roomId } = useParams();
-    const navigate = useNavigate();
 
     const setRoom = useSetAtom(roomAtom);
 
@@ -38,7 +37,6 @@ export default function SelectVideo() {
 
     async function onUnsyncVideo() {
         await sendToContent("UNSYNC_VIDEO", undefined);
-        navigate("/", { replace: true });
     }
 
     return (
@@ -48,11 +46,9 @@ export default function SelectVideo() {
                 <Text>{videos.length} videos found</Text>
             </Box>
 
-            {isSyncing && (
-                <Button variant="light" color="red" onClick={onUnsyncVideo}>
-                    Unsync
-                </Button>
-            )}
+            <Button variant="light" color="red" onClick={onUnsyncVideo} disabled={!isSyncing}>
+                Unsync
+            </Button>
 
             {videos.map(({ id, playing, time }) => (
                 <Paper withBorder p="xs" key={id}>
