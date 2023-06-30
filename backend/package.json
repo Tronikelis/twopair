@@ -2,6 +2,8 @@
     "name": "backend",
     "type": "module",
     "scripts": {
+        "build": "tsc",
+        "build:check": "tsc --noEmit",
         "dev": "tsx --tsconfig ./tsconfig.json ./src/index.ts"
     },
     "dependencies": {

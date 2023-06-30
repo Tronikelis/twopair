@@ -2,6 +2,7 @@
     "name": "extension",
     "type": "module",
     "scripts": {
+        "build:check": "tsc --noEmit",
         "build:dev": "pnpm popup:build:dev && pnpm content_script:build:dev",
         "popup:build:dev": "vite build -c ./vite.config.popup.ts --mode development",
         "content_script:build:dev": "vite build -c ./vite.config.content_script.ts --mode development"
