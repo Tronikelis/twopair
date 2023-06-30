@@ -12,6 +12,7 @@ import noop from "~/utils/noop";
 import { SYNC_MARGIN, VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../config/const";
 import { socket } from "../socket.io";
 import getVideoElement from "../utils/getVideoElement";
+import withinMargin from "../utils/withinMargin";
 
 async function joinRoom(
     input: JoinRoomClient,
@@ -22,9 +23,18 @@ async function joinRoom(
         input satisfies JoinRoomClient
     )) as JoinRoomServer;
 
+    const {
+        room: { playing, time },
+    } = response;
+
     // sync up when joining the room
-    video.currentTime = response.room.time;
-    response.room.playing ? void video.play() : video.pause();
+    // this is not the latest info btw me
+    if (playing === video.paused) {
+        playing ? void video.play() : video.pause();
+    }
+    if (!withinMargin(video.currentTime, time, SYNC_MARGIN)) {
+        video.currentTime = time;
+    }
 
     return response;
 }
@@ -37,22 +47,37 @@ export const references = {
 };
 
 function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
+    function removeVideoListeners() {
+        for (const event of VIDEO_EVENTS_LISTEN) {
+            video.removeEventListener(event, references.onSyncVideo);
+        }
+    }
+    function addVideoListeners() {
+        for (const event of VIDEO_EVENTS_LISTEN) {
+            video.addEventListener(event, references.onSyncVideo);
+        }
+    }
+
     socket.off(SYNC_ROOM, references.onSyncRoom);
     references.onSyncRoom = ({ playing, time }: SyncRoomServer) => {
+        // this probably removes some jank
+        // but different websites behave differently
+        removeVideoListeners();
+
         if (playing === video.paused) {
             playing ? void video.play() : video.pause();
         }
-        if (Math.abs(video.currentTime - time) > SYNC_MARGIN) {
+        if (!withinMargin(video.currentTime, time, SYNC_MARGIN)) {
             video.currentTime = time;
         }
-    };
 
+        // this sometimes removes some back-n-forth jank
+        // but different websites behave differently
+        addVideoListeners();
+    };
     socket.on(SYNC_ROOM, references.onSyncRoom);
 
-    for (const event of VIDEO_EVENTS_LISTEN) {
-        video.removeEventListener(event, references.onSyncVideo);
-    }
-
+    removeVideoListeners();
     references.onSyncVideo = () => {
         socket.emit(SYNC_ROOM, {
             roomId: input.roomId,
@@ -60,10 +85,7 @@ function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
             time: video.currentTime,
         } satisfies SyncRoomClient);
     };
-
-    for (const event of VIDEO_EVENTS_LISTEN) {
-        video.addEventListener(event, references.onSyncVideo);
-    }
+    addVideoListeners();
 }
 
 export default async function setSyncingVideo(
