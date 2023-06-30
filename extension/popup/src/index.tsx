@@ -7,7 +7,6 @@ import noop from "~/utils/noop";
 import Idx from "./routes/idx";
 import RoomId from "./routes/room_@id";
 import RoomJoin from "./routes/room_join";
-import RoomOwn from "./routes/room_own";
 import Settings from "./routes/settings";
 import { setDefaults } from "./util/storage";
 
@@ -15,10 +14,6 @@ const router = createMemoryRouter([
     {
         path: "/",
         element: <Idx />,
-    },
-    {
-        path: "/room/own",
-        element: <RoomOwn />,
     },
     {
         path: "/room/join",
