@@ -1,3 +1,5 @@
+export type SocketAck<T = undefined> = (input: T) => void;
+
 export interface Room {
     id: string;
     playing: boolean;
@@ -8,31 +10,4 @@ export interface Room {
 export interface User {
     id: string;
     username: string;
-}
-
-export interface JoinRoomClient {
-    id: string;
-    user: User;
-}
-
-export interface JoinRoomServer {
-    room: Room;
-}
-
-export interface SyncRoomClient extends Pick<Room, "playing" | "time"> {
-    roomId: string;
-}
-
-export type SyncRoomServer = Pick<Room, "playing" | "time">;
-
-export type LeaveRoomClient = undefined;
-
-export type LeaveRoomServer = undefined;
-
-export interface GetRoomServer {
-    room: Room | undefined;
-}
-
-export interface GetRoomClient {
-    roomId: string;
 }
