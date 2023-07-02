@@ -1,9 +1,9 @@
 import { Socket } from "socket.io";
 
 import { LEAVE_ROOM_ACK } from "~/config/events.js";
-import { LeaveRoomClient, LeaveRoomServer, SocketAck } from "~/types/socket.io.js";
+import { LeaveRoomClient, LeaveRoomServer } from "~/types/socket.io.js";
 
-import { EventCb } from "./types.js";
+import { EventCb, SocketAck } from "./types.js";
 
 // why doesn't ts complain that 1 argument is missing 🤷
 const leaveRoomAck: EventCb = (socket: Socket) => {

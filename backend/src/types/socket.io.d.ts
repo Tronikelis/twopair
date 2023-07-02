@@ -1,5 +1,3 @@
-export type SocketAck<T = undefined> = (input: T) => void;
-
 export interface Room {
     id: string;
     playing: boolean;
