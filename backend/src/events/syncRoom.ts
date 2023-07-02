@@ -1,16 +1,10 @@
 import { Socket } from "socket.io";
 
 import { SYNC_ROOM } from "~/config/events.js";
-import { Room } from "~/types/socket.io.js";
+import { Room, SyncRoomClient, SyncRoomServer } from "~/types/socket.io.js";
 import LRU from "~/utils/lru.js";
 
 import { EventCb } from "./types.js";
-
-export type SyncRoomServer = Pick<Room, "playing" | "time">;
-
-export interface SyncRoomClient extends Pick<Room, "playing" | "time"> {
-    roomId: string;
-}
 
 const syncRoom: EventCb = (socket: Socket, db: LRU<string, Room>) => {
     return ({ roomId, playing, time }: SyncRoomClient) => {

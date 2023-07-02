@@ -1,19 +1,10 @@
 import { Socket } from "socket.io";
 
 import { JOIN_ROOM_ACK } from "~/config/events.js";
-import { Room, SocketAck, User } from "~/types/socket.io.js";
+import { JoinRoomClient, JoinRoomServer, Room, SocketAck } from "~/types/socket.io.js";
 import LRU from "~/utils/lru.js";
 
 import { EventCb } from "./types.js";
-
-export interface JoinRoomClient {
-    id: string;
-    user: User;
-}
-
-export interface JoinRoomServer {
-    room: Room;
-}
 
 const joinRoomAck: EventCb = (socket: Socket, db: LRU<string, Room>) => {
     return async ({ id, user }: JoinRoomClient, ack: SocketAck<JoinRoomServer>) => {
