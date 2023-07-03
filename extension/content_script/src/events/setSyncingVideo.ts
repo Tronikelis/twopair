@@ -69,10 +69,12 @@ function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
 
 export default async function setSyncingVideo(
     input: SetSyncingVideoData
-): Promise<SetSyncingVideoRes | undefined> {
+): Promise<SetSyncingVideoRes> {
     const video = getVideoElement(input.videoId);
-    if (!video) return;
+    if (!video) return { room: undefined };
 
+    // prevent duplicate event listeners race conditions
+    if (video.getAttribute(VIDEO_ATTR_IS_SYNCING) === "true") return { room: undefined };
     video.setAttribute(VIDEO_ATTR_IS_SYNCING, "true");
 
     // reset listeners 1/2

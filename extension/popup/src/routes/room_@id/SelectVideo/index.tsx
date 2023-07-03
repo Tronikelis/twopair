@@ -23,7 +23,7 @@ export default function SelectVideo() {
     async function onSyncVideo(videoId: string) {
         if (!roomId || !userId || !username) return;
 
-        const room = await sendToContent("SET_SYNCING_VIDEO", {
+        const { room } = await sendToContent("SET_SYNCING_VIDEO", {
             roomId,
             videoId,
             user: {
@@ -32,7 +32,12 @@ export default function SelectVideo() {
             },
         });
 
-        setRoom(room.room);
+        if (!room) {
+            // handle err
+            return;
+        }
+
+        setRoom(room);
     }
 
     async function onUnsyncVideo() {

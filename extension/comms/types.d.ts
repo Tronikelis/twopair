@@ -26,7 +26,7 @@ export interface SetSyncingVideoData {
 }
 
 export interface SetSyncingVideoRes {
-    room: Room;
+    room: Room | undefined;
 }
 
 export type UnsyncVideoData = undefined;
