@@ -1,12 +1,9 @@
-import { Socket } from "socket.io";
-
 import { GET_ROOM_ACK } from "~/config/events.js";
-import { GetRoomClient, GetRoomServer, Room } from "~/types/socket.io.js";
-import LRU from "~/utils/lru.js";
+import { GetRoomClient, GetRoomServer } from "~/types/socket.io.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
-const getRoomAck: EventCb = (_socket: Socket, db: LRU<string, Room>) => {
+const getRoomAck: EventCb = (_socket, db) => {
     return ({ roomId }: GetRoomClient, ack: SocketAck<GetRoomServer>) => {
         console.log(GET_ROOM_ACK);
         console.log({ roomId });

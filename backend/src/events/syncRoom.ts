@@ -1,12 +1,9 @@
-import { Socket } from "socket.io";
-
 import { SYNC_ROOM } from "~/config/events.js";
-import { Room, SyncRoomClient, SyncRoomServer } from "~/types/socket.io.js";
-import LRU from "~/utils/lru.js";
+import { SyncRoomClient, SyncRoomServer } from "~/types/socket.io.js";
 
 import { EventCb } from "./types.js";
 
-const syncRoom: EventCb = (socket: Socket, db: LRU<string, Room>) => {
+const syncRoom: EventCb = (socket, db) => {
     return ({ roomId, playing, time }: SyncRoomClient) => {
         console.log(SYNC_ROOM);
         console.log({ roomId, playing, time });
