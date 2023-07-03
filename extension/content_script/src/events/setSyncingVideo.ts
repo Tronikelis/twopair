@@ -7,6 +7,7 @@ import {
 } from "backend/src/types/socket.io";
 
 import { SetSyncingVideoData, SetSyncingVideoRes } from "~/comms";
+import debounce from "~/utils/debounce";
 import noop from "~/utils/noop";
 
 import { SYNC_MARGIN, VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../config/const";
@@ -29,6 +30,7 @@ async function joinRoom(
 
     // sync up when joining the room
     // this is not the latest info btw me
+    // just the last sync event !
     if (playing === video.paused) {
         playing ? void video.play() : video.pause();
     }
@@ -47,45 +49,22 @@ export const references = {
 };
 
 function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
-    function removeVideoListeners() {
-        for (const event of VIDEO_EVENTS_LISTEN) {
-            video.removeEventListener(event, references.onSyncVideo);
-        }
-    }
-    function addVideoListeners() {
-        for (const event of VIDEO_EVENTS_LISTEN) {
-            video.addEventListener(event, references.onSyncVideo);
-        }
-    }
-
-    socket.off(SYNC_ROOM, references.onSyncRoom);
     references.onSyncRoom = ({ playing, time }: SyncRoomServer) => {
-        // this probably removes some jank
-        // but different websites behave differently
-        removeVideoListeners();
-
         if (playing === video.paused) {
             playing ? void video.play() : video.pause();
         }
         if (!withinMargin(video.currentTime, time, SYNC_MARGIN)) {
             video.currentTime = time;
         }
-
-        // this sometimes removes some back-n-forth jank
-        // but different websites behave differently
-        addVideoListeners();
     };
-    socket.on(SYNC_ROOM, references.onSyncRoom);
 
-    removeVideoListeners();
-    references.onSyncVideo = () => {
+    references.onSyncVideo = debounce(() => {
         socket.emit(SYNC_ROOM, {
             roomId: input.roomId,
             playing: !video.paused,
             time: video.currentTime,
         } satisfies SyncRoomClient);
-    };
-    addVideoListeners();
+    }, 100);
 }
 
 export default async function setSyncingVideo(
@@ -96,8 +75,20 @@ export default async function setSyncingVideo(
 
     video.setAttribute(VIDEO_ATTR_IS_SYNCING, "true");
 
+    // reset listeners 1/2
+    socket.off(SYNC_ROOM, references.onSyncRoom);
+    for (const event of VIDEO_EVENTS_LISTEN) {
+        video.removeEventListener(event, references.onSyncVideo);
+    }
+
     const room = await joinRoom({ id: input.roomId, user: input.user }, video);
     syncRoom(input, video);
+
+    // reset listeners 2/2
+    socket.on(SYNC_ROOM, references.onSyncRoom);
+    for (const event of VIDEO_EVENTS_LISTEN) {
+        video.addEventListener(event, references.onSyncVideo);
+    }
 
     return room;
 }
