@@ -19,7 +19,7 @@
         "extension"
     ],
     "engines": {
-        "node": ">=18",
+        "node": "18.x.x",
         "npm": ">=7"
     },
     "dependencies": {
