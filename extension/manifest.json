@@ -1,11 +1,11 @@
 {
     "$schema": "https://json.schemastore.org/chrome-manifest",
-    "name": "Watch Anything Together",
+    "name": "Twopair",
     "version": "0.1.0",
     "manifest_version": 3,
 
     "action": {
-        "default_title": "Watch Anything Together",
+        "default_title": "Twopair",
         "default_popup": "./popup/dist/index.html"
     },
 

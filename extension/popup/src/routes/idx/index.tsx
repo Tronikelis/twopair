@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
 import { nanoid } from "nanoid";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,9 +32,14 @@ export default function Idx() {
 
     return (
         <Stack spacing="xl" justify="center" sx={{ flex: 1 }}>
-            <Title order={3} align="center">
-                WAT - Watch Anything Together
-            </Title>
+            <Box>
+                <Title order={3} align="center">
+                    Twopair
+                </Title>
+                <Text color="dimmed" align="center">
+                    Watch any* video on the internet with your friends
+                </Text>
+            </Box>
 
             <Text align="center">Welcome {username}</Text>
 

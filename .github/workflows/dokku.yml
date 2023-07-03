@@ -1,12 +1,10 @@
 name: Dokku
 
-
 on:
     release:
-      types:
-        - created
+        types:
+            - created
     workflow_dispatch:
-
 
 jobs:
     dokku:
@@ -42,8 +40,8 @@ jobs:
             - name: Deploy to dokku
               uses: vitalyliber/dokku-github-action@v7.1
               env:
-                PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-                FORCE_DEPLOY: true
-                BRANCH: master
-                HOST: ${{ secrets.HOST }}
-                PROJECT: wat
+                  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+                  FORCE_DEPLOY: true
+                  BRANCH: master
+                  HOST: ${{ secrets.HOST }}
+                  PROJECT: twopair
