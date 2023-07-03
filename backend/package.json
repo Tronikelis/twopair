@@ -10,6 +10,10 @@
     "dependencies": {
         "socket.io": "4.7.1"
     },
+    "optionalDependencies": {
+        "bufferutil": "4.0.7",
+        "utf-8-validate": "5.0.10"
+    },
     "devDependencies": {
         "tsc-alias": "1.8.6",
         "tsx": "3.12.7"
