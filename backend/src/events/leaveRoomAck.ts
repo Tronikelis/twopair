@@ -3,7 +3,6 @@ import { LeaveRoomClient, LeaveRoomServer } from "~/types/socket.io.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
-// why doesn't ts complain that 1 argument is missing 🤷
 const leaveRoomAck: EventCb = (socket, db) => {
     return async ({ roomId, userId }: LeaveRoomClient, ack: SocketAck<LeaveRoomServer>) => {
         console.log(LEAVE_ROOM_ACK);
