@@ -8,7 +8,7 @@ import Idx from "./routes/idx";
 import RoomId from "./routes/room_@id";
 import RoomJoin from "./routes/room_join";
 import Settings from "./routes/settings";
-import { setDefaults } from "./util/storage";
+import { setDefaults } from "./utils/storage";
 
 const router = createMemoryRouter([
     {
