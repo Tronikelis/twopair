@@ -1,6 +1,12 @@
 /// <reference types="vite/client" />
 
-import { GetRoomClient, GetRoomServer, Room, User } from "backend/src/types/socket.io";
+import {
+    GetRoomClient,
+    GetRoomServer,
+    LeaveRoomClient,
+    Room,
+    User,
+} from "backend/src/types/socket.io";
 
 export type MessageType =
     | "GET_VIDEO_ELEMENTS"
@@ -16,7 +22,6 @@ export interface GetVideoElementsRes {
         syncing: boolean;
     }[];
 }
-
 export type GetVideoElementsData = undefined;
 
 export interface SetSyncingVideoData {
@@ -24,12 +29,11 @@ export interface SetSyncingVideoData {
     videoId: string;
     user: User;
 }
-
 export interface SetSyncingVideoRes {
     room: Room | undefined;
 }
 
-export type UnsyncVideoData = undefined;
+export type UnsyncVideoData = LeaveRoomClient;
 export type UnsyncVideoRes = undefined;
 
 export type GetRoomData = GetRoomClient;

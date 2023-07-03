@@ -8,8 +8,8 @@ import { socket } from "../socket.io";
 
 import { references } from "./setSyncingVideo";
 
-export default async function unsyncVideo(_input: UnsyncVideoData): Promise<UnsyncVideoRes> {
-    await socket.emitWithAck(LEAVE_ROOM_ACK, undefined satisfies LeaveRoomClient);
+export default async function unsyncVideo(input: UnsyncVideoData): Promise<UnsyncVideoRes> {
+    await socket.emitWithAck(LEAVE_ROOM_ACK, input satisfies LeaveRoomClient);
 
     const videos = Array.from(document.querySelectorAll("video"));
 

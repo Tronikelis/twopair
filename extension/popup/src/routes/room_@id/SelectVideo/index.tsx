@@ -41,7 +41,8 @@ export default function SelectVideo() {
     }
 
     async function onUnsyncVideo() {
-        await sendToContent("UNSYNC_VIDEO", undefined);
+        if (!roomId || !userId) return;
+        await sendToContent("UNSYNC_VIDEO", { roomId, userId });
     }
 
     return (
