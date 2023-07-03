@@ -38,7 +38,7 @@ jobs:
                   push: false
 
             - name: Deploy to dokku
-              uses: vitalyliber/dokku-github-action@v7
+              uses: vitalyliber/dokku-github-action@v7.1
               env:
                 PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
                 FORCE_DEPLOY: true
