@@ -3,6 +3,6 @@
     "verbose": true,
     "ignore": ["**/node_modules/*", "**/dist/*"],
     "watch": ["./backend/*", "./extension/*"],
-    "exec": "pnpm extension:build:dev",
+    "exec": "npm run extension:build:dev",
     "ext": "ts,tsx"
 }

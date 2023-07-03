@@ -2,8 +2,7 @@ import { MantineProvider, Stack } from "@mantine/core";
 import React from "react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 
-import noop from "~/utils/noop";
-
+import useEffectAsync from "./hooks/useEffectAsync";
 import Idx from "./routes/idx";
 import RoomId from "./routes/room_@id";
 import RoomJoin from "./routes/room_join";
@@ -29,9 +28,9 @@ const router = createMemoryRouter([
     },
 ]);
 
-setDefaults().catch(noop);
-
 export default function Main() {
+    useEffectAsync(setDefaults, []);
+
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
             <Stack p="md" w={16 * 30} h={9 * 30} sx={{ overflow: "auto" }}>

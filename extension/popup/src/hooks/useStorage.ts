@@ -1,5 +1,5 @@
 import { useDidUpdate } from "@mantine/hooks";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import browser from "webextension-polyfill";
 
 import noop from "~/utils/noop";
@@ -9,17 +9,12 @@ import useEffectAsync from "./useEffectAsync";
 export default function useStorage<T>(key: string, def: T) {
     const [state, setState] = useState(def);
 
-    const stateRef = useRef(state);
-    stateRef.current = state;
-
     // listen for changes outside of this hook
     useEffect(() => {
         function onChange(changes: browser.Storage.StorageAreaOnChangedChangesType) {
+            console.log({ changes });
             const change = changes[key];
-
             if (!change?.newValue) return;
-            if (change.newValue === stateRef.current) return;
-
             setState(change.newValue);
         }
 
@@ -32,8 +27,7 @@ export default function useStorage<T>(key: string, def: T) {
     // sync on mount
     useEffectAsync(async () => {
         const value = (await browser.storage.local.get(key))[key] as T | undefined;
-
-        if (!value || value === stateRef.current) return;
+        if (!value) return;
         setState(value);
     }, []);
 
