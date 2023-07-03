@@ -6,7 +6,12 @@ import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
 import { sendToContent } from "~/comms";
-import { ROOM_ID_LEN, STORAGE_LAST_ROOM_ID, STORAGE_USERNAME } from "~/popup/config/const";
+import {
+    ROOM_ID_LEN,
+    STORAGE_LAST_ROOM_ID,
+    STORAGE_USER_ID,
+    STORAGE_USERNAME,
+} from "~/popup/config/const";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
 
@@ -14,12 +19,14 @@ export default function Idx() {
     const navigate = useNavigate();
 
     const [username] = useStorage(STORAGE_USERNAME, "");
+    const [userId] = useStorage(STORAGE_USER_ID, "");
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
     const { isSyncing } = useGetVideoElements();
 
     async function onUnsync() {
-        await sendToContent("UNSYNC_VIDEO", undefined);
+        if (!userId || !lastRoomId) return;
+        await sendToContent("UNSYNC_VIDEO", { roomId: lastRoomId, userId });
     }
 
     async function onNewRoom() {
