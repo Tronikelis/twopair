@@ -4,40 +4,31 @@ on: push
 
 jobs:
     ci:
-        runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
+      steps:
+          - name: Cloning repo
+            uses: actions/checkout@v3
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+          - name: Setup Node.js environment
+            uses: actions/setup-node@v3.5.1
+            with:
+                node-version: 18
 
-            - name: Install Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18
+          - name: Cache node_modules
+            uses: actions/cache@v3
+            with:
+                path: "${{ github.workspace }}/node_modules"
+                key: ${{ runner.os }}-lint-${{ hashFiles('package-lock.json', '*/package-lock.json') }}
 
-            - uses: pnpm/action-setup@v2
-              name: Install pnpm
-              id: pnpm-install
-              with:
-                  version: 8
-                  run_install: false
+          - name: Check for cached node_modules
+            run: |
+                if [ -d "${{ github.workspace }}/node_modules" ]; then
+                    echo "Found cached node_modules, restoring from cache"
+                else
+                    echo "No cached node_modules found, installing dependencies"
+                    npm ci
+                fi
 
-            - name: Get pnpm store directory
-              id: pnpm-cache
-              shell: bash
-              run: |
-                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-            - uses: actions/cache@v3
-              name: Setup pnpm cache
-              with:
-                  path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-                  key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-pnpm-store-
-
-            - name: Install dependencies
-              run: pnpm install
-
-            - name: Finally CI
-              run: "pnpm build:check && pnpm lint"
+          - name: "Finally, CI"
+            run: |
+                npm run build:check && npm run lint

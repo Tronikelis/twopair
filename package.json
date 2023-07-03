@@ -3,15 +3,24 @@
     "version": "0.1.0",
     "type": "module",
     "scripts": {
-        "dev": "concurrently \"pnpm backend:dev\" \"pnpm extension:browser:dev\" \"nodemon\" --kill-others",
-        "backend:dev": "cd backend && pnpm dev",
-        "extension:build:dev": "cd extension && pnpm build:dev",
+        "dev": "concurrently \"npm run backend:dev\" \"npm run extension:browser:dev\" \"nodemon\" --kill-others",
+        "backend:prod": "cd backend && npm run prod",
+        "backend:dev": "cd backend && npm run dev",
+        "backend:build": "cd backend && npm run build",
+        "extension:build:prod": "cd extension && npm run build:prod",
+        "extension:build:dev": "cd extension && npm run build:dev",
         "extension:browser:dev": "cd extension && web-ext run --verbose --devtools",
         "lint": "eslint -c ./.eslintrc.cjs .",
-        "build:check": "cd extension && pnpm build:check && cd .. && cd backend && pnpm build:check"
+        "build:check": "cd extension && npm run build:check && cd .. && cd backend && npm run build:check",
+        "build": ""
     },
+    "workspaces": [
+        "backend",
+        "extension"
+    ],
     "engines": {
-        "node": ">=18"
+        "node": ">=18",
+        "npm": ">=7"
     },
     "dependencies": {
         "nanoid": "4.0.2"

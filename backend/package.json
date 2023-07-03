@@ -2,14 +2,16 @@
     "name": "backend",
     "type": "module",
     "scripts": {
-        "build": "tsc",
+        "build": "tsc && tsc-alias -p ./tsconfig.json",
         "build:check": "tsc --noEmit",
-        "dev": "tsx --tsconfig ./tsconfig.json ./src/index.ts"
+        "dev": "tsx --tsconfig ./tsconfig.json ./src/index.ts",
+        "prod": "node ./dist/index.js"
     },
     "dependencies": {
         "socket.io": "4.7.1"
     },
     "devDependencies": {
+        "tsc-alias": "1.8.6",
         "tsx": "3.12.7"
     }
 }

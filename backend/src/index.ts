@@ -26,7 +26,7 @@ function main() {
         socket.on(GET_ROOM_ACK, getRoomAck(socket, db));
     });
 
-    io.listen(3000);
+    io.listen(process.env.PORT ? parseInt(process.env.PORT) : 3000);
 }
 
 main();
