@@ -3,7 +3,7 @@ import { JoinRoomClient, JoinRoomServer, Room } from "~/types/socket.io.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
-const joinRoomAck: EventCb = (socket, db) => {
+const joinRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
     return async ({ id, user }: JoinRoomClient, ack: SocketAck<JoinRoomServer>) => {
         console.log(JOIN_ROOM_ACK);
         console.log({
@@ -12,7 +12,10 @@ const joinRoomAck: EventCb = (socket, db) => {
         });
 
         await socket.join(id);
-        const roomInDb = db.get(id);
+        socketToUser.set(socket, user.id);
+        socketToRoom.set(socket, id);
+
+        const roomInDb = rooms.get(id);
 
         if (!roomInDb) {
             const room: Room = {
@@ -22,7 +25,7 @@ const joinRoomAck: EventCb = (socket, db) => {
                 users: [user],
             };
 
-            db.set(id, room);
+            rooms.set(id, room);
             ack({ room });
             return;
         }
@@ -32,7 +35,7 @@ const joinRoomAck: EventCb = (socket, db) => {
             roomClone.users.push(user);
         }
 
-        db.set(id, roomClone);
+        rooms.set(id, roomClone);
         ack({ room: roomClone });
     };
 };

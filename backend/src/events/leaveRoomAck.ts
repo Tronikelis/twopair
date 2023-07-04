@@ -3,21 +3,23 @@ import { LeaveRoomClient, LeaveRoomServer } from "~/types/socket.io.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
-const leaveRoomAck: EventCb = (socket, db) => {
+const leaveRoomAck: EventCb = (socket, { rooms, socketToRoom }) => {
     return async ({ roomId, userId }: LeaveRoomClient, ack: SocketAck<LeaveRoomServer>) => {
         console.log(LEAVE_ROOM_ACK);
         console.log({ roomId });
 
-        const room = db.get(roomId);
+        const room = rooms.get(roomId);
         if (room) {
             const roomClone = structuredClone(room);
             roomClone.users = roomClone.users.filter(x => x.id !== userId);
-            db.set(roomId, roomClone);
+            rooms.set(roomId, roomClone);
         }
 
         await Promise.all(
             Array.from(socket.rooms).map(async room => await socket.leave(room))
         );
+
+        socketToRoom.delete(socket);
 
         ack(undefined);
     };
