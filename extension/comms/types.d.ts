@@ -10,9 +10,11 @@ import {
 
 export type MessageType =
     | "GET_VIDEO_ELEMENTS"
-    | "SET_SYNCING_VIDEO"
+    | "SYNC_VIDEO"
     | "UNSYNC_VIDEO"
-    | "GET_ROOM";
+    | "GET_ROOM"
+    | "CREATE_ROOM"
+    | "JOIN_ROOM";
 
 export interface GetVideoElementsRes {
     videos: {
@@ -24,14 +26,11 @@ export interface GetVideoElementsRes {
 }
 export type GetVideoElementsData = undefined;
 
-export interface SetSyncingVideoData {
-    roomId: string;
+export interface SyncVideoData {
     videoId: string;
-    user: User;
+    roomId: string;
 }
-export interface SetSyncingVideoRes {
-    room: Room | undefined;
-}
+export type SyncVideoRes = undefined;
 
 export type UnsyncVideoData = LeaveRoomClient;
 export type UnsyncVideoRes = undefined;
@@ -41,14 +40,14 @@ export type GetRoomRes = GetRoomServer;
 
 export type Data = {
     GET_VIDEO_ELEMENTS: GetVideoElementsData;
-    SET_SYNCING_VIDEO: SetSyncingVideoData;
+    SYNC_VIDEO: SyncVideoData;
     UNSYNC_VIDEO: UnsyncVideoData;
     GET_ROOM: GetRoomData;
 };
 
 export type Res = {
     GET_VIDEO_ELEMENTS: GetVideoElementsRes;
-    SET_SYNCING_VIDEO: SetSyncingVideoRes;
+    SYNC_VIDEO: SetSyncingVideoRes;
     UNSYNC_VIDEO: UnsyncVideoRes;
     GET_ROOM: GetRoomRes;
 };

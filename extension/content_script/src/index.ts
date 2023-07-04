@@ -1,8 +1,8 @@
-import { GetRoomData, listenFromContent, SetSyncingVideoData, UnsyncVideoData } from "~/comms";
+import { GetRoomData, listenFromContent, SyncVideoData, UnsyncVideoData } from "~/comms";
 
 import getRoom from "./events/getRoom";
 import getVideoElements from "./events/getVideoElements";
-import setSyncingVideo from "./events/setSyncingVideo";
+import setSyncingVideo from "./events/syncVideo";
 import unsyncVideo from "./events/unsyncVideo";
 
 listenFromContent(async (type, data) => {
@@ -12,7 +12,7 @@ listenFromContent(async (type, data) => {
 
         case "SET_SYNCING_VIDEO":
             // todo: error handling here
-            return await setSyncingVideo(data as SetSyncingVideoData);
+            return await setSyncingVideo(data as SyncVideoData);
 
         case "UNSYNC_VIDEO":
             return await unsyncVideo(data as UnsyncVideoData);

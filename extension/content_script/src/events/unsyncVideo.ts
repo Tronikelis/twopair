@@ -6,7 +6,7 @@ import { UnsyncVideoData, UnsyncVideoRes } from "~/comms";
 import { VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../config/const";
 import { socket } from "../socket.io";
 
-import { references } from "./setSyncingVideo";
+import { references } from "./syncVideo";
 
 export default async function unsyncVideo(input: UnsyncVideoData): Promise<UnsyncVideoRes> {
     await socket.emitWithAck(LEAVE_ROOM_ACK, input satisfies LeaveRoomClient);

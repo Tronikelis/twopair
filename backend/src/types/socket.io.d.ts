@@ -2,6 +2,8 @@ export interface Room {
     id: string;
     playing: boolean;
     time: number;
+    ownerId: string;
+    websiteUrl: string;
     users: User[];
 }
 
@@ -18,11 +20,11 @@ export interface GetRoomClient {
 }
 
 export interface JoinRoomClient {
-    id: string;
+    roomId: string;
     user: User;
 }
 export interface JoinRoomServer {
-    room: Room;
+    room: Room | undefined;
 }
 
 export interface LeaveRoomClient {
@@ -34,4 +36,12 @@ export type LeaveRoomServer = undefined;
 export type SyncRoomServer = Pick<Room, "playing" | "time">;
 export interface SyncRoomClient extends Pick<Room, "playing" | "time"> {
     roomId: string;
+}
+
+export interface CreateRoomClient {
+    websiteUrl: string;
+    user: User;
+}
+export interface CreateRoomServer {
+    room: Room;
 }

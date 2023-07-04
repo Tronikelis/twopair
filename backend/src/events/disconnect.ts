@@ -1,3 +1,5 @@
+import removeUser from "~/utils/removeUser.js";
+
 import { EventCb } from "./types.js";
 
 const disconnect: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
@@ -14,7 +16,7 @@ const disconnect: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
         if (!room) return;
 
         const roomClone = structuredClone(room);
-        roomClone.users = roomClone.users.filter(x => x.id !== userId);
+        removeUser(roomClone, userId);
         rooms.set(roomId, roomClone);
 
         socketToRoom.delete(socket);

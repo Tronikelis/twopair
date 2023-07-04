@@ -1,12 +1,7 @@
-import { JOIN_ROOM_ACK, SYNC_ROOM } from "backend/src/config/events";
-import {
-    JoinRoomClient,
-    JoinRoomServer,
-    SyncRoomClient,
-    SyncRoomServer,
-} from "backend/src/types/socket.io";
+import { SYNC_ROOM } from "backend/src/config/events";
+import { SyncRoomClient, SyncRoomServer } from "backend/src/types/socket.io";
 
-import { SetSyncingVideoData, SetSyncingVideoRes } from "~/comms";
+import { SyncVideoData, SyncVideoRes } from "~/comms";
 import debounce from "~/utils/debounce";
 import noop from "~/utils/noop";
 
@@ -15,32 +10,6 @@ import { socket } from "../socket.io";
 import getVideoElement from "../utils/getVideoElement";
 import withinMargin from "../utils/withinMargin";
 
-async function joinRoom(
-    input: JoinRoomClient,
-    video: HTMLVideoElement
-): Promise<JoinRoomServer> {
-    const response = (await socket.emitWithAck(
-        JOIN_ROOM_ACK,
-        input satisfies JoinRoomClient
-    )) as JoinRoomServer;
-
-    const {
-        room: { playing, time },
-    } = response;
-
-    // sync up when joining the room
-    // this is not the latest info btw me
-    // just the last sync event !
-    if (playing === video.paused) {
-        playing ? void video.play() : video.pause();
-    }
-    if (!withinMargin(video.currentTime, time, SYNC_MARGIN)) {
-        video.currentTime = time;
-    }
-
-    return response;
-}
-
 type AnyFn = (...args: any) => void;
 
 export const references = {
@@ -48,7 +17,7 @@ export const references = {
     onSyncVideo: noop as AnyFn,
 };
 
-function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
+function syncRoom(input: SyncVideoData, video: HTMLVideoElement) {
     references.onSyncRoom = ({ playing, time }: SyncRoomServer) => {
         if (playing === video.paused) {
             playing ? void video.play() : video.pause();
@@ -67,14 +36,12 @@ function syncRoom(input: SetSyncingVideoData, video: HTMLVideoElement) {
     }, 100);
 }
 
-export default async function setSyncingVideo(
-    input: SetSyncingVideoData
-): Promise<SetSyncingVideoRes> {
+export default function syncVideo(input: SyncVideoData): SyncVideoRes {
     const video = getVideoElement(input.videoId);
-    if (!video) return { room: undefined };
+    if (!video) return;
 
     // prevent duplicate event listeners race conditions
-    if (video.getAttribute(VIDEO_ATTR_IS_SYNCING) === "true") return { room: undefined };
+    if (video.getAttribute(VIDEO_ATTR_IS_SYNCING) === "true") return;
     video.setAttribute(VIDEO_ATTR_IS_SYNCING, "true");
 
     // reset listeners 1/2
@@ -83,7 +50,6 @@ export default async function setSyncingVideo(
         video.removeEventListener(event, references.onSyncVideo);
     }
 
-    const room = await joinRoom({ id: input.roomId, user: input.user }, video);
     syncRoom(input, video);
 
     // reset listeners 2/2
@@ -91,6 +57,4 @@ export default async function setSyncingVideo(
     for (const event of VIDEO_EVENTS_LISTEN) {
         video.addEventListener(event, references.onSyncVideo);
     }
-
-    return room;
 }
