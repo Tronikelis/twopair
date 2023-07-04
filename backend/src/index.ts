@@ -29,7 +29,7 @@ function main() {
     };
 
     io.on("connection", socket => {
-        console.log("socket joined !");
+        console.log("socket connected");
 
         socket.on("disconnect", disconnect(socket, db));
 

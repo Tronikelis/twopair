@@ -2,6 +2,8 @@ import { EventCb } from "./types.js";
 
 const disconnect: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
     return () => {
+        console.log("socket disconnected");
+
         const userId = socketToUser.get(socket);
         if (!userId) return;
 
@@ -12,7 +14,7 @@ const disconnect: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
         if (!room) return;
 
         const roomClone = structuredClone(room);
-        room.users = room.users.filter(x => x.id !== userId);
+        roomClone.users = roomClone.users.filter(x => x.id !== userId);
         rooms.set(roomId, roomClone);
 
         socketToRoom.delete(socket);
