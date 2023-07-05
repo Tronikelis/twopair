@@ -8,6 +8,7 @@ import useUser from "~/popup/hooks/useUser";
 
 import Room from "./Room";
 import SelectVideo from "./SelectVideo";
+import ShareWebsiteUrl from "./ShareWebsiteUrl";
 
 export default function RoomId() {
     const navigate = useNavigate();
@@ -32,11 +33,13 @@ export default function RoomId() {
                 }
             />
 
+            <ShareWebsiteUrl />
+
             <Group align="flex-start">
-                <Box sx={{ flex: 0.6 }}>
+                <Box sx={{ flex: 0.3 }}>
                     <SelectVideo />
                 </Box>
-                <Box sx={{ flex: 0.4 }}>
+                <Box sx={{ flex: 0.7 }}>
                     <Room />
                 </Box>
             </Group>
