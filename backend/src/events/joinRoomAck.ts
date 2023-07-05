@@ -1,15 +1,12 @@
 import { JOIN_ROOM_ACK } from "~/config/events.js";
 import { JoinRoomClient, JoinRoomServer } from "~/types/socket.io.js";
+import logger from "~/utils/logger.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
 const joinRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
     return async ({ roomId, user }: JoinRoomClient, ack: SocketAck<JoinRoomServer>) => {
-        console.log(JOIN_ROOM_ACK);
-        console.log({
-            roomId,
-            user,
-        });
+        logger.info({ payload: { roomId, user } }, JOIN_ROOM_ACK);
 
         const room = structuredClone(rooms.get(roomId));
         if (!room) {

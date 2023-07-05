@@ -8,6 +8,7 @@
         "prod": "node ./dist/index.js"
     },
     "dependencies": {
+        "pino": "8.14.1",
         "socket.io": "4.7.1"
     },
     "optionalDependencies": {
