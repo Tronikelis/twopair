@@ -1,12 +1,12 @@
 import { SYNC_ROOM } from "~/config/events.js";
 import { SyncRoomClient, SyncRoomServer } from "~/types/socket.io.js";
+import logger from "~/utils/logger.js";
 
 import { EventCb } from "./types.js";
 
 const syncRoom: EventCb = (socket, { rooms }) => {
     return ({ roomId, playing, time }: SyncRoomClient) => {
-        console.log(SYNC_ROOM);
-        console.log({ roomId, playing, time });
+        logger.info({ payload: { roomId, playing, time } }, SYNC_ROOM);
 
         const room = structuredClone(rooms.get(roomId));
         if (!room) return;

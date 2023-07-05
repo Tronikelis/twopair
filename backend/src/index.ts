@@ -16,6 +16,7 @@ import leaveRoomAck from "./events/leaveRoomAck.js";
 import setWebsiteUrlAck from "./events/setWebsiteUrlAck.js";
 import syncRoom from "./events/syncRoom.js";
 import { Room } from "./types/socket.io.js";
+import logger from "./utils/logger.js";
 import LRU from "./utils/lru.js";
 
 export interface DB {
@@ -38,7 +39,7 @@ function main() {
     };
 
     io.on("connection", socket => {
-        console.log("socket connected");
+        logger.info("socket connected");
 
         socket.on("disconnect", disconnect(socket, db));
 
@@ -50,7 +51,9 @@ function main() {
         socket.on(SET_WEBSITE_URL_ACK, setWebsiteUrlAck(socket, db));
     });
 
-    io.listen(process.env.PORT ? parseInt(process.env.PORT) : 3000);
+    const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+    io.listen(port);
+    logger.info(`listening on ${port}`);
 }
 
 main();

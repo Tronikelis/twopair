@@ -1,10 +1,11 @@
+import logger from "~/utils/logger.js";
 import removeUser from "~/utils/removeUser.js";
 
 import { EventCb } from "./types.js";
 
 const disconnect: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
     return () => {
-        console.log("socket disconnected");
+        logger.info("socket disconnected");
 
         const userId = socketToUser.get(socket);
         if (!userId) return;
