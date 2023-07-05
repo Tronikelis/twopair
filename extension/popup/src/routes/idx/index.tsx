@@ -68,7 +68,7 @@ export default function Idx() {
                     New room
                 </Button>
 
-                <Button to="/room/join" component={Link}>
+                <Button to="/room/join" component={Link} disabled={!!elements?.syncingId}>
                     Join room
                 </Button>
             </Group>
