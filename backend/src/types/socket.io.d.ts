@@ -3,7 +3,7 @@ export interface Room {
     playing: boolean;
     time: number;
     ownerId: string;
-    websiteUrl: string;
+    websiteUrl?: string;
     users: User[];
 }
 
@@ -39,7 +39,6 @@ export interface SyncRoomClient extends Pick<Room, "playing" | "time"> {
 }
 
 export interface CreateRoomClient {
-    websiteUrl: string;
     user: User;
 }
 export interface CreateRoomServer {

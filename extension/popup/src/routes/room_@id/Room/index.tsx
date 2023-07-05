@@ -1,19 +1,23 @@
-import { Box, Paper, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Paper, Stack, Text, Title } from "@mantine/core";
 import { useAtom } from "jotai";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { sendToContent } from "~/comms";
 import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import useFnRef from "~/popup/hooks/useFnRef";
 import useInterval from "~/popup/hooks/useInterval";
+import useUser from "~/popup/hooks/useUser";
 
 import { roomAtom } from "../store";
 
 export default function Room() {
+    const navigate = useNavigate();
     const { id: roomId } = useParams();
 
     const [room, setRoom] = useAtom(roomAtom);
+
+    const user = useUser();
 
     const getRoom = useFnRef(async () => {
         if (!roomId) return;
@@ -24,12 +28,23 @@ export default function Room() {
     useInterval(getRoom, 1e3);
     useEffectAsync(getRoom, []);
 
+    async function onLeaveRoom() {
+        if (!user || !roomId) return;
+        await sendToContent("LEAVE_ROOM", { roomId, userId: user.id });
+        navigate("/");
+    }
+
     return (
         <Stack>
             <Box>
                 <Title order={5}>Room</Title>
                 <Text>{roomId}</Text>
+                {room?.websiteUrl && <Text>{room.websiteUrl}</Text>}
             </Box>
+
+            <Button onClick={onLeaveRoom} variant="light" color="red">
+                Leave
+            </Button>
 
             <Paper p="xs" withBorder>
                 {room && (

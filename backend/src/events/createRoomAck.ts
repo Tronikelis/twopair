@@ -6,13 +6,10 @@ import { EventCb, SocketAck } from "./types.js";
 
 const createRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
     return async (
-        { user: { id: userId, username }, websiteUrl }: CreateRoomClient,
+        { user: { id: userId, username } }: CreateRoomClient,
         ack: SocketAck<CreateRoomServer>
     ) => {
-        let roomId = "";
-        while (rooms.get(roomId)) {
-            roomId = await nanoid(6);
-        }
+        const roomId = await nanoid(6);
 
         await socket.join(roomId);
 
@@ -20,7 +17,6 @@ const createRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) =
             id: roomId,
             time: 0,
             playing: false,
-            websiteUrl,
             ownerId: userId,
             users: [{ id: userId, username }],
         };
