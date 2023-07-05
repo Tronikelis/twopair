@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { GetVideoElementsRes, sendToContent } from "~/comms";
 
@@ -7,22 +7,15 @@ import useFnRef from "./useFnRef";
 import useInterval from "./useInterval";
 
 export default function useGetVideoElements() {
-    const [videos, setVideos] = useState<GetVideoElementsRes["videos"]>([]);
+    const [response, setResponse] = useState<GetVideoElementsRes | undefined>(undefined);
 
     const getVideoElements = useFnRef(async () => {
-        const { videos } = await sendToContent("GET_VIDEO_ELEMENTS", undefined);
-        setVideos(videos);
+        const response = await sendToContent("GET_VIDEO_ELEMENTS", undefined);
+        setResponse(response);
     });
 
     useEffectAsync(getVideoElements, []);
     useInterval(getVideoElements, 1e3);
 
-    const isSyncing = useMemo(() => {
-        return !!videos.find(x => x.syncing);
-    }, [videos]);
-
-    return {
-        videos,
-        isSyncing,
-    };
+    return response;
 }

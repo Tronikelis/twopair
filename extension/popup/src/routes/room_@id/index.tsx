@@ -1,21 +1,36 @@
-import { Box, Group, Stack, Title } from "@mantine/core";
+import { Box, Button, Group, Stack } from "@mantine/core";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import GoBack from "~/popup/components/GoBack";
+import { sendToContent } from "~/comms";
+import RouteTitle from "~/popup/components/RouteTitle";
+import useUser from "~/popup/hooks/useUser";
 
 import Room from "./Room";
 import SelectVideo from "./SelectVideo";
 
 export default function RoomId() {
-    const { id } = useParams();
+    const navigate = useNavigate();
+    const { id: roomId } = useParams();
+
+    const user = useUser();
+
+    async function onLeaveRoom() {
+        if (!user || !roomId) return;
+        await sendToContent("LEAVE_ROOM", { roomId, userId: user.id });
+        navigate("/");
+    }
 
     return (
         <Stack>
-            <Group>
-                <GoBack />
-                <Title order={3}>Room id: {id}</Title>
-            </Group>
+            <RouteTitle
+                title={`Room ${roomId}`}
+                action={
+                    <Button onClick={onLeaveRoom} size="xs" variant="light" color="red">
+                        Leave
+                    </Button>
+                }
+            />
 
             <Group align="flex-start">
                 <Box sx={{ flex: 0.6 }}>

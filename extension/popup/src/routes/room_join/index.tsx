@@ -1,11 +1,13 @@
-import { Button, Group, Stack, TextInput, Title } from "@mantine/core";
-import React, { useState } from "react";
+import { Button, Stack, TextInput } from "@mantine/core";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
-import GoBack from "~/popup/components/GoBack";
-import { ROOM_ID_LEN, STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
+import { sendToContent } from "~/comms";
+import RouteTitle from "~/popup/components/RouteTitle";
+import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
+import useUser from "~/popup/hooks/useUser";
 
 export default function RoomJoin() {
     const navigate = useNavigate();
@@ -13,11 +15,21 @@ export default function RoomJoin() {
     const [error, setError] = useState("");
     const [id, setId] = useState("");
 
-    async function onJoin() {
-        if (!id) return;
+    const user = useUser();
 
-        if (id.length < ROOM_ID_LEN) {
-            setError(`ids have at least ${ROOM_ID_LEN} characters`);
+    useEffect(() => {
+        setError("");
+    }, [id]);
+
+    async function onJoin() {
+        if (!id || !user) return;
+
+        const { room } = await sendToContent("JOIN_ROOM", {
+            roomId: id,
+            user,
+        });
+        if (!room) {
+            setError("This room does not exist");
             return;
         }
 
@@ -28,10 +40,7 @@ export default function RoomJoin() {
 
     return (
         <Stack>
-            <Group>
-                <GoBack />
-                <Title order={4}>Join a room</Title>
-            </Group>
+            <RouteTitle title="Join a room" />
 
             <Stack mt="md">
                 <TextInput

@@ -1,14 +1,14 @@
 import { LEAVE_ROOM_ACK } from "backend/src/config/events";
 import { LeaveRoomClient } from "backend/src/types/socket.io";
 
-import { UnsyncVideoData, UnsyncVideoRes } from "~/comms";
+import { LeaveRoomData, LeaveRoomRes } from "~/comms";
 
 import { VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../config/const";
 import { socket } from "../socket.io";
 
-import { references } from "./setSyncingVideo";
+import { references } from "./syncVideo";
 
-export default async function unsyncVideo(input: UnsyncVideoData): Promise<UnsyncVideoRes> {
+export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoomRes> {
     await socket.emitWithAck(LEAVE_ROOM_ACK, input satisfies LeaveRoomClient);
 
     const videos = Array.from(document.querySelectorAll("video"));

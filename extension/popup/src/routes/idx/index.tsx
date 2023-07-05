@@ -1,40 +1,47 @@
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
-import { nanoid } from "nanoid";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
 import { sendToContent } from "~/comms";
-import {
-    ROOM_ID_LEN,
-    STORAGE_LAST_ROOM_ID,
-    STORAGE_USER_ID,
-    STORAGE_USERNAME,
-} from "~/popup/config/const";
+import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
+import useUser from "~/popup/hooks/useUser";
 
 export default function Idx() {
     const navigate = useNavigate();
 
-    const [username] = useStorage(STORAGE_USERNAME, "");
-    const [userId] = useStorage(STORAGE_USER_ID, "");
+    const user = useUser();
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
-    const { isSyncing } = useGetVideoElements();
+    const elements = useGetVideoElements();
 
-    async function onUnsync() {
-        if (!userId || !lastRoomId) return;
-        await sendToContent("UNSYNC_VIDEO", { roomId: lastRoomId, userId });
+    async function onLeaveRoom() {
+        if (!user || !lastRoomId) return;
+        await sendToContent("LEAVE_ROOM", { roomId: lastRoomId, userId: user.id });
     }
 
     async function onNewRoom() {
-        const id = nanoid(ROOM_ID_LEN);
+        if (!user) return;
 
-        const url = urlbat("/room/:id", { id });
-        await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: id });
+        const { room } = await sendToContent("CREATE_ROOM", {
+            user,
+        });
+
+        const url = urlbat("/room/:id", { id: room.id });
+        await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: room.id });
         navigate(url);
+    }
+
+    async function onLastRoom() {
+        if (!user || !lastRoomId) return;
+
+        const { room } = await sendToContent("JOIN_ROOM", { roomId: lastRoomId, user });
+        if (!room) return;
+
+        navigate(urlbat("/room/:id", { id: lastRoomId }));
     }
 
     return (
@@ -48,29 +55,32 @@ export default function Idx() {
                 </Text>
             </Box>
 
-            <Text align="center">Welcome {username}</Text>
+            <Text align="center">Welcome {user?.username}</Text>
 
             <Group sx={{ justifyContent: "center" }}>
                 {lastRoomId && (
-                    <Button
-                        variant="outline"
-                        to={urlbat("/room/:id", { id: lastRoomId })}
-                        component={Link}
-                    >
+                    <Button variant="outline" onClick={onLastRoom}>
                         Last room
                     </Button>
                 )}
 
-                <Button onClick={onNewRoom}>New room</Button>
+                <Button onClick={onNewRoom} disabled={!!elements?.syncingId}>
+                    New room
+                </Button>
 
-                <Button to="/room/join" component={Link}>
+                <Button to="/room/join" component={Link} disabled={!!elements?.syncingId}>
                     Join room
                 </Button>
             </Group>
 
             <Group ml="auto">
-                <Button variant="light" color="red" onClick={onUnsync} disabled={!isSyncing}>
-                    Unsync
+                <Button
+                    variant="light"
+                    color="red"
+                    onClick={onLeaveRoom}
+                    disabled={!elements?.syncingId}
+                >
+                    Leave
                 </Button>
 
                 <Button to="/settings" color="gray" component={Link}>

@@ -1,8 +1,12 @@
-import { Button } from "@mantine/core";
+import { Button, Sx } from "@mantine/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function GoBack() {
+interface GoBackProps {
+    sx?: Sx;
+}
+
+export default function GoBack({ sx }: GoBackProps) {
     const navigate = useNavigate();
 
     function onClick() {
@@ -10,7 +14,7 @@ export default function GoBack() {
     }
 
     return (
-        <Button onClick={onClick} variant="subtle">
+        <Button sx={sx} onClick={onClick} size="xs" variant="subtle">
             {"<< Back"}
         </Button>
     );

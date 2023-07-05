@@ -12,7 +12,6 @@ export default function useStorage<T>(key: string, def: T) {
     // listen for changes outside of this hook
     useEffect(() => {
         function onChange(changes: browser.Storage.StorageAreaOnChangedChangesType) {
-            console.log({ changes });
             const change = changes[key];
             if (!change?.newValue) return;
             setState(change.newValue);

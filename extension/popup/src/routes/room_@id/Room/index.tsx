@@ -29,12 +29,21 @@ export default function Room() {
             <Box>
                 <Title order={5}>Room</Title>
                 <Text>{roomId}</Text>
+                {room?.websiteUrl && <Text>{room.websiteUrl}</Text>}
             </Box>
 
             <Paper p="xs" withBorder>
                 {room && (
                     <Stack spacing="xs">
-                        <Text>People: {room.users.map(x => x.username).join(", ")}</Text>
+                        <Stack spacing={0}>
+                            <Text>People:</Text>
+                            {room.users.map(x => (
+                                <Text key={x.id}>
+                                    {"- " + x.username}
+                                    {x.id === room.ownerId && " 👑"}
+                                </Text>
+                            ))}
+                        </Stack>
 
                         <Text>
                             <Text span weight={600}>

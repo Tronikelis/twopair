@@ -1,5 +1,6 @@
 import { LEAVE_ROOM_ACK } from "~/config/events.js";
 import { LeaveRoomClient, LeaveRoomServer } from "~/types/socket.io.js";
+import removeUser from "~/utils/removeUser.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
@@ -11,7 +12,7 @@ const leaveRoomAck: EventCb = (socket, { rooms, socketToRoom }) => {
         const room = rooms.get(roomId);
         if (room) {
             const roomClone = structuredClone(room);
-            roomClone.users = roomClone.users.filter(x => x.id !== userId);
+            removeUser(roomClone, userId);
             rooms.set(roomId, roomClone);
         }
 
