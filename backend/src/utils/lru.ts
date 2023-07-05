@@ -23,6 +23,7 @@ export default class LRU<K, V> {
         this.tail = undefined;
     }
 
+    /** if the value is an object this returns a direct reference */
     get(key: K): V | undefined {
         const node = this.lookup.get(key);
         if (!node) return undefined;

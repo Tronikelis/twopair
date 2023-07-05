@@ -9,16 +9,13 @@ const leaveRoomAck: EventCb = (socket, { rooms, socketToRoom }) => {
         console.log(LEAVE_ROOM_ACK);
         console.log({ roomId });
 
-        const room = rooms.get(roomId);
+        const room = structuredClone(rooms.get(roomId));
         if (room) {
-            const roomClone = structuredClone(room);
-            removeUser(roomClone, userId);
-            rooms.set(roomId, roomClone);
+            removeUser(room, userId);
+            rooms.set(roomId, room);
         }
 
-        await Promise.all(
-            Array.from(socket.rooms).map(async room => await socket.leave(room))
-        );
+        await Promise.all(Array.from(socket.rooms).map(async x => await socket.leave(x)));
 
         socketToRoom.delete(socket);
 

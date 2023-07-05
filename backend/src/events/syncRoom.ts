@@ -8,13 +8,12 @@ const syncRoom: EventCb = (socket, { rooms }) => {
         console.log(SYNC_ROOM);
         console.log({ roomId, playing, time });
 
-        const room = rooms.get(roomId);
+        const room = structuredClone(rooms.get(roomId));
         if (!room) return;
 
-        const roomClone = structuredClone(room);
-        roomClone.playing = playing;
-        roomClone.time = time;
-        rooms.set(roomId, roomClone);
+        room.playing = playing;
+        room.time = time;
+        rooms.set(roomId, room);
 
         // excludes the socket that is sending this event
         socket.broadcast.to(roomId).emit(SYNC_ROOM, {
