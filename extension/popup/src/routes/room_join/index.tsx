@@ -1,11 +1,11 @@
-import { Button, Group, Stack, TextInput, Title } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
 import { sendToContent } from "~/comms";
-import GoBack from "~/popup/components/GoBack";
+import RouteTitle from "~/popup/components/RouteTitle";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useUser from "~/popup/hooks/useUser";
 
@@ -40,10 +40,7 @@ export default function RoomJoin() {
 
     return (
         <Stack>
-            <Group>
-                <GoBack />
-                <Title order={4}>Join a room</Title>
-            </Group>
+            <RouteTitle title="Join a room" />
 
             <Stack mt="md">
                 <TextInput

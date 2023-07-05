@@ -1,7 +1,7 @@
-import { Group, Stack, TextInput, Title } from "@mantine/core";
+import { Stack, TextInput } from "@mantine/core";
 import React from "react";
 
-import GoBack from "~/popup/components/GoBack";
+import RouteTitle from "~/popup/components/RouteTitle";
 import { STORAGE_USERNAME } from "~/popup/config/const";
 import useStorage from "~/popup/hooks/useStorage";
 
@@ -10,10 +10,7 @@ export default function Settings() {
 
     return (
         <Stack>
-            <Group>
-                <GoBack />
-                <Title order={3}>Settings</Title>
-            </Group>
+            <RouteTitle title="Settings" />
 
             <TextInput
                 label="Username"
