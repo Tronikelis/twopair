@@ -25,6 +25,13 @@ export default function ShareWebsiteUrl() {
         setRoom(room);
     }
 
+    // this forces the user to inject the content script into the newly opened page
+    // (by opening the popup again in the new page)
+    function onClickAnchor() {
+        // lil delay hack cause otherwise the link opens in an entirely new browser instance
+        setTimeout(() => window.close(), 1);
+    }
+
     let truncatedUrl = room?.websiteUrl?.split("://").at(-1);
     if (truncatedUrl && truncatedUrl.length > 40) {
         truncatedUrl = truncatedUrl.slice(0, 40) + "...";
@@ -32,7 +39,7 @@ export default function ShareWebsiteUrl() {
 
     return (
         <Stack spacing="xs" align="center">
-            <Anchor italic href={room?.websiteUrl || "#"}>
+            <Anchor onClick={onClickAnchor} italic href={room?.websiteUrl || "#"}>
                 {truncatedUrl || "example.com/video"}
             </Anchor>
 

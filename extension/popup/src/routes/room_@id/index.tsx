@@ -27,7 +27,7 @@ export default function RoomId() {
             <RouteTitle
                 title={`Room ${roomId}`}
                 action={
-                    <Button onClick={onLeaveRoom} size="xs" variant="light" color="red">
+                    <Button onClick={onLeaveRoom} size="xs" variant="subtle" color="red">
                         Leave
                     </Button>
                 }
