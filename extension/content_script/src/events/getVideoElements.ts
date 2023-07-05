@@ -27,12 +27,17 @@ export default function getVideoElements(_input: GetVideoElementsData): GetVideo
         }
     }
 
+    const syncingVideo = document.querySelector(`[${VIDEO_ATTR_IS_SYNCING}="true"]`);
+    const syncingId = syncingVideo
+        ? (syncingVideo.getAttribute(VIDEO_ATTR_ID) as string)
+        : undefined;
+
     return {
+        syncingId,
         videos: videos.map(video => ({
             id: video.getAttribute(VIDEO_ATTR_ID) as string,
             playing: !video.paused,
             time: video.currentTime,
-            syncing: video.getAttribute(VIDEO_ATTR_IS_SYNCING) === "true",
         })),
     };
 }

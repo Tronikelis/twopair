@@ -30,6 +30,7 @@ export default function RoomJoin() {
         });
         if (!room) {
             setError("This room does not exist");
+            return;
         }
 
         await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: id });

@@ -8,7 +8,7 @@ import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 export default function SelectVideo() {
     const { id: roomId } = useParams();
 
-    const { videos, isSyncing } = useGetVideoElements();
+    const elements = useGetVideoElements();
 
     async function onSyncVideo(videoId: string) {
         if (!roomId) return;
@@ -22,17 +22,21 @@ export default function SelectVideo() {
         <Stack>
             <Box>
                 <Title order={5}>Select Video</Title>
-                <Text>{videos.length} videos found</Text>
+                <Text>{elements?.videos.length} videos found</Text>
             </Box>
 
-            {videos.map(({ id, playing, time }) => (
+            {elements?.videos.map(({ id, playing, time }) => (
                 <Paper withBorder p="xs" key={id}>
                     <Stack spacing="xs">
                         <Text>
                             {playing ? "⏩ Playing" : "⏸️ Paused"} at {Math.floor(time)}s
                         </Text>
 
-                        <Button size="sm" onClick={() => onSyncVideo(id)} disabled={isSyncing}>
+                        <Button
+                            size="sm"
+                            onClick={() => onSyncVideo(id)}
+                            disabled={elements.syncingId === id}
+                        >
                             Sync
                         </Button>
                     </Stack>

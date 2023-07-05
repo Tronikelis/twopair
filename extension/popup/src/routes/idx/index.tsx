@@ -16,7 +16,7 @@ export default function Idx() {
     const user = useUser();
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
-    const { isSyncing } = useGetVideoElements();
+    const elements = useGetVideoElements();
 
     async function onLeaveRoom() {
         if (!user || !lastRoomId) return;
@@ -29,8 +29,6 @@ export default function Idx() {
         const { room } = await sendToContent("CREATE_ROOM", {
             user,
         });
-
-        console.log({ room });
 
         const url = urlbat("/room/:id", { id: room.id });
         await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: room.id });
@@ -78,7 +76,7 @@ export default function Idx() {
                     variant="light"
                     color="red"
                     onClick={onLeaveRoom}
-                    disabled={!isSyncing}
+                    disabled={!elements?.syncingId}
                 >
                     Leave
                 </Button>

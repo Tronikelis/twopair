@@ -8,8 +8,6 @@ import {
     JoinRoomClient,
     JoinRoomServer,
     LeaveRoomClient,
-    Room,
-    User,
 } from "backend/src/types/socket.io";
 
 export type MessageType =
@@ -21,11 +19,11 @@ export type MessageType =
     | "JOIN_ROOM";
 
 export interface GetVideoElementsRes {
+    syncingId?: string;
     videos: {
         id: string;
         time: number;
         playing: boolean;
-        syncing: boolean;
     }[];
 }
 export type GetVideoElementsData = undefined;

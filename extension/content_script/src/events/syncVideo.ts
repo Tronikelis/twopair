@@ -57,4 +57,8 @@ export default function syncVideo(input: SyncVideoData): SyncVideoRes {
     for (const event of VIDEO_EVENTS_LISTEN) {
         video.addEventListener(event, references.onSyncVideo);
     }
+
+    // new user joined, reset the video for everyone (idk about this one)
+    video.pause();
+    video.currentTime = 0;
 }
