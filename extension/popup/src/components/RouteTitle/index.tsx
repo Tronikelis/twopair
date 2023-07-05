@@ -1,7 +1,7 @@
 import { Group, Title } from "@mantine/core";
 import React, { ReactNode } from "react";
 
-import GoBack from "./GoBack";
+import GoBack from "../GoBack";
 
 interface RouteTitleProps {
     title: string;
