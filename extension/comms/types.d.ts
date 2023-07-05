@@ -8,6 +8,8 @@ import {
     JoinRoomClient,
     JoinRoomServer,
     LeaveRoomClient,
+    SetWebsiteUrlClient,
+    SetWebsiteUrlServer,
 } from "backend/src/types/socket.io";
 
 export type MessageType =
@@ -16,7 +18,8 @@ export type MessageType =
     | "GET_ROOM"
     | "CREATE_ROOM"
     | "LEAVE_ROOM"
-    | "JOIN_ROOM";
+    | "JOIN_ROOM"
+    | "SET_WEBSITE_URL";
 
 export interface GetVideoElementsRes {
     syncingId?: string;
@@ -46,6 +49,9 @@ export type JoinRoomRes = JoinRoomServer;
 export type CreateRoomData = CreateRoomClient;
 export type CreateRoomRes = CreateRoomServer;
 
+export type SetWebsiteUrlData = SetWebsiteUrlClient;
+export type SetWebsiteUrlRes = SetWebsiteUrlServer;
+
 export type Data = {
     GET_VIDEO_ELEMENTS: GetVideoElementsData;
     SYNC_VIDEO: SyncVideoData;
@@ -53,6 +59,7 @@ export type Data = {
     GET_ROOM: GetRoomData;
     JOIN_ROOM: JoinRoomData;
     CREATE_ROOM: CreateRoomData;
+    SET_WEBSITE_URL: SetWebsiteUrlData;
 };
 
 export type Res = {
@@ -62,4 +69,5 @@ export type Res = {
     GET_ROOM: GetRoomRes;
     JOIN_ROOM: JoinRoomRes;
     CREATE_ROOM: CreateRoomRes;
+    SET_WEBSITE_URL: SetWebsiteUrlRes;
 };

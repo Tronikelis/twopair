@@ -44,3 +44,11 @@ export interface CreateRoomClient {
 export interface CreateRoomServer {
     room: Room;
 }
+
+export interface SetWebsiteUrlClient {
+    websiteUrl: string;
+    roomId: string;
+}
+export interface SetWebsiteUrlServer {
+    room: Room | undefined;
+}

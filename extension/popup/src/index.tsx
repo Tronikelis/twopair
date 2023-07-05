@@ -33,7 +33,7 @@ export default function Main() {
 
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
-            <Stack p="md" w={16 * 30} h={9 * 30} sx={{ overflow: "auto" }}>
+            <Stack p="md" w={16 * 40} h={9 * 40} sx={{ overflow: "auto" }}>
                 <RouterProvider router={router} />
             </Stack>
         </MantineProvider>

@@ -4,6 +4,7 @@ import {
     JoinRoomData,
     LeaveRoomData,
     listenFromContent,
+    SetWebsiteUrlData,
     SyncVideoData,
 } from "~/comms";
 
@@ -12,6 +13,7 @@ import getRoom from "./events/getRoom";
 import getVideoElements from "./events/getVideoElements";
 import joinRoom from "./events/joinRoom";
 import leaveRoom from "./events/leaveRoom";
+import setWebsiteUrl from "./events/setWebsiteUrl";
 import syncVideo from "./events/syncVideo";
 
 listenFromContent(async (type, data) => {
@@ -33,5 +35,8 @@ listenFromContent(async (type, data) => {
 
         case "SYNC_VIDEO":
             return syncVideo(data as SyncVideoData);
+
+        case "SET_WEBSITE_URL":
+            return await setWebsiteUrl(data as SetWebsiteUrlData);
     }
 });

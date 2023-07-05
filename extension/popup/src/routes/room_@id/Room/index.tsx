@@ -29,7 +29,6 @@ export default function Room() {
             <Box>
                 <Title order={5}>Room</Title>
                 <Text>{roomId}</Text>
-                {room?.websiteUrl && <Text>{room.websiteUrl}</Text>}
             </Box>
 
             <Paper p="xs" withBorder>

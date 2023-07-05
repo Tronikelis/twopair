@@ -11,8 +11,8 @@ const joinRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => 
             user,
         });
 
-        const roomInDb = rooms.get(roomId);
-        if (!roomInDb) {
+        const room = structuredClone(rooms.get(roomId));
+        if (!room) {
             ack({ room: undefined });
             return;
         }
@@ -21,13 +21,12 @@ const joinRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => 
         socketToUser.set(socket, user.id);
         socketToRoom.set(socket, roomId);
 
-        const roomClone = structuredClone(roomInDb);
-        if (!roomClone.users.find(x => x.id === user.id)) {
-            roomClone.users.push(user);
+        if (!room.users.find(x => x.id === user.id)) {
+            room.users.push(user);
         }
 
-        rooms.set(roomId, roomClone);
-        ack({ room: roomClone });
+        rooms.set(roomId, room);
+        ack({ room });
     };
 };
 
