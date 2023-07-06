@@ -1,4 +1,5 @@
 import { MantineProvider, Stack } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import React from "react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 
@@ -33,6 +34,7 @@ export default function Main() {
 
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>
+            <Notifications limit={1} />
             <Stack p="md" w={16 * 40} h={9 * 40} sx={{ overflow: "auto" }}>
                 <RouterProvider router={router} />
             </Stack>

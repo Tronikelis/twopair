@@ -60,6 +60,8 @@ export default function Room() {
                         </Text>
                     </Stack>
                 )}
+
+                {!room && <Text>This room does not exist 🤔</Text>}
             </Paper>
         </Stack>
     );
