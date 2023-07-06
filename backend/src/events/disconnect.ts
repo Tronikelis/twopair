@@ -1,5 +1,5 @@
 import logger from "~/utils/logger.js";
-import removeUser from "~/utils/removeUser.js";
+import removeUser from "~/utils/room/removeUser.js";
 
 import { EventCb } from "./types.js";
 

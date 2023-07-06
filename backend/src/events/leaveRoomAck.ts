@@ -1,7 +1,7 @@
 import { LEAVE_ROOM_ACK } from "~/config/events.js";
 import { LeaveRoomClient, LeaveRoomServer } from "~/types/socket.io.js";
 import logger from "~/utils/logger.js";
-import removeUser from "~/utils/removeUser.js";
+import removeUser from "~/utils/room/removeUser.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
