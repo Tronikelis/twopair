@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, Text, Title } from "@mantine/core";
+import { Box, List, Paper, Stack, Text, Title } from "@mantine/core";
 import { useAtom } from "jotai";
 import React from "react";
 import { useParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import { sendToContent } from "~/comms";
 import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import useFnRef from "~/popup/hooks/useFnRef";
 import useInterval from "~/popup/hooks/useInterval";
+import useUser from "~/popup/hooks/useUser";
 
 import { roomAtom } from "../store";
 
@@ -14,6 +15,7 @@ export default function Room() {
     const { id: roomId } = useParams();
 
     const [room, setRoom] = useAtom(roomAtom);
+    const user = useUser();
 
     const getRoom = useFnRef(async () => {
         if (!roomId) return;
@@ -36,12 +38,15 @@ export default function Room() {
                     <Stack spacing="xs">
                         <Stack spacing={0}>
                             <Text>People:</Text>
-                            {room.users.map(x => (
-                                <Text key={x.id}>
-                                    {"- " + x.username}
-                                    {x.id === room.ownerId && " 👑"}
-                                </Text>
-                            ))}
+                            <List>
+                                {room.users.map(x => (
+                                    <List.Item key={x.id}>
+                                        {x.username}
+                                        {x.id === user?.id && " 👤"}
+                                        {x.id === room.ownerId && " 👑"}
+                                    </List.Item>
+                                ))}
+                            </List>
                         </Stack>
 
                         <Text>

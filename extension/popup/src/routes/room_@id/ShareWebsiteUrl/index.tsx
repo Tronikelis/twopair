@@ -29,6 +29,7 @@ export default function ShareWebsiteUrl() {
     // (by opening the popup again in the new page)
     function onClickAnchor() {
         // lil delay hack cause otherwise the link opens in an entirely new browser instance
+        // (at least in FF)
         setTimeout(() => window.close(), 1);
     }
 
