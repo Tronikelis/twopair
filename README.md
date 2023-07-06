@@ -17,7 +17,20 @@ This [open source](https://github.com/Tronikelis/twopair) browser extension let'
 
 
 
+## Building the extension
+
+Clone the repo and install deps with `npm i` and then:
+
+- backend
+  - `npm run backend:build`
+  
+- extension
+  - [DEV] `npm run extension:build:dev`
+  - [PROD] `npm run extension:build:prod`
+
 
 ## Privacy policy
 
 The extension communicates with an external server which does not log / collect **ANY** personal information
+
+
