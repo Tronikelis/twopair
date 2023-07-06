@@ -13,10 +13,10 @@
     },
     "optionalDependencies": {
         "bufferutil": "4.0.7",
-        "utf-8-validate": "5.0.10"
+        "utf-8-validate": "6.0.3"
     },
     "devDependencies": {
-        "tsc-alias": "1.8.6",
+        "tsc-alias": "1.8.7",
         "tsx": "3.12.7"
     }
 }
