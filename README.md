@@ -1,4 +1,4 @@
-# Twopair
+<h1 align="center">Twopair</h1>
 
 This browser extension let's you watch any video on any website together with your friends
 
