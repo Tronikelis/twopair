@@ -5,10 +5,13 @@ import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
 import { sendToContent } from "~/comms";
+import ExternalLink from "~/popup/components/ExternalLink";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
+import notify, { showInjectScriptErr } from "~/popup/utils/notify";
+import tryCatch from "~/utils/tryCatch";
 
 export default function Idx() {
     const navigate = useNavigate();
@@ -26,20 +29,32 @@ export default function Idx() {
     async function onNewRoom() {
         if (!user) return;
 
-        const { room } = await sendToContent("CREATE_ROOM", {
-            user,
-        });
+        const [err, data] = await tryCatch(() => sendToContent("CREATE_ROOM", { user }));
+        if (err) {
+            showInjectScriptErr();
+            return;
+        }
 
-        const url = urlbat("/room/:id", { id: room.id });
-        await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: room.id });
+        const url = urlbat("/room/:id", { id: data.room.id });
+        await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: data.room.id });
         navigate(url);
     }
 
     async function onLastRoom() {
         if (!user || !lastRoomId) return;
 
-        const { room } = await sendToContent("JOIN_ROOM", { roomId: lastRoomId, user });
-        if (!room) return;
+        const [err, data] = await tryCatch(() =>
+            sendToContent("JOIN_ROOM", { roomId: lastRoomId, user })
+        );
+        if (err) {
+            showInjectScriptErr();
+            return;
+        }
+
+        if (!data.room) {
+            notify.err({ message: "Room does not exist" });
+            return;
+        }
 
         navigate(urlbat("/room/:id", { id: lastRoomId }));
     }
@@ -73,19 +88,28 @@ export default function Idx() {
                 </Button>
             </Group>
 
-            <Group ml="auto">
-                <Button
-                    variant="light"
-                    color="red"
-                    onClick={onLeaveRoom}
-                    disabled={!elements?.syncingId}
+            <Group position="apart">
+                <ExternalLink
+                    color="dimmed"
+                    href="https://github.com/Tronikelis/twopair#notes"
                 >
-                    Leave
-                </Button>
+                    {"*some won't work"}
+                </ExternalLink>
 
-                <Button to="/settings" color="gray" component={Link}>
-                    Settings
-                </Button>
+                <Group>
+                    <Button
+                        variant="light"
+                        color="red"
+                        onClick={onLeaveRoom}
+                        disabled={!elements?.syncingId}
+                    >
+                        Leave
+                    </Button>
+
+                    <Button to="/settings" color="gray" component={Link}>
+                        Settings
+                    </Button>
+                </Group>
             </Group>
         </Stack>
     );
