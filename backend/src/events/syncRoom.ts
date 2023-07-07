@@ -11,8 +11,8 @@ const syncRoom: EventCb = (socket, { rooms }) => {
         const room = rooms.get(roomId)?.clone();
         if (!room) return;
 
-        room.playing = playing;
-        room.time = time;
+        room.data.playing = playing;
+        room.data.time = time;
         rooms.set(roomId, room);
 
         // excludes the socket that is sending this event

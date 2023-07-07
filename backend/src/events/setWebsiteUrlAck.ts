@@ -17,7 +17,7 @@ const setWebsiteUrlAck: EventCb = (_socket, { rooms }) => {
             return;
         }
 
-        room.websiteUrl = websiteUrl;
+        room.data.websiteUrl = websiteUrl;
         rooms.set(roomId, room);
 
         ack({ room: room.serialize() });

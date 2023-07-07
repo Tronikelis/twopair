@@ -1,19 +1,10 @@
 import { RoomObj, User } from "~/types/socket.io.js";
 
 export default class Room {
-    public id: string;
-    public playing: boolean;
-    public time: number;
-    public ownerId?: string;
-    public websiteUrl?: string;
-    public users: User[];
+    public data: RoomObj;
 
     constructor(room: RoomObj) {
-        this.id = room.id;
-        this.playing = room.playing;
-        this.time = room.time;
-        this.ownerId = room.ownerId;
-        this.users = room.users;
+        this.data = structuredClone(room);
     }
 
     static defaults(id: string): Room {
@@ -28,53 +19,43 @@ export default class Room {
     }
 
     public clone(): Room {
-        return new Room({
-            id: this.id,
-            ownerId: this.ownerId,
-            playing: this.playing,
-            time: this.time,
-            websiteUrl: this.websiteUrl,
-            users: structuredClone(this.users),
-        });
+        return new Room(structuredClone(this.data));
     }
 
     public addUser(user: User): this {
-        const existsIdx = this.users.findIndex(x => x.id === user.id);
+        const data = this.data;
+
+        const existsIdx = data.users.findIndex(x => x.id === user.id);
         if (existsIdx !== -1) {
-            const u = this.users[existsIdx];
+            const u = data.users[existsIdx];
             if (!u) return this;
 
             u.username = user.username;
             return this;
         }
 
-        if (this.users.length <= 0) {
-            this.ownerId = user.id;
+        if (data.users.length <= 0) {
+            data.ownerId = user.id;
         }
 
-        this.users.push(user);
+        data.users.push(user);
 
         return this;
     }
 
     public removeUser(userId: string): this {
-        this.users = this.users.filter(x => x.id !== userId);
+        const data = this.data;
 
-        if (!this.users.find(x => x.id === this.ownerId) && this.users.length >= 1) {
-            this.ownerId = this.users[0]?.id as string;
+        data.users = data.users.filter(x => x.id !== userId);
+
+        if (!data.users.find(x => x.id === data.ownerId) && data.users.length >= 1) {
+            data.ownerId = data.users[0]?.id as string;
         }
 
         return this;
     }
 
     public serialize(): RoomObj {
-        return {
-            id: this.id,
-            ownerId: this.ownerId,
-            playing: this.playing,
-            time: this.time,
-            websiteUrl: this.websiteUrl,
-            users: this.users,
-        };
+        return structuredClone(this.data);
     }
 }
