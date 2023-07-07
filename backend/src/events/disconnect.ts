@@ -1,5 +1,4 @@
 import logger from "~/utils/logger.js";
-import removeUser from "~/utils/room/removeUser.js";
 
 import { EventCb } from "./types.js";
 
@@ -13,10 +12,10 @@ const disconnect: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
         const roomId = socketToRoom.get(socket);
         if (!roomId) return;
 
-        const room = structuredClone(rooms.get(roomId));
+        const room = rooms.get(roomId)?.clone();
         if (!room) return;
 
-        removeUser(room, userId);
+        room.removeUser(userId);
         rooms.set(roomId, room);
 
         socketToRoom.delete(socket);

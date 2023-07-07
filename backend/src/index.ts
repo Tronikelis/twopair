@@ -15,9 +15,9 @@ import joinRoomAck from "./events/joinRoomAck.js";
 import leaveRoomAck from "./events/leaveRoomAck.js";
 import setWebsiteUrlAck from "./events/setWebsiteUrlAck.js";
 import syncRoom from "./events/syncRoom.js";
-import { Room } from "./types/socket.io.js";
 import logger from "./utils/logger.js";
 import LRU from "./utils/lru.js";
+import Room from "./utils/room.js";
 
 export interface DB {
     rooms: LRU<string, Room>;

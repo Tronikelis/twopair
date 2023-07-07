@@ -11,16 +11,16 @@ const setWebsiteUrlAck: EventCb = (_socket, { rooms }) => {
     ) => {
         logger.info({ payload: { roomId, websiteUrl: "REDACTED" } }, SET_WEBSITE_URL_ACK);
 
-        const room = structuredClone(rooms.get(roomId));
+        const room = rooms.get(roomId)?.clone();
         if (!room) {
             ack({ room: undefined });
             return;
         }
 
-        room.websiteUrl = websiteUrl;
+        room.data.websiteUrl = websiteUrl;
         rooms.set(roomId, room);
 
-        ack({ room });
+        ack({ room: room.serialize() });
     };
 };
 

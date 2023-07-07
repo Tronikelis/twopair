@@ -8,7 +8,7 @@ const getRoomAck: EventCb = (_socket, { rooms }) => {
     return ({ roomId }: GetRoomClient, ack: SocketAck<GetRoomServer>) => {
         logger.info({ payload: { roomId } }, GET_ROOM_ACK);
 
-        const room = rooms.get(roomId) || undefined;
+        const room = rooms.get(roomId)?.serialize() || undefined;
         ack({ room });
     };
 };
