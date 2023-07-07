@@ -14,7 +14,7 @@ This [open source](https://github.com/Tronikelis/twopair) browser extension let'
 ## Notes
 
 - Currently does not support videos that play in `<iframe>`, because the injected script does not have access to websites embedded in other websites
-
+- Currently does not work on some websites that have strict CSP rules, but I am working on this one [#15](https://github.com/Tronikelis/twopair/issues/15)
 
 
 ## Building the extension
