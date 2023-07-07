@@ -17,6 +17,12 @@
         "default_popup": "./popup/dist/index.html"
     },
 
+    "background": {
+        "scripts": ["./bg/dist/index.js"],
+        "type": "module",
+        "persistent": true
+    },
+
     "content_scripts": [
         {
             "matches": ["<all_urls>"],

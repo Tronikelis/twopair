@@ -3,12 +3,14 @@
     "type": "module",
     "scripts": {
         "build:check": "tsc --noEmit",
-        "build:dev": "npm run popup:build:dev && npm run content_script:build:dev",
-        "build:prod": "npm run popup:build:prod && npm run content_script:build:prod",
+        "build:dev": "npm run popup:build:dev && npm run content_script:build:dev && npm run bg:build:dev",
+        "build:prod": "npm run popup:build:prod && npm run content_script:build:prod && npm run bg:build:prod",
         "content_script:build:dev": "vite build -c ./vite.config.content_script.ts --mode development",
         "content_script:build:prod": "vite build -c ./vite.config.content_script.ts --mode production",
         "popup:build:dev": "vite build -c ./vite.config.popup.ts --mode development",
-        "popup:build:prod": "vite build -c ./vite.config.popup.ts --mode production"
+        "popup:build:prod": "vite build -c ./vite.config.popup.ts --mode production",
+        "bg:build:dev": "vite build -c ./vite.config.bg.ts --mode development",
+        "bg:build:prod": "vite build -c ./vite.config.bg.ts --mode production"
     },
     "dependencies": {
         "@emotion/react": "11.11.1",
