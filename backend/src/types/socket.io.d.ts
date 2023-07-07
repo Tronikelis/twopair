@@ -1,9 +1,9 @@
-export interface Room {
+export interface RoomObj {
     id: string;
     playing: boolean;
     time: number;
-    ownerId: string;
-    websiteUrl?: string;
+    ownerId: string | undefined;
+    websiteUrl: string | undefined;
     users: User[];
 }
 
@@ -13,7 +13,7 @@ export interface User {
 }
 
 export interface GetRoomServer {
-    room: Room | undefined;
+    room: RoomObj | undefined;
 }
 export interface GetRoomClient {
     roomId: string;
@@ -24,7 +24,7 @@ export interface JoinRoomClient {
     user: User;
 }
 export interface JoinRoomServer {
-    room: Room | undefined;
+    room: RoomObj | undefined;
 }
 
 export interface LeaveRoomClient {
@@ -33,8 +33,8 @@ export interface LeaveRoomClient {
 }
 export type LeaveRoomServer = undefined;
 
-export type SyncRoomServer = Pick<Room, "playing" | "time">;
-export interface SyncRoomClient extends Pick<Room, "playing" | "time"> {
+export type SyncRoomServer = Pick<RoomObj, "playing" | "time">;
+export interface SyncRoomClient extends Pick<RoomObj, "playing" | "time"> {
     roomId: string;
 }
 
@@ -42,7 +42,7 @@ export interface CreateRoomClient {
     user: User;
 }
 export interface CreateRoomServer {
-    room: Room;
+    room: RoomObj;
 }
 
 export interface SetWebsiteUrlClient {
@@ -50,5 +50,5 @@ export interface SetWebsiteUrlClient {
     roomId: string;
 }
 export interface SetWebsiteUrlServer {
-    room: Room | undefined;
+    room: RoomObj | undefined;
 }

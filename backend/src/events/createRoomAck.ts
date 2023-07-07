@@ -1,8 +1,9 @@
 import { nanoid } from "nanoid/async";
 
 import { CREATE_ROOM_ACK } from "~/config/events.js";
-import { CreateRoomClient, CreateRoomServer, Room } from "~/types/socket.io.js";
+import { CreateRoomClient, CreateRoomServer } from "~/types/socket.io.js";
 import logger from "~/utils/logger.js";
+import Room from "~/utils/room.js";
 
 import { EventCb, SocketAck } from "./types.js";
 
@@ -14,19 +15,13 @@ const createRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) =
 
         await socket.join(roomId);
 
-        const room: Room = {
-            id: roomId,
-            time: 0,
-            playing: false,
-            ownerId: user.id,
-            users: [user],
-        };
+        const room = Room.defaults(roomId).addUser(user);
 
         rooms.set(roomId, room);
         socketToRoom.set(socket, roomId);
         socketToUser.set(socket, user.id);
 
-        ack({ room });
+        ack({ room: room.serialize() });
     };
 };
 
