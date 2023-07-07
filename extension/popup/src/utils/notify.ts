@@ -10,7 +10,8 @@ function err(props: NotificationProps) {
 
 function showInjectScriptErr() {
     return err({
-        message: "Can't inject the script into this page, are you on a regular website?",
+        message:
+            "Can't inject the script into this page, are you on a regular website? Try refreshing it",
     });
 }
 

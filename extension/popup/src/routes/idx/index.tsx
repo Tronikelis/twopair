@@ -5,6 +5,7 @@ import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
 import { sendToContent } from "~/comms";
+import ExternalLink from "~/popup/components/ExternalLink";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
@@ -87,19 +88,28 @@ export default function Idx() {
                 </Button>
             </Group>
 
-            <Group ml="auto">
-                <Button
-                    variant="light"
-                    color="red"
-                    onClick={onLeaveRoom}
-                    disabled={!elements?.syncingId}
+            <Group position="apart">
+                <ExternalLink
+                    color="dimmed"
+                    href="https://github.com/Tronikelis/twopair#notes"
                 >
-                    Leave
-                </Button>
+                    {"*some won't work"}
+                </ExternalLink>
 
-                <Button to="/settings" color="gray" component={Link}>
-                    Settings
-                </Button>
+                <Group>
+                    <Button
+                        variant="light"
+                        color="red"
+                        onClick={onLeaveRoom}
+                        disabled={!elements?.syncingId}
+                    >
+                        Leave
+                    </Button>
+
+                    <Button to="/settings" color="gray" component={Link}>
+                        Settings
+                    </Button>
+                </Group>
             </Group>
         </Stack>
     );
