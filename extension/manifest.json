@@ -1,8 +1,16 @@
 {
     "$schema": "https://json.schemastore.org/chrome-manifest",
-    "name": "Twopair",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "manifest_version": 3,
+
+    "name": "Twopair",
+    "description": "This open source browser extension let's you watch any video on any website together with your friends",
+    "icons": {
+        "16": "./media/icon_16x16.png",
+        "48": "./media/icon_48x48.png",
+        "128": "./media/icon_128x128.png",
+        "256": "./media/icon_256x256.png"
+    },
 
     "action": {
         "default_title": "Twopair",
