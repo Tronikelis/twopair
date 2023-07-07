@@ -1,7 +1,7 @@
 {
     "$schema": "https://json.schemastore.org/chrome-manifest",
     "name": "Twopair",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "manifest_version": 3,
 
     "action": {
@@ -13,7 +13,7 @@
         {
             "matches": ["<all_urls>"],
             "js": ["./content_script/dist/index.js"],
-            "run_at": "document_idle"
+            "run_at": "document_end"
         }
     ],
 

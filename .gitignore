@@ -2,3 +2,5 @@ node_modules/
 dist/
 *timestamp-*
 *.zip
+web-ext-artifacts/
+

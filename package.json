@@ -1,6 +1,5 @@
 {
     "name": "twopair",
-    "version": "0.1.0",
     "type": "module",
     "scripts": {
         "dev": "concurrently \"npm run backend:dev\" \"npm run extension:browser:dev\" \"nodemon\" --kill-others",
