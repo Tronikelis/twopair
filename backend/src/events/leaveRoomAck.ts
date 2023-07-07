@@ -8,7 +8,7 @@ const leaveRoomAck: EventCb = (socket, { rooms, socketToRoom }) => {
     return async ({ roomId, userId }: LeaveRoomClient, ack: SocketAck<LeaveRoomServer>) => {
         logger.info({ payload: { roomId, userId } }, LEAVE_ROOM_ACK);
 
-        const room = structuredClone(rooms.get(roomId));
+        const room = rooms.get(roomId)?.clone();
         if (room) {
             room.removeUser(userId);
             rooms.set(roomId, room);

@@ -12,7 +12,7 @@ const disconnect: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => {
         const roomId = socketToRoom.get(socket);
         if (!roomId) return;
 
-        const room = structuredClone(rooms.get(roomId));
+        const room = rooms.get(roomId)?.clone();
         if (!room) return;
 
         room.removeUser(userId);

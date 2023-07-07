@@ -8,7 +8,7 @@ const joinRoomAck: EventCb = (socket, { rooms, socketToRoom, socketToUser }) => 
     return async ({ roomId, user }: JoinRoomClient, ack: SocketAck<JoinRoomServer>) => {
         logger.info({ payload: { roomId, user } }, JOIN_ROOM_ACK);
 
-        const room = structuredClone(rooms.get(roomId));
+        const room = rooms.get(roomId)?.clone();
         if (!room) {
             ack({ room: undefined });
             return;

@@ -8,7 +8,7 @@ const syncRoom: EventCb = (socket, { rooms }) => {
     return ({ roomId, playing, time }: SyncRoomClient) => {
         logger.info({ payload: { roomId, playing, time } }, SYNC_ROOM);
 
-        const room = structuredClone(rooms.get(roomId));
+        const room = rooms.get(roomId)?.clone();
         if (!room) return;
 
         room.playing = playing;

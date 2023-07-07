@@ -27,6 +27,17 @@ export default class Room {
         });
     }
 
+    public clone(): Room {
+        return new Room({
+            id: this.id,
+            ownerId: this.ownerId,
+            playing: this.playing,
+            time: this.time,
+            websiteUrl: this.websiteUrl,
+            users: structuredClone(this.users),
+        });
+    }
+
     public addUser(user: User): this {
         const existsIdx = this.users.findIndex(x => x.id === user.id);
         if (existsIdx !== -1) {
