@@ -5,11 +5,11 @@ const ExternalLink = forwardRef<HTMLAnchorElement, AnchorProps & ComponentPropsW
     ({ children, onClick: _onClick, ...props }, ref) => {
         function onClick(e: MouseEvent<HTMLAnchorElement>) {
             if (_onClick) _onClick(e);
-            setTimeout(() => window.close(), 1);
+            setTimeout(() => window.close(), 1e3);
         }
 
         return (
-            <Anchor {...props} ref={ref} onClick={onClick}>
+            <Anchor target="_blank" {...props} ref={ref} onClick={onClick}>
                 {children}
             </Anchor>
         );
