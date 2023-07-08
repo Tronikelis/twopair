@@ -3,12 +3,14 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 import { sendToBg } from "~/comms";
+import useGetSyncingStatus from "~/popup/hooks/useGetSyncingStatus";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 
 export default function SelectVideo() {
     const { id: roomId } = useParams();
 
     const elements = useGetVideoElements();
+    const status = useGetSyncingStatus();
 
     async function onSyncVideo(videoId: string) {
         if (!roomId) return;
@@ -35,7 +37,7 @@ export default function SelectVideo() {
                         <Button
                             size="sm"
                             onClick={() => onSyncVideo(id)}
-                            disabled={elements.syncingId === id}
+                            disabled={status?.syncingId === id}
                         >
                             Sync
                         </Button>

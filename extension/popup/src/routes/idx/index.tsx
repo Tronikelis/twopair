@@ -59,6 +59,9 @@ export default function Idx() {
         navigate(urlbat("/room/:id", { id: lastRoomId }));
     }
 
+    const canCreate = !!status && !status.syncing && !status.syncingId;
+    const canLeave = !(!!status && status.syncing && !status.syncingId);
+
     return (
         <Stack spacing="xl" justify="center" sx={{ flex: 1 }}>
             <Box>
@@ -79,11 +82,11 @@ export default function Idx() {
                     </Button>
                 )}
 
-                <Button onClick={onNewRoom} disabled={!status || status.syncing}>
+                <Button onClick={onNewRoom} disabled={!canCreate}>
                     New room
                 </Button>
 
-                <Button to="/room/join" component={Link} disabled={!status || status.syncing}>
+                <Button to="/room/join" component={Link} disabled={!canCreate}>
                     Join room
                 </Button>
             </Group>
@@ -101,7 +104,7 @@ export default function Idx() {
                         variant="light"
                         color="red"
                         onClick={onLeaveRoom}
-                        disabled={!status || !status?.syncing}
+                        disabled={!canLeave}
                     >
                         Leave
                     </Button>

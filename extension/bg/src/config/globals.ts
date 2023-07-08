@@ -1,4 +1,8 @@
-const globals = {
+type Globals = {
+    syncing: boolean;
+};
+
+const globals: Globals = {
     syncing: false,
 };
 
