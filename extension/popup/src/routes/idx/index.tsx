@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
-import { sendToContent } from "~/comms";
+import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
@@ -23,13 +23,13 @@ export default function Idx() {
 
     async function onLeaveRoom() {
         if (!user || !lastRoomId) return;
-        await sendToContent("LEAVE_ROOM", { roomId: lastRoomId, userId: user.id });
+        await sendToBg("LEAVE_ROOM", { roomId: lastRoomId, userId: user.id });
     }
 
     async function onNewRoom() {
         if (!user) return;
 
-        const [err, data] = await tryCatch(() => sendToContent("CREATE_ROOM", { user }));
+        const [err, data] = await tryCatch(() => sendToBg("CREATE_ROOM", { user }));
         if (err) {
             showInjectScriptErr();
             return;
@@ -44,7 +44,7 @@ export default function Idx() {
         if (!user || !lastRoomId) return;
 
         const [err, data] = await tryCatch(() =>
-            sendToContent("JOIN_ROOM", { roomId: lastRoomId, user })
+            sendToBg("JOIN_ROOM", { roomId: lastRoomId, user })
         );
         if (err) {
             showInjectScriptErr();

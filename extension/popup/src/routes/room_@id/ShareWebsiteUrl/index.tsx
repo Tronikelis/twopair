@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { sendToContent } from "~/comms";
+import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
 import getTabUrl from "~/popup/utils/getTabUrl";
 
@@ -17,7 +17,7 @@ export default function ShareWebsiteUrl() {
         if (!roomId) return;
 
         const websiteUrl = await getTabUrl();
-        const { room } = await sendToContent("SET_WEBSITE_URL", { roomId, websiteUrl });
+        const { room } = await sendToBg("SET_WEBSITE_URL", { roomId, websiteUrl });
         if (!room) {
             // handle err
             return;

@@ -1,42 +1,19 @@
-import {
-    CreateRoomData,
-    GetRoomData,
-    JoinRoomData,
-    LeaveRoomData,
-    listenFromContent,
-    SetWebsiteUrlData,
-    SyncVideoData,
-} from "~/comms";
+import { listenFromScript, OnVideoChangeData, SyncVideoData } from "~/comms";
 
-import createRoom from "./events/createRoom";
-import getRoom from "./events/getRoom";
 import getVideoElements from "./events/getVideoElements";
-import joinRoom from "./events/joinRoom";
-import leaveRoom from "./events/leaveRoom";
-import setWebsiteUrl from "./events/setWebsiteUrl";
+import onVideoChange from "./events/onVideoChange";
 import syncVideo from "./events/syncVideo";
 
-listenFromContent(async (type, data) => {
+// eslint-disable-next-line @typescript-eslint/require-await
+listenFromScript(async (type, data) => {
     switch (type) {
         case "GET_VIDEO_ELEMENTS":
             return getVideoElements(undefined);
 
-        case "CREATE_ROOM":
-            return await createRoom(data as CreateRoomData);
-
-        case "GET_ROOM":
-            return await getRoom(data as GetRoomData);
-
-        case "JOIN_ROOM":
-            return await joinRoom(data as JoinRoomData);
-
-        case "LEAVE_ROOM":
-            return await leaveRoom(data as LeaveRoomData);
-
         case "SYNC_VIDEO":
             return syncVideo(data as SyncVideoData);
 
-        case "SET_WEBSITE_URL":
-            return await setWebsiteUrl(data as SetWebsiteUrlData);
+        case "ON_VIDEO_CHANGE":
+            return onVideoChange(data as OnVideoChangeData);
     }
 });

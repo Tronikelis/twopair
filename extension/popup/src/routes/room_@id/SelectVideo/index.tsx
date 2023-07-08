@@ -2,7 +2,7 @@ import { Box, Button, Paper, Stack, Text, Title } from "@mantine/core";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { sendToContent } from "~/comms";
+import { sendToBg } from "~/comms";
 import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 
 export default function SelectVideo() {
@@ -12,7 +12,7 @@ export default function SelectVideo() {
 
     async function onSyncVideo(videoId: string) {
         if (!roomId) return;
-        await sendToContent("SYNC_VIDEO", {
+        await sendToBg("SYNC_VIDEO", {
             videoId,
             roomId,
         });

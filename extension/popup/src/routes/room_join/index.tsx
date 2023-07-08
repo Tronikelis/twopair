@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
-import { sendToContent } from "~/comms";
+import { sendToBg } from "~/comms";
 import RouteTitle from "~/popup/components/RouteTitle";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useUser from "~/popup/hooks/useUser";
@@ -27,7 +27,7 @@ export default function RoomJoin() {
         if (!id || !user) return;
 
         const [err, data] = await tryCatch(() =>
-            sendToContent("JOIN_ROOM", {
+            sendToBg("JOIN_ROOM", {
                 roomId: id,
                 user,
             })

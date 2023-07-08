@@ -19,6 +19,7 @@ const syncRoom: EventCb = (socket, { rooms }) => {
         socket.broadcast.to(roomId).emit(SYNC_ROOM, {
             playing,
             time,
+            roomId,
         } satisfies SyncRoomServer);
     };
 };

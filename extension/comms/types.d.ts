@@ -19,7 +19,8 @@ export type MessageType =
     | "CREATE_ROOM"
     | "LEAVE_ROOM"
     | "JOIN_ROOM"
-    | "SET_WEBSITE_URL";
+    | "SET_WEBSITE_URL"
+    | "ON_VIDEO_CHANGE";
 
 export interface GetVideoElementsRes {
     syncingId?: string;
@@ -52,6 +53,13 @@ export type CreateRoomRes = CreateRoomServer;
 export type SetWebsiteUrlData = SetWebsiteUrlClient;
 export type SetWebsiteUrlRes = SetWebsiteUrlServer;
 
+export interface OnVideoChangeData {
+    playing: boolean;
+    time: number;
+    roomId: string;
+}
+export type OnVideoChangeRes = undefined;
+
 export type Data = {
     GET_VIDEO_ELEMENTS: GetVideoElementsData;
     SYNC_VIDEO: SyncVideoData;
@@ -60,6 +68,7 @@ export type Data = {
     JOIN_ROOM: JoinRoomData;
     CREATE_ROOM: CreateRoomData;
     SET_WEBSITE_URL: SetWebsiteUrlData;
+    ON_VIDEO_CHANGE: OnVideoChangeData;
 };
 
 export type Res = {
@@ -70,4 +79,5 @@ export type Res = {
     JOIN_ROOM: JoinRoomRes;
     CREATE_ROOM: CreateRoomRes;
     SET_WEBSITE_URL: SetWebsiteUrlRes;
+    ON_VIDEO_CHANGE: OnVideoChangeRes;
 };

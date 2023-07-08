@@ -2,7 +2,7 @@ import { Box, Button, Group, Stack } from "@mantine/core";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { sendToContent } from "~/comms";
+import { sendToBg } from "~/comms";
 import RouteTitle from "~/popup/components/RouteTitle";
 import useUser from "~/popup/hooks/useUser";
 
@@ -18,7 +18,7 @@ export default function RoomId() {
 
     async function onLeaveRoom() {
         if (!user || !roomId) return;
-        await sendToContent("LEAVE_ROOM", { roomId, userId: user.id });
+        await sendToBg("LEAVE_ROOM", { roomId, userId: user.id });
         navigate("/");
     }
 
