@@ -7,7 +7,7 @@ import getVideoElement from "../utils/getVideoElement";
 
 type AnyFn = (...args: any) => void;
 
-let onSyncVideo = noop as AnyFn;
+export let onSyncVideo = noop as AnyFn;
 
 export default function syncVideo(input: SyncVideoData): SyncVideoRes {
     const video = getVideoElement(input.videoId);

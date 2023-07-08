@@ -1,6 +1,7 @@
-import { listenFromScript, OnVideoChangeData, SyncVideoData } from "~/comms";
+import { LeaveRoomData, listenFromScript, OnVideoChangeData, SyncVideoData } from "~/comms";
 
 import getVideoElements from "./events/getVideoElements";
+import leaveRoom from "./events/leaveRoom";
 import onVideoChange from "./events/onVideoChange";
 import syncVideo from "./events/syncVideo";
 
@@ -15,6 +16,9 @@ listenFromScript(async (type, data) => {
 
         case "ON_VIDEO_CHANGE":
             return onVideoChange(data as OnVideoChangeData);
+
+        case "LEAVE_ROOM":
+            return leaveRoom(data as LeaveRoomData);
 
         default:
             throw new Error(`unknown type "${type}" in content script`);
