@@ -17,14 +17,15 @@ import joinRoom from "./events/joinRoom";
 import leaveRoom from "./events/leaveRoom";
 import onVideoChange from "./events/onVideoChange";
 import setWebsiteUrl from "./events/setWebsiteUrl";
-import listenToSocket from "./socket.io/listenToSocket";
-import { socket } from "./socket.io";
-
-listenToSocket();
+import { listenToSocket } from "./socket.io";
 
 listenFromScript(async (type, data) => {
-    socket.connect();
+    listenToSocket();
 
+    // TODO: ERR HANDLING ON ALL THESE ROUTES
+    // HANDLE IF CONTENT SCRIPT IS LOADED
+    // HANDLE IF SOCKET.IO CAN'T CONNECT
+    // !!!
     switch (type) {
         // popup -> background -> content
         case "GET_VIDEO_ELEMENTS":
