@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { sendToBg } from "~/comms";
 import RouteTitle from "~/popup/components/RouteTitle";
 import useUser from "~/popup/hooks/useUser";
+import useValidActions from "~/popup/hooks/useValidActions";
 
 import Room from "./Room";
 import SelectVideo from "./SelectVideo";
@@ -14,6 +15,7 @@ export default function RoomId() {
     const navigate = useNavigate();
     const { id: roomId } = useParams();
 
+    const actions = useValidActions();
     const user = useUser();
 
     async function onLeaveRoom() {
@@ -27,7 +29,13 @@ export default function RoomId() {
             <RouteTitle
                 title={`Room ${roomId}`}
                 action={
-                    <Button onClick={onLeaveRoom} size="xs" variant="subtle" color="red">
+                    <Button
+                        disabled={!actions.canLeaveRoom}
+                        onClick={onLeaveRoom}
+                        size="xs"
+                        variant="subtle"
+                        color="red"
+                    >
                         Leave
                     </Button>
                 }

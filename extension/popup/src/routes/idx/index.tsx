@@ -7,9 +7,9 @@ import browser from "webextension-polyfill";
 import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
-import useGetSyncingStatus from "~/popup/hooks/useGetSyncingStatus";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
+import useValidActions from "~/popup/hooks/useValidActions";
 import notify, { showInjectScriptErr } from "~/popup/utils/notify";
 import tryCatch from "~/utils/tryCatch";
 
@@ -19,7 +19,7 @@ export default function Idx() {
     const user = useUser();
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
-    const status = useGetSyncingStatus();
+    const actions = useValidActions();
 
     async function onLeaveRoom() {
         if (!user || !lastRoomId) return;
@@ -59,16 +59,6 @@ export default function Idx() {
         navigate(urlbat("/room/:id", { id: lastRoomId }));
     }
 
-    // note: status.syncingId is independent for every tab
-    // meaning we can check if we are currently globally syncing with "status.syncing"
-    // and if that syncing is happening in this tab if the "status.syncingId" is truthy
-
-    // if we are syncing, but not in this tab and we want to leave:
-    // we need to somehow force the user to go to the tab where the syncing is happening
-    // and leave the room from that tab (content_script on THAT SPECIFIC needs to remove event listeners)
-    const canCreate = !!status && !status.syncing && !status.syncingId;
-    const canLeave = !(!!status && status.syncing && !status.syncingId);
-
     return (
         <Stack spacing="xl" justify="center" sx={{ flex: 1 }}>
             <Box>
@@ -89,11 +79,11 @@ export default function Idx() {
                     </Button>
                 )}
 
-                <Button onClick={onNewRoom} disabled={!canCreate}>
+                <Button onClick={onNewRoom} disabled={!actions.canCreateRoom}>
                     New room
                 </Button>
 
-                <Button to="/room/join" component={Link} disabled={!canCreate}>
+                <Button to="/room/join" component={Link} disabled={!actions.canCreateRoom}>
                     Join room
                 </Button>
             </Group>
@@ -111,7 +101,7 @@ export default function Idx() {
                         variant="light"
                         color="red"
                         onClick={onLeaveRoom}
-                        disabled={!canLeave}
+                        disabled={!actions.canLeaveRoom}
                     >
                         Leave
                     </Button>
