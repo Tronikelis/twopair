@@ -17,7 +17,10 @@ import joinRoom from "./events/joinRoom";
 import leaveRoom from "./events/leaveRoom";
 import onVideoChange from "./events/onVideoChange";
 import setWebsiteUrl from "./events/setWebsiteUrl";
+import listenToSocket from "./socket.io/listenToSocket";
 import { socket } from "./socket.io";
+
+listenToSocket();
 
 listenFromScript(async (type, data) => {
     socket.connect();
@@ -30,6 +33,10 @@ listenFromScript(async (type, data) => {
         // popup -> background -> content
         case "SYNC_VIDEO":
             return await sendToContent("SYNC_VIDEO", data as SyncVideoData);
+
+        // popup -> background -> content
+        case "LEAVE_ROOM":
+            return await leaveRoom(data as LeaveRoomData);
 
         // popup -> background
         case "CREATE_ROOM":
@@ -44,15 +51,14 @@ listenFromScript(async (type, data) => {
             return await joinRoom(data as JoinRoomData);
 
         // popup -> background
-        case "LEAVE_ROOM":
-            return await leaveRoom(data as LeaveRoomData);
-
-        // popup -> background
         case "SET_WEBSITE_URL":
             return await setWebsiteUrl(data as SetWebsiteUrlData);
 
         // content -> background
         case "ON_VIDEO_CHANGE":
             return onVideoChange(data as OnVideoChangeData);
+
+        default:
+            throw new Error(`unknown type "${type}" in background script`);
     }
 });

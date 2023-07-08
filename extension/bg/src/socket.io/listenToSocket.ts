@@ -5,7 +5,7 @@ import { OnVideoChangeData, sendToContent } from "~/comms";
 
 import { socket } from ".";
 
-export default function initListeners() {
+export default function listenToSocket() {
     socket.on(SYNC_ROOM, async (data: SyncRoomServer) => {
         await sendToContent("ON_VIDEO_CHANGE", data satisfies OnVideoChangeData);
     });

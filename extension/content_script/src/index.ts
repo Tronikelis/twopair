@@ -15,5 +15,8 @@ listenFromScript(async (type, data) => {
 
         case "ON_VIDEO_CHANGE":
             return onVideoChange(data as OnVideoChangeData);
+
+        default:
+            throw new Error(`unknown type "${type}" in content script`);
     }
 });

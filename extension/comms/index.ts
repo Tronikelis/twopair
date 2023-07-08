@@ -6,7 +6,7 @@ export type * from "./types";
 
 type ContentValidTypes = Extract<
     MessageType,
-    "GET_VIDEO_ELEMENTS" | "SYNC_VIDEO" | "ON_VIDEO_CHANGE"
+    "GET_VIDEO_ELEMENTS" | "SYNC_VIDEO" | "ON_VIDEO_CHANGE" | "LEAVE_ROOM"
 >;
 type BackgroundValidTypes = MessageType;
 
