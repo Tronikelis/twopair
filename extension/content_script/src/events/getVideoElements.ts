@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { GetVideoElementsData, GetVideoElementsRes } from "~/comms";
 
 import { VIDEO_ATTR_ID, VIDEO_ATTR_IS_SYNCING } from "../config/const";
+import getSyncingVideo from "../utils/getSyncingVideo";
 
 export default function getVideoElements(_input: GetVideoElementsData): GetVideoElementsRes {
     const videos = Array.from(document.querySelectorAll("video")).filter(x => x.src);
@@ -27,7 +28,7 @@ export default function getVideoElements(_input: GetVideoElementsData): GetVideo
         }
     }
 
-    const syncingVideo = document.querySelector(`[${VIDEO_ATTR_IS_SYNCING}="true"]`);
+    const syncingVideo = getSyncingVideo();
     const syncingId = syncingVideo
         ? (syncingVideo.getAttribute(VIDEO_ATTR_ID) as string)
         : undefined;

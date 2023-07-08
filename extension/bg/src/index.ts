@@ -1,6 +1,7 @@
 import {
     CreateRoomData,
     GetRoomData,
+    GetSyncingStatusData,
     GetVideoElementsData,
     JoinRoomData,
     LeaveRoomData,
@@ -13,10 +14,12 @@ import {
 
 import createRoom from "./events/createRoom";
 import getRoom from "./events/getRoom";
+import getSyncingStatus from "./events/getSyncingStatus";
 import joinRoom from "./events/joinRoom";
 import leaveRoom from "./events/leaveRoom";
 import onVideoChange from "./events/onVideoChange";
 import setWebsiteUrl from "./events/setWebsiteUrl";
+import syncVideo from "./events/syncVideo";
 import { listenToSocket } from "./socket.io";
 
 listenFromScript(async (type, data) => {
@@ -33,11 +36,15 @@ listenFromScript(async (type, data) => {
 
         // popup -> background -> content
         case "SYNC_VIDEO":
-            return await sendToContent("SYNC_VIDEO", data as SyncVideoData);
+            return await syncVideo(data as SyncVideoData);
 
         // popup -> background -> content
         case "LEAVE_ROOM":
             return await leaveRoom(data as LeaveRoomData);
+
+        // popup -> background -> content
+        case "GET_SYNCING_STATUS":
+            return await getSyncingStatus(data as GetSyncingStatusData);
 
         // popup -> background
         case "CREATE_ROOM":

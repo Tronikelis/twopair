@@ -7,7 +7,7 @@ import browser from "webextension-polyfill";
 import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
-import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
+import useGetSyncingStatus from "~/popup/hooks/useGetSyncingStatus";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
 import notify, { showInjectScriptErr } from "~/popup/utils/notify";
@@ -19,7 +19,7 @@ export default function Idx() {
     const user = useUser();
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
-    const elements = useGetVideoElements();
+    const status = useGetSyncingStatus();
 
     async function onLeaveRoom() {
         if (!user || !lastRoomId) return;
@@ -79,11 +79,11 @@ export default function Idx() {
                     </Button>
                 )}
 
-                <Button onClick={onNewRoom} disabled={!!elements?.syncingId}>
+                <Button onClick={onNewRoom} disabled={!status || status.syncing}>
                     New room
                 </Button>
 
-                <Button to="/room/join" component={Link} disabled={!!elements?.syncingId}>
+                <Button to="/room/join" component={Link} disabled={!status || status.syncing}>
                     Join room
                 </Button>
             </Group>
@@ -101,7 +101,7 @@ export default function Idx() {
                         variant="light"
                         color="red"
                         onClick={onLeaveRoom}
-                        disabled={!elements?.syncingId}
+                        disabled={!status || !status?.syncing}
                     >
                         Leave
                     </Button>

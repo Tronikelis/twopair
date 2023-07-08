@@ -3,11 +3,8 @@ import debounce from "~/utils/debounce";
 import noop from "~/utils/noop";
 
 import { VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../config/const";
+import globals from "../config/globals";
 import getVideoElement from "../utils/getVideoElement";
-
-type AnyFn = (...args: any) => void;
-
-export let onSyncVideo = noop as AnyFn;
 
 export default function syncVideo(input: SyncVideoData): SyncVideoRes {
     const video = getVideoElement(input.videoId);
@@ -18,10 +15,10 @@ export default function syncVideo(input: SyncVideoData): SyncVideoRes {
     video.setAttribute(VIDEO_ATTR_IS_SYNCING, "true");
 
     for (const event of VIDEO_EVENTS_LISTEN) {
-        video.removeEventListener(event, onSyncVideo);
+        video.removeEventListener(event, globals.onSyncVideo);
     }
 
-    onSyncVideo = debounce(() => {
+    globals.onSyncVideo = debounce(() => {
         sendToBg("ON_VIDEO_CHANGE", {
             playing: !video.paused,
             time: video.currentTime,
@@ -32,7 +29,7 @@ export default function syncVideo(input: SyncVideoData): SyncVideoRes {
     }, 100);
 
     for (const event of VIDEO_EVENTS_LISTEN) {
-        video.addEventListener(event, onSyncVideo);
+        video.addEventListener(event, globals.onSyncVideo);
     }
 
     // new user joined, reset the video for everyone (idk about this one)
