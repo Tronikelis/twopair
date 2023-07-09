@@ -4,14 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
 
-import { sendToContent } from "~/comms";
+import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
+import LeaveRoomBnt from "~/popup/components/LeaveRoomBtn";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
-import useGetVideoElements from "~/popup/hooks/useGetVideoElements";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
-import notify, { showInjectScriptErr } from "~/popup/utils/notify";
-import tryCatch from "~/utils/tryCatch";
+import useValidActions from "~/popup/hooks/useValidActions";
+import notify from "~/popup/utils/notify";
 
 export default function Idx() {
     const navigate = useNavigate();
@@ -19,38 +19,22 @@ export default function Idx() {
     const user = useUser();
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
-    const elements = useGetVideoElements();
-
-    async function onLeaveRoom() {
-        if (!user || !lastRoomId) return;
-        await sendToContent("LEAVE_ROOM", { roomId: lastRoomId, userId: user.id });
-    }
+    const actions = useValidActions();
 
     async function onNewRoom() {
         if (!user) return;
 
-        const [err, data] = await tryCatch(() => sendToContent("CREATE_ROOM", { user }));
-        if (err) {
-            showInjectScriptErr();
-            return;
-        }
-
+        const data = await sendToBg("CREATE_ROOM", { user });
         const url = urlbat("/room/:id", { id: data.room.id });
         await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: data.room.id });
+
         navigate(url);
     }
 
     async function onLastRoom() {
         if (!user || !lastRoomId) return;
 
-        const [err, data] = await tryCatch(() =>
-            sendToContent("JOIN_ROOM", { roomId: lastRoomId, user })
-        );
-        if (err) {
-            showInjectScriptErr();
-            return;
-        }
-
+        const data = await sendToBg("JOIN_ROOM", { roomId: lastRoomId, user });
         if (!data.room) {
             notify.err({ message: "Room does not exist" });
             return;
@@ -79,11 +63,11 @@ export default function Idx() {
                     </Button>
                 )}
 
-                <Button onClick={onNewRoom} disabled={!!elements?.syncingId}>
+                <Button onClick={onNewRoom} disabled={!actions.canCreateRoom}>
                     New room
                 </Button>
 
-                <Button to="/room/join" component={Link} disabled={!!elements?.syncingId}>
+                <Button to="/room/join" component={Link} disabled={!actions.canCreateRoom}>
                     Join room
                 </Button>
             </Group>
@@ -97,14 +81,7 @@ export default function Idx() {
                 </ExternalLink>
 
                 <Group>
-                    <Button
-                        variant="light"
-                        color="red"
-                        onClick={onLeaveRoom}
-                        disabled={!elements?.syncingId}
-                    >
-                        Leave
-                    </Button>
+                    <LeaveRoomBnt />
 
                     <Button to="/settings" color="gray" component={Link}>
                         Settings

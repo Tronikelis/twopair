@@ -33,7 +33,7 @@ export interface LeaveRoomClient {
 }
 export type LeaveRoomServer = undefined;
 
-export type SyncRoomServer = Pick<RoomObj, "playing" | "time">;
+export type SyncRoomServer = SyncRoomClient;
 export interface SyncRoomClient extends Pick<RoomObj, "playing" | "time"> {
     roomId: string;
 }

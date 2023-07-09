@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { sendToContent } from "~/comms";
+import { sendToBg } from "~/comms";
 import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import useFnRef from "~/popup/hooks/useFnRef";
 import useInterval from "~/popup/hooks/useInterval";
@@ -19,7 +19,7 @@ export default function Room() {
 
     const getRoom = useFnRef(async () => {
         if (!roomId) return;
-        const { room } = await sendToContent("GET_ROOM", { roomId });
+        const { room } = await sendToBg("GET_ROOM", { roomId });
         setRoom(room);
     });
 

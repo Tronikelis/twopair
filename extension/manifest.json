@@ -1,6 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/chrome-manifest",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "manifest_version": 3,
 
     "name": "Twopair",
@@ -15,6 +15,12 @@
     "action": {
         "default_title": "Twopair",
         "default_popup": "./popup/dist/index.html"
+    },
+
+    "background": {
+        "scripts": ["./bg/dist/index.js"],
+        "type": "module",
+        "persistent": true
     },
 
     "content_scripts": [

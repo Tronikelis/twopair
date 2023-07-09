@@ -4,7 +4,13 @@ import type { Data, MessageType, Res } from "./types";
 
 export type * from "./types";
 
-export async function sendToContent<Type extends MessageType>(
+type ContentValidTypes = Extract<
+    MessageType,
+    "GET_VIDEO_ELEMENTS" | "SYNC_VIDEO" | "ON_VIDEO_CHANGE" | "LEAVE_ROOM"
+>;
+type BackgroundValidTypes = MessageType;
+
+export async function sendToContent<Type extends ContentValidTypes>(
     type: Type,
     data: Data[Type]
 ): Promise<Res[Type]> {
@@ -20,7 +26,15 @@ export async function sendToContent<Type extends MessageType>(
     return res;
 }
 
-export function listenFromContent<Type extends MessageType>(
+export async function sendToBg<Type extends BackgroundValidTypes>(
+    type: Type,
+    data: Data[Type]
+): Promise<Res[Type]> {
+    const res = (await browser.runtime.sendMessage(undefined, { type, data })) as Res[Type];
+    return res;
+}
+
+export function listenFromScript<Type extends MessageType>(
     cb: (type: Type, data: Data[Type]) => Promise<Res[Type]>
 ) {
     browser.runtime.onMessage.addListener(async ({ type, data }) => {

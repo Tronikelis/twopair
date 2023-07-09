@@ -1,21 +1,14 @@
-import { LEAVE_ROOM_ACK } from "backend/src/config/events";
-import { LeaveRoomClient } from "backend/src/types/socket.io";
-
 import { LeaveRoomData, LeaveRoomRes } from "~/comms";
 
 import { VIDEO_ATTR_IS_SYNCING, VIDEO_EVENTS_LISTEN } from "../config/const";
-import { socket } from "../socket.io";
+import globals from "../config/globals";
 
-import { references } from "./syncVideo";
-
-export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoomRes> {
-    await socket.emitWithAck(LEAVE_ROOM_ACK, input satisfies LeaveRoomClient);
-
+export default function leaveRoom(_input: LeaveRoomData): LeaveRoomRes {
     const videos = Array.from(document.querySelectorAll("video"));
 
     for (const event of VIDEO_EVENTS_LISTEN) {
         for (const video of videos) {
-            video.removeEventListener(event, references.onSyncVideo);
+            video.removeEventListener(event, globals.onSyncVideo);
             video.setAttribute(VIDEO_ATTR_IS_SYNCING, "false");
         }
     }

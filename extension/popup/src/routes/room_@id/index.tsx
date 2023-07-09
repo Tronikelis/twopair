@@ -1,36 +1,22 @@
-import { Box, Button, Group, Stack } from "@mantine/core";
+import { Box, Group, Stack } from "@mantine/core";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { sendToContent } from "~/comms";
+import LeaveRoomBnt from "~/popup/components/LeaveRoomBtn";
 import RouteTitle from "~/popup/components/RouteTitle";
-import useUser from "~/popup/hooks/useUser";
 
 import Room from "./Room";
 import SelectVideo from "./SelectVideo";
 import ShareWebsiteUrl from "./ShareWebsiteUrl";
 
 export default function RoomId() {
-    const navigate = useNavigate();
     const { id: roomId } = useParams();
-
-    const user = useUser();
-
-    async function onLeaveRoom() {
-        if (!user || !roomId) return;
-        await sendToContent("LEAVE_ROOM", { roomId, userId: user.id });
-        navigate("/");
-    }
 
     return (
         <Stack>
             <RouteTitle
                 title={`Room ${roomId}`}
-                action={
-                    <Button onClick={onLeaveRoom} size="xs" variant="subtle" color="red">
-                        Leave
-                    </Button>
-                }
+                action={<LeaveRoomBnt size="xs" variant="subtle" />}
             />
 
             <ShareWebsiteUrl />
