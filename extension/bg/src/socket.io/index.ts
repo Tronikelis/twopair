@@ -8,7 +8,7 @@ export const socket = io(
     import.meta.env.MODE === "production"
         ? "https://twopair.tronikel.lt"
         : "http://localhost:3000",
-    { ackTimeout: 5e3, autoConnect: false }
+    { ackTimeout: 2e3, autoConnect: false }
 );
 
 let listening = false;
