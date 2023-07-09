@@ -6,6 +6,7 @@ import browser from "webextension-polyfill";
 
 import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
+import LeaveRoomBnt from "~/popup/components/LeaveRoomBtn";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
@@ -20,11 +21,6 @@ export default function Idx() {
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
     const actions = useValidActions();
-
-    async function onLeaveRoom() {
-        if (!user || !lastRoomId) return;
-        await sendToBg("LEAVE_ROOM", { roomId: lastRoomId, userId: user.id });
-    }
 
     async function onNewRoom() {
         if (!user) return;
@@ -97,14 +93,7 @@ export default function Idx() {
                 </ExternalLink>
 
                 <Group>
-                    <Button
-                        variant="light"
-                        color="red"
-                        onClick={onLeaveRoom}
-                        disabled={!actions.canLeaveRoom}
-                    >
-                        Leave
-                    </Button>
+                    <LeaveRoomBnt />
 
                     <Button to="/settings" color="gray" component={Link}>
                         Settings
