@@ -29,8 +29,6 @@ export default function useValidActions(): Actions {
 
     return {
         canCreateRoom: !status.syncing && !status.syncingId,
-        canLeaveRoom:
-            // oh my god
-            !otherTab && !off,
+        canLeaveRoom: !otherTab && !off,
     };
 }
