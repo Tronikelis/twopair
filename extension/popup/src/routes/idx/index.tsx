@@ -11,8 +11,7 @@ import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
 import useValidActions from "~/popup/hooks/useValidActions";
-import notify, { showInjectScriptErr } from "~/popup/utils/notify";
-import tryCatch from "~/utils/tryCatch";
+import notify from "~/popup/utils/notify";
 
 export default function Idx() {
     const navigate = useNavigate();
@@ -25,28 +24,17 @@ export default function Idx() {
     async function onNewRoom() {
         if (!user) return;
 
-        const [err, data] = await tryCatch(() => sendToBg("CREATE_ROOM", { user }));
-        if (err) {
-            showInjectScriptErr();
-            return;
-        }
-
+        const data = await sendToBg("CREATE_ROOM", { user });
         const url = urlbat("/room/:id", { id: data.room.id });
         await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: data.room.id });
+
         navigate(url);
     }
 
     async function onLastRoom() {
         if (!user || !lastRoomId) return;
 
-        const [err, data] = await tryCatch(() =>
-            sendToBg("JOIN_ROOM", { roomId: lastRoomId, user })
-        );
-        if (err) {
-            showInjectScriptErr();
-            return;
-        }
-
+        const data = await sendToBg("JOIN_ROOM", { roomId: lastRoomId, user });
         if (!data.room) {
             notify.err({ message: "Room does not exist" });
             return;

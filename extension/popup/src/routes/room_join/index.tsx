@@ -8,8 +8,6 @@ import { sendToBg } from "~/comms";
 import RouteTitle from "~/popup/components/RouteTitle";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useUser from "~/popup/hooks/useUser";
-import { showInjectScriptErr } from "~/popup/utils/notify";
-import tryCatch from "~/utils/tryCatch";
 
 export default function RoomJoin() {
     const navigate = useNavigate();
@@ -26,17 +24,10 @@ export default function RoomJoin() {
     async function onJoin() {
         if (!id || !user) return;
 
-        const [err, data] = await tryCatch(() =>
-            sendToBg("JOIN_ROOM", {
-                roomId: id,
-                user,
-            })
-        );
-        if (err) {
-            showInjectScriptErr();
-            return;
-        }
-
+        const data = await sendToBg("JOIN_ROOM", {
+            roomId: id,
+            user,
+        });
         if (!data.room) {
             setError("This room does not exist");
             return;
