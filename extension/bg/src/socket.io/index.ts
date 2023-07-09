@@ -16,10 +16,10 @@ let listening = false;
 export function listenToSocket() {
     if (listening) return;
 
-    socket.connect();
-    listening = true;
-
     socket.on(SYNC_ROOM, async (data: SyncRoomServer) => {
         await sendToContent("ON_VIDEO_CHANGE", data satisfies OnVideoChangeData);
     });
+
+    socket.connect();
+    listening = true;
 }
