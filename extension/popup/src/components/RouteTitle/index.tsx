@@ -1,5 +1,5 @@
 import { Group, Title } from "@mantine/core";
-import React, { ReactNode } from "react";
+import React, { forwardRef, ReactNode } from "react";
 
 import GoBack from "../GoBack";
 
@@ -9,12 +9,16 @@ interface RouteTitleProps {
     withBack?: boolean;
 }
 
-export default function RouteTitle({ action, title, withBack = true }: RouteTitleProps) {
-    return (
-        <Group>
-            {withBack && <GoBack />}
-            <Title order={3}>{title}</Title>
-            {action}
-        </Group>
-    );
-}
+const RouteTitle = forwardRef<HTMLDivElement, RouteTitleProps>(
+    ({ action, title, withBack = true }, ref) => {
+        return (
+            <Group ref={ref}>
+                {withBack && <GoBack />}
+                <Title order={3}>{title}</Title>
+                {action}
+            </Group>
+        );
+    }
+);
+
+export default RouteTitle;

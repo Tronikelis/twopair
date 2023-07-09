@@ -12,14 +12,14 @@ const leaveConditions = "Can only leave if video is syncing and you are in the s
 const LeaveRoomBnt = forwardRef<
     HTMLButtonElement,
     ButtonProps & ComponentPropsWithoutRef<"button">
->(({ onClick, children, ...props }, ref) => {
+>(({ onClick: _onClick, children, ...props }, ref) => {
     const user = useUser();
     const actions = useValidActions();
 
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
     async function onLeave(e: MouseEvent<HTMLButtonElement>) {
-        if (onClick) onClick(e);
+        if (_onClick) _onClick(e);
 
         if (!user || !lastRoomId) return;
         await sendToBg("LEAVE_ROOM", { roomId: lastRoomId, userId: user.id });
