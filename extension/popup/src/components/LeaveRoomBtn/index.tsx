@@ -26,7 +26,7 @@ const LeaveRoomBnt = forwardRef<
     }
 
     return (
-        <Tooltip openDelay={500} label={leaveConditions} disabled={actions.canLeaveRoom}>
+        <Tooltip label={leaveConditions} disabled={actions.canLeaveRoom}>
             <Box>
                 <Button
                     color="red"
