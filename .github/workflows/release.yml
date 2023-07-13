@@ -53,6 +53,6 @@ jobs:
             - name: Convert manifest to chrome
               run: |
                   "cd extension"
-                  "jq '{background: {worker_script: .background.scripts[0], type: .background.type}}' manifest.json > _manifest.json"
+                  "jq '.background |= {worker_script: .scripts[0], type: .type}' manifest.json > _manifest.json"
                   "mv _manifest.json manifest.json"
                   "cat manifest.json"
