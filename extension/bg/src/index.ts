@@ -66,6 +66,10 @@ listenFromScript(async (type, data) => {
         case "ON_VIDEO_CHANGE":
             return onVideoChange(data as OnVideoChangeData);
 
+        // keep background script alive by sending filler events
+        case "PING":
+            return;
+
         default:
             throw new Error(`unknown type "${type}" in background script`);
     }

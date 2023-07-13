@@ -21,7 +21,8 @@ export type MessageType =
     | "JOIN_ROOM"
     | "SET_WEBSITE_URL"
     | "ON_VIDEO_CHANGE"
-    | "GET_SYNCING_STATUS";
+    | "GET_SYNCING_STATUS"
+    | "PING";
 
 export interface GetVideoElementsRes {
     syncingId: string | undefined;
@@ -77,6 +78,7 @@ export type Data = {
     SET_WEBSITE_URL: SetWebsiteUrlData;
     ON_VIDEO_CHANGE: OnVideoChangeData;
     GET_SYNCING_STATUS: GetSyncingStatusData;
+    PING: undefined;
 };
 
 export type Res = {
@@ -89,4 +91,5 @@ export type Res = {
     SET_WEBSITE_URL: SetWebsiteUrlRes;
     ON_VIDEO_CHANGE: OnVideoChangeRes;
     GET_SYNCING_STATUS: GetSyncingStatusRes;
+    PING: undefined;
 };

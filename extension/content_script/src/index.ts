@@ -1,9 +1,21 @@
-import { LeaveRoomData, listenFromScript, OnVideoChangeData, SyncVideoData } from "~/comms";
+import {
+    LeaveRoomData,
+    listenFromScript,
+    OnVideoChangeData,
+    sendToBg,
+    SyncVideoData,
+} from "~/comms";
+import noop from "~/utils/noop";
 
 import getVideoElements from "./events/getVideoElements";
 import leaveRoom from "./events/leaveRoom";
 import onVideoChange from "./events/onVideoChange";
 import syncVideo from "./events/syncVideo";
+
+// keep background script alive (this works?)
+setInterval(() => {
+    sendToBg("PING", undefined).catch(noop);
+}, 500);
 
 // eslint-disable-next-line @typescript-eslint/require-await
 listenFromScript(async (type, data) => {
