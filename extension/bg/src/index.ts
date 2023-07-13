@@ -20,7 +20,10 @@ import leaveRoom from "./events/leaveRoom";
 import onVideoChange from "./events/onVideoChange";
 import setWebsiteUrl from "./events/setWebsiteUrl";
 import syncVideo from "./events/syncVideo";
+import keepAliveChrome from "./utils/keepAliveChrome";
 import { listenToSocket } from "./socket.io";
+
+keepAliveChrome();
 
 listenFromScript(async (type, data) => {
     listenToSocket();
