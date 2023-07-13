@@ -32,10 +32,11 @@
 
     "permissions": ["storage"],
 
+    "minimum_chrome_version": "110",
     "browser_specific_settings": {
         "gecko": {
             "id": "contactdonatas@gmail.com",
-            "strict_min_version": "109.0"
+            "strict_min_version": "110.0"
         }
     }
 }
