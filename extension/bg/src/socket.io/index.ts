@@ -15,7 +15,7 @@ export const socket = io(
             // don't use http long-polling as chrome does not support it in bg script (service worker now)
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            typeof chrome !== "undefined" && typeof browser !== "undefined"
+            typeof chrome !== "undefined" && typeof browser !== "undefined" // here checking if we are on firefox
                 ? undefined
                 : ["websocket"],
     }
