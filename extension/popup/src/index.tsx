@@ -35,10 +35,14 @@ export default function Main() {
 
     useEffectAsync(async () => {
         const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-        if (!tab) console.error("did find a tab to inject the script into");
+        if (!tab || tab.id === undefined) {
+            console.error("did not find a tab to inject the script into");
+            return;
+        }
 
+        // from my research if the input is "files" this gets run only once
         await browser.scripting.executeScript({
-            target: { tabId: tab?.id as number },
+            target: { tabId: tab.id },
             files: ["/content_script/dist/index.js"],
             injectImmediately: true,
         });
