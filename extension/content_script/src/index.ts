@@ -33,4 +33,5 @@ const onMessage: ListenCb = async ({ type, data }) => {
     }
 };
 
+// this HAS to be in global scope because chrome does not register it otherwise
 browser.runtime.onMessage.addListener(onMessage);
