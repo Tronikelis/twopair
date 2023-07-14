@@ -8,7 +8,17 @@ export const socket = io(
     import.meta.env.MODE === "production"
         ? "https://twopair.tronikel.lt"
         : "http://localhost:3000",
-    { ackTimeout: 2e3, autoConnect: false }
+    {
+        ackTimeout: 2e3,
+        autoConnect: false,
+        transports:
+            // don't use http long-polling as chrome does not support it in bg script (service worker now)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            typeof chrome !== "undefined" && typeof browser !== "undefined" // here checking if we are on firefox
+                ? undefined
+                : ["websocket"],
+    }
 );
 
 let listening = false;

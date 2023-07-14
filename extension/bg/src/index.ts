@@ -1,3 +1,5 @@
+import browser from "webextension-polyfill";
+
 import {
     CreateRoomData,
     GetRoomData,
@@ -5,7 +7,7 @@ import {
     GetVideoElementsData,
     JoinRoomData,
     LeaveRoomData,
-    listenFromScript,
+    ListenCb,
     OnVideoChangeData,
     sendToContent,
     SetWebsiteUrlData,
@@ -25,7 +27,7 @@ import { listenToSocket } from "./socket.io";
 
 keepAliveChrome();
 
-listenFromScript(async (type, data) => {
+const onMessage: ListenCb = async ({ type, data }) => {
     listenToSocket();
 
     // TODO: ERR HANDLING ON ALL THESE ROUTES
@@ -76,4 +78,7 @@ listenFromScript(async (type, data) => {
         default:
             throw new Error(`unknown type "${type}" in background script`);
     }
-});
+};
+
+// this HAS to be in global scope because chrome does not register it otherwise
+browser.runtime.onMessage.addListener(onMessage);

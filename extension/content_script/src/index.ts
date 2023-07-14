@@ -1,10 +1,6 @@
-import {
-    LeaveRoomData,
-    listenFromScript,
-    OnVideoChangeData,
-    sendToBg,
-    SyncVideoData,
-} from "~/comms";
+import browser from "webextension-polyfill";
+
+import { LeaveRoomData, ListenCb, OnVideoChangeData, sendToBg, SyncVideoData } from "~/comms";
 import noop from "~/utils/noop";
 
 import getVideoElements from "./events/getVideoElements";
@@ -18,7 +14,7 @@ setInterval(() => {
 }, 500);
 
 // eslint-disable-next-line @typescript-eslint/require-await
-listenFromScript(async (type, data) => {
+const onMessage: ListenCb = async ({ type, data }) => {
     switch (type) {
         case "GET_VIDEO_ELEMENTS":
             return getVideoElements(undefined);
@@ -35,4 +31,7 @@ listenFromScript(async (type, data) => {
         default:
             throw new Error(`unknown type "${type}" in content script`);
     }
-});
+};
+
+// this HAS to be in global scope because chrome does not register it otherwise
+browser.runtime.onMessage.addListener(onMessage);

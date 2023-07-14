@@ -26,15 +26,16 @@ export default function ShareWebsiteUrl() {
         setRoom(room);
     }
 
-    let truncatedUrl = room?.websiteUrl?.split("://").at(-1);
+    const placeholderUrl = "https://youtube.com";
+    let truncatedUrl = (room?.websiteUrl || placeholderUrl).split("://").at(-1);
     if (truncatedUrl && truncatedUrl.length > 40) {
         truncatedUrl = truncatedUrl.slice(0, 40) + "...";
     }
 
     return (
         <Stack spacing="xs" align="center">
-            <ExternalLink italic href={room?.websiteUrl || "#"}>
-                {truncatedUrl || "example.com/video"}
+            <ExternalLink italic href={room?.websiteUrl || placeholderUrl}>
+                {truncatedUrl}
             </ExternalLink>
 
             <Box>
