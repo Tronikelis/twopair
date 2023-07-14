@@ -8,7 +8,12 @@ export const socket = io(
     import.meta.env.MODE === "production"
         ? "https://twopair.tronikel.lt"
         : "http://localhost:3000",
-    { ackTimeout: 2e3, autoConnect: false }
+    {
+        ackTimeout: 2e3,
+        autoConnect: false,
+        // don't use http long-polling as chrome does not support it in bg script (service worker now)
+        transports: ["websocket"],
+    }
 );
 
 let listening = false;
