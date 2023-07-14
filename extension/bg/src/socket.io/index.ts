@@ -11,8 +11,13 @@ export const socket = io(
     {
         ackTimeout: 2e3,
         autoConnect: false,
-        // don't use http long-polling as chrome does not support it in bg script (service worker now)
-        transports: ["websocket"],
+        transports:
+            // don't use http long-polling as chrome does not support it in bg script (service worker now)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            typeof chrome !== "undefined" && typeof browser !== "undefined"
+                ? undefined
+                : ["websocket"],
     }
 );
 
