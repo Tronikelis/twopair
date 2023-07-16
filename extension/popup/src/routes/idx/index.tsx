@@ -37,6 +37,7 @@ export default function Idx() {
         const url = urlbat("/room/:id", { id: data.room.id });
         await browser.storage.local.set({ [STORAGE_LAST_ROOM_ID]: data.room.id });
 
+        navigated = true;
         navigate(url);
     }
 
