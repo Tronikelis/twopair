@@ -1,5 +1,5 @@
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
@@ -13,6 +13,8 @@ import useUser from "~/popup/hooks/useUser";
 import useValidActions from "~/popup/hooks/useValidActions";
 import notify from "~/popup/utils/notify";
 
+let navigated = false;
+
 export default function Idx() {
     const navigate = useNavigate();
 
@@ -20,6 +22,13 @@ export default function Idx() {
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
     const actions = useValidActions();
+
+    useEffect(() => {
+        if (navigated || !lastRoomId) return;
+        navigated = true;
+
+        navigate(urlbat("/room/:id", { id: lastRoomId }));
+    }, [lastRoomId, navigate]);
 
     async function onNewRoom() {
         if (!user) return;
