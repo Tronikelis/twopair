@@ -35,7 +35,7 @@ export async function sendToContent<Type extends ContentValidTypes>(
     });
 
     const tab = tabId !== undefined ? await browser.tabs.get(tabId) : tabs[0];
-    if (!tab?.id) throw new Error("did not found active tab");
+    if (!tab?.id) throw new Error("this tab does not have an id, throwing");
 
     const res = (await browser.tabs.sendMessage(tab.id, { type, data })) as Res[Type];
     return {

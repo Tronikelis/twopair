@@ -10,7 +10,7 @@ export default async function getSyncingStatus(
         sendToContent("GET_VIDEO_ELEMENTS", undefined, undefined)
     );
     if (err) {
-        console.warn("content_script in active page is not injected");
+        console.warn(err);
     }
 
     return {

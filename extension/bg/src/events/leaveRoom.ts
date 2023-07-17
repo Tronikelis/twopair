@@ -24,7 +24,7 @@ export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoom
         )
     );
     if (err) {
-        console.warn("content_script not injected when calling leaveRoom in bg");
+        console.warn(err);
     }
 
     await socket.emitWithAck(LEAVE_ROOM_ACK, input satisfies LeaveRoomClient);

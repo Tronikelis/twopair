@@ -5,6 +5,7 @@ import {
     GetRoomData,
     GetSyncingStatusData,
     GetVideoElementsData,
+    GetVideoElementsRes,
     JoinRoomData,
     LeaveRoomData,
     ListenCb,
@@ -13,6 +14,7 @@ import {
     SetWebsiteUrlData,
     SyncVideoData,
 } from "~/comms";
+import tryCatch from "~/utils/tryCatch";
 
 import createRoom from "./events/createRoom";
 import getRoom from "./events/getRoom";
@@ -39,13 +41,15 @@ const onMessage: ListenCb = async ({ type, data }) => {
     switch (type) {
         // popup -> background -> content
         case "GET_VIDEO_ELEMENTS": {
-            const { data: res } = await sendToContent(
-                "GET_VIDEO_ELEMENTS",
-                data as GetVideoElementsData,
-                undefined
+            const [err, res] = await tryCatch(() =>
+                sendToContent("GET_VIDEO_ELEMENTS", data as GetVideoElementsData, undefined)
             );
+            if (err) {
+                console.warn(err);
+                return { syncingId: undefined, videos: [] } as GetVideoElementsRes;
+            }
 
-            return res;
+            return res.data;
         }
 
         // popup -> background -> content
