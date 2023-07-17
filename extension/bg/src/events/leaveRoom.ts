@@ -9,7 +9,9 @@ import { socket } from "../socket.io";
 
 export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoomRes> {
     if (globals.syncingTabId === undefined) {
-        throw new Error("trying to leave a room when not in a room, syncingTabId is falsy");
+        throw new Error(
+            "trying to leave a room when not in a room, syncingTabId is undefined"
+        );
     }
 
     const [err] = await tryCatch(() =>
