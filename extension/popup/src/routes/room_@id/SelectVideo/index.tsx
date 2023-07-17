@@ -37,7 +37,7 @@ export default function SelectVideo() {
                         <Button
                             size="sm"
                             onClick={() => onSyncVideo(id)}
-                            disabled={status?.syncingId === id}
+                            disabled={status?.videoId === id}
                         >
                             Sync
                         </Button>

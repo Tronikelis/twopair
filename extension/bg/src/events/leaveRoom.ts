@@ -13,7 +13,13 @@ export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoom
     }
 
     const [err] = await tryCatch(() =>
-        sendToContent("LEAVE_ROOM", input, globals.syncingTabId)
+        sendToContent(
+            "LEAVE_ROOM",
+            input,
+            // sending this event to the currently syncing tab
+            // for it to remove event listeners from the video
+            globals.syncingTabId
+        )
     );
     if (err) {
         console.warn("content_script not injected when calling leaveRoom in bg");

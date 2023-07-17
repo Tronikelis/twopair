@@ -1,6 +1,6 @@
 import useGetSyncingStatus from "./useGetSyncingStatus";
 
 export default function useIsSyncing() {
-    const syncing = useGetSyncingStatus();
-    return syncing?.tabId !== undefined || syncing?.videoId !== undefined;
+    const status = useGetSyncingStatus();
+    return status?.tabId !== undefined || status?.videoId !== undefined;
 }
