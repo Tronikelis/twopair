@@ -28,7 +28,9 @@ import { listenToSocket } from "./socket.io";
 keepAliveChrome();
 
 const onMessage: ListenCb = async ({ type, data }) => {
-    listenToSocket();
+    if (type !== "PING") {
+        listenToSocket();
+    }
 
     // TODO: ERR HANDLING ON ALL THESE ROUTES
     // HANDLE IF CONTENT SCRIPT IS LOADED
