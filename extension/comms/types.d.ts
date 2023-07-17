@@ -57,8 +57,8 @@ export type SetWebsiteUrlRes = SetWebsiteUrlServer;
 
 export type GetSyncingStatusData = undefined;
 export interface GetSyncingStatusRes {
-    syncing: boolean;
-    syncingId: string | undefined;
+    videoId: string | undefined;
+    tabId: number | undefined;
 }
 
 export interface OnVideoChangeData {

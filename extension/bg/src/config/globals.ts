@@ -1,9 +1,9 @@
 type Globals = {
-    syncing: boolean;
+    syncingTabId: number | undefined;
 };
 
 const globals: Globals = {
-    syncing: false,
+    syncingTabId: undefined,
 };
 
 export default globals;

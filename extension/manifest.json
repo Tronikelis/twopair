@@ -1,6 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/chrome-manifest",
-    "version": "0.4.1",
+    "version": "0.5.0",
     "manifest_version": 3,
 
     "name": "Twopair",
@@ -22,7 +22,16 @@
         "type": "module"
     },
 
-    "permissions": ["storage", "activeTab", "scripting"],
+    "content_scripts": [
+        {
+            "js": ["./content_script/dist/index.js"],
+            "run_at": "document_start",
+            "matches": ["<all_urls>"],
+            "all_frames": false
+        }
+    ],
+
+    "permissions": ["storage", "activeTab"],
 
     "minimum_chrome_version": "110",
     "browser_specific_settings": {

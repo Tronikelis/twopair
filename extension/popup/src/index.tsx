@@ -2,7 +2,6 @@ import { MantineProvider, Stack } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import React from "react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
-import browser from "webextension-polyfill";
 
 import useEffectAsync from "./hooks/useEffectAsync";
 import Idx from "./routes/idx";
@@ -32,21 +31,6 @@ const router = createMemoryRouter([
 
 export default function Main() {
     useEffectAsync(setDefaults, []);
-
-    useEffectAsync(async () => {
-        const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-        if (!tab || tab.id === undefined) {
-            console.error("did not find a tab to inject the script into");
-            return;
-        }
-
-        // from my research if the input is "files" this gets run only once
-        await browser.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ["/content_script/dist/index.js"],
-            injectImmediately: true,
-        });
-    }, []);
 
     return (
         <MantineProvider withGlobalStyles withNormalizeCSS>

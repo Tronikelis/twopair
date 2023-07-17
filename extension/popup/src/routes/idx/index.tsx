@@ -8,9 +8,9 @@ import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
 import LeaveRoomBnt from "~/popup/components/LeaveRoomBtn";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
+import useIsSyncing from "~/popup/hooks/useIsSyncing";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
-import useValidActions from "~/popup/hooks/useValidActions";
 import notify from "~/popup/utils/notify";
 
 let navigated = false;
@@ -21,7 +21,7 @@ export default function Idx() {
     const user = useUser();
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
-    const actions = useValidActions();
+    const syncing = useIsSyncing();
 
     useEffect(() => {
         if (navigated || !lastRoomId) return;
@@ -73,11 +73,11 @@ export default function Idx() {
                     </Button>
                 )}
 
-                <Button onClick={onNewRoom} disabled={!actions.canCreateRoom}>
+                <Button onClick={onNewRoom} disabled={syncing}>
                     New room
                 </Button>
 
-                <Button to="/room/join" component={Link} disabled={!actions.canCreateRoom}>
+                <Button to="/room/join" component={Link} disabled={syncing}>
                     Join room
                 </Button>
             </Group>

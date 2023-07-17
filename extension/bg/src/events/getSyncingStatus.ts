@@ -6,13 +6,15 @@ import globals from "../config/globals";
 export default async function getSyncingStatus(
     _input: GetSyncingStatusData
 ): Promise<GetSyncingStatusRes> {
-    const [err, videos] = await tryCatch(() => sendToContent("GET_VIDEO_ELEMENTS", undefined));
+    const [err, res] = await tryCatch(() =>
+        sendToContent("GET_VIDEO_ELEMENTS", undefined, undefined)
+    );
     if (err) {
-        console.warn("content_script in active page is not injected");
+        console.warn(err);
     }
 
     return {
-        syncing: globals.syncing,
-        syncingId: videos?.syncingId,
+        videoId: res?.data.syncingId,
+        tabId: globals.syncingTabId,
     };
 }

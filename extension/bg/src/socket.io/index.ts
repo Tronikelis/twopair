@@ -4,6 +4,8 @@ import { io } from "socket.io-client";
 
 import { OnVideoChangeData, sendToContent } from "~/comms";
 
+import globals from "../config/globals";
+
 export const socket = io(
     import.meta.env.MODE === "production"
         ? "https://twopair.tronikel.lt"
@@ -27,7 +29,17 @@ export function listenToSocket() {
     if (listening) return;
 
     socket.on(SYNC_ROOM, async (data: SyncRoomServer) => {
-        await sendToContent("ON_VIDEO_CHANGE", data satisfies OnVideoChangeData);
+        if (globals.syncingTabId === undefined) {
+            console.warn("ignoring sync events if not synced myself");
+            return;
+        }
+
+        await sendToContent(
+            "ON_VIDEO_CHANGE",
+            data satisfies OnVideoChangeData,
+            // changing the video on the correct tab
+            globals.syncingTabId
+        );
     });
 
     socket.connect();

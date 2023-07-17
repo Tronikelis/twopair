@@ -5,6 +5,7 @@ import {
     GetRoomData,
     GetSyncingStatusData,
     GetVideoElementsData,
+    GetVideoElementsRes,
     JoinRoomData,
     LeaveRoomData,
     ListenCb,
@@ -13,6 +14,7 @@ import {
     SetWebsiteUrlData,
     SyncVideoData,
 } from "~/comms";
+import tryCatch from "~/utils/tryCatch";
 
 import createRoom from "./events/createRoom";
 import getRoom from "./events/getRoom";
@@ -28,7 +30,9 @@ import { listenToSocket } from "./socket.io";
 keepAliveChrome();
 
 const onMessage: ListenCb = async ({ type, data }) => {
-    listenToSocket();
+    if (type !== "PING") {
+        listenToSocket();
+    }
 
     // TODO: ERR HANDLING ON ALL THESE ROUTES
     // HANDLE IF CONTENT SCRIPT IS LOADED
@@ -36,8 +40,17 @@ const onMessage: ListenCb = async ({ type, data }) => {
     // !!!
     switch (type) {
         // popup -> background -> content
-        case "GET_VIDEO_ELEMENTS":
-            return await sendToContent("GET_VIDEO_ELEMENTS", data as GetVideoElementsData);
+        case "GET_VIDEO_ELEMENTS": {
+            const [err, res] = await tryCatch(() =>
+                sendToContent("GET_VIDEO_ELEMENTS", data as GetVideoElementsData, undefined)
+            );
+            if (err) {
+                console.warn(err);
+                return { syncingId: undefined, videos: [] } as GetVideoElementsRes;
+            }
+
+            return res.data;
+        }
 
         // popup -> background -> content
         case "SYNC_VIDEO":

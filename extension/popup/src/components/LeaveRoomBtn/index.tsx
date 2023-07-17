@@ -1,20 +1,18 @@
-import { Box, Button, ButtonProps, Tooltip } from "@mantine/core";
+import { Box, Button, ButtonProps } from "@mantine/core";
 import React, { ComponentPropsWithoutRef, forwardRef, MouseEvent } from "react";
 
 import { sendToBg } from "~/comms";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
+import useIsSyncing from "~/popup/hooks/useIsSyncing";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
-import useValidActions from "~/popup/hooks/useValidActions";
-
-const leaveConditions = "Can only leave if video is syncing and you are in the same tab!";
 
 const LeaveRoomBnt = forwardRef<
     HTMLButtonElement,
     ButtonProps & ComponentPropsWithoutRef<"button">
 >(({ onClick: _onClick, children, ...props }, ref) => {
     const user = useUser();
-    const actions = useValidActions();
+    const syncing = useIsSyncing();
 
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
@@ -26,19 +24,11 @@ const LeaveRoomBnt = forwardRef<
     }
 
     return (
-        <Tooltip label={leaveConditions} disabled={actions.canLeaveRoom}>
-            <Box>
-                <Button
-                    color="red"
-                    onClick={onLeave}
-                    disabled={!actions.canLeaveRoom}
-                    {...props}
-                    ref={ref}
-                >
-                    {children || "Leave"}
-                </Button>
-            </Box>
-        </Tooltip>
+        <Box>
+            <Button color="red" onClick={onLeave} disabled={!syncing} {...props} ref={ref}>
+                {children || "Leave"}
+            </Button>
+        </Box>
     );
 });
 
