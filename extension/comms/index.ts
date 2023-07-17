@@ -18,20 +18,30 @@ type ContentValidTypes = Extract<
 >;
 type BackgroundValidTypes = MessageType;
 
+type ContentResponse<T> = {
+    data: T;
+    tabId: number;
+};
+
 export async function sendToContent<Type extends ContentValidTypes>(
     type: Type,
-    data: Data[Type]
-): Promise<Res[Type]> {
+    data: Data[Type],
+    /** send to a specific tab */
+    tabId: number | undefined
+): Promise<ContentResponse<Res[Type]>> {
     const tabs = await browser.tabs.query({
         currentWindow: true,
         active: true,
     });
 
-    const tab = tabs[0];
+    const tab = tabId !== undefined ? await browser.tabs.get(tabId) : tabs[0];
     if (!tab?.id) throw new Error("did not found active tab");
 
     const res = (await browser.tabs.sendMessage(tab.id, { type, data })) as Res[Type];
-    return res;
+    return {
+        data: res,
+        tabId: tab.id,
+    };
 }
 
 export async function sendToBg<Type extends BackgroundValidTypes>(

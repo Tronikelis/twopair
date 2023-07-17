@@ -36,8 +36,15 @@ const onMessage: ListenCb = async ({ type, data }) => {
     // !!!
     switch (type) {
         // popup -> background -> content
-        case "GET_VIDEO_ELEMENTS":
-            return await sendToContent("GET_VIDEO_ELEMENTS", data as GetVideoElementsData);
+        case "GET_VIDEO_ELEMENTS": {
+            const { data: res } = await sendToContent(
+                "GET_VIDEO_ELEMENTS",
+                data as GetVideoElementsData,
+                undefined
+            );
+
+            return res;
+        }
 
         // popup -> background -> content
         case "SYNC_VIDEO":
