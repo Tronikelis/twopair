@@ -1,5 +1,5 @@
 import { Box, Button, Group, Stack, Text, Title } from "@mantine/core";
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import urlbat from "urlbat";
 import browser from "webextension-polyfill";
@@ -8,6 +8,8 @@ import { sendToBg } from "~/comms";
 import ExternalLink from "~/popup/components/ExternalLink";
 import LeaveRoomBnt from "~/popup/components/LeaveRoomBtn";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
+import useEffectAsync from "~/popup/hooks/useEffectAsync";
+import useFnRef from "~/popup/hooks/useFnRef";
 import useIsSyncing from "~/popup/hooks/useIsSyncing";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
@@ -23,12 +25,25 @@ export default function Idx() {
 
     const syncing = useIsSyncing();
 
-    useEffect(() => {
-        if (navigated || !lastRoomId) return;
-        navigated = true;
+    const onLastRoom = useFnRef(async () => {
+        if (!user || !lastRoomId) return;
+
+        const data = await sendToBg("JOIN_ROOM", { roomId: lastRoomId, user });
+        if (!data.room) {
+            notify.err({ message: "Room does not exist" });
+            return;
+        }
 
         navigate(urlbat("/room/:id", { id: lastRoomId }));
-    }, [lastRoomId, navigate]);
+    });
+
+    // automatically go back to last room on popup open
+    useEffectAsync(async () => {
+        if (navigated || !lastRoomId || !user) return;
+        navigated = true;
+
+        await onLastRoom();
+    }, [lastRoomId, user, onLastRoom]);
 
     async function onNewRoom() {
         if (!user) return;
@@ -39,18 +54,6 @@ export default function Idx() {
 
         navigated = true;
         navigate(url);
-    }
-
-    async function onLastRoom() {
-        if (!user || !lastRoomId) return;
-
-        const data = await sendToBg("JOIN_ROOM", { roomId: lastRoomId, user });
-        if (!data.room) {
-            notify.err({ message: "Room does not exist" });
-            return;
-        }
-
-        navigate(urlbat("/room/:id", { id: lastRoomId }));
     }
 
     return (
