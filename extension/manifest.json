@@ -22,7 +22,15 @@
         "type": "module"
     },
 
-    "permissions": ["storage", "activeTab", "scripting"],
+    "content_scripts": [
+        {
+            "js": ["./content_script/dist/index.js"],
+            "run_at": "document_end",
+            "matches": ["<all_urls>"]
+        }
+    ],
+
+    "permissions": ["storage"],
 
     "minimum_chrome_version": "110",
     "browser_specific_settings": {
