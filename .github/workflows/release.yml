@@ -58,7 +58,7 @@ jobs:
                   cat manifest.json;
 
             - name: Release to chrome web store
-              run: cd extension && npx -y chrome-webstore-upload-cli@2 upload --auto-publish
+              run: cd extension && rm -rf node_modules && npx -y chrome-webstore-upload-cli@2 upload --auto-publish
               env:
                   EXTENSION_ID: ${{ secrets.CR_EXTENSION_ID }}
                   CLIENT_ID: ${{ secrets.CR_CLIENT_ID }}
