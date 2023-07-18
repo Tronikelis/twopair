@@ -10,7 +10,6 @@ import LeaveRoomBnt from "~/popup/components/LeaveRoomBtn";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
 import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import useFnRef from "~/popup/hooks/useFnRef";
-import useIsSyncing from "~/popup/hooks/useIsSyncing";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
 import notify from "~/popup/utils/notify";
@@ -22,8 +21,6 @@ export default function Idx() {
 
     const user = useUser();
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
-
-    const syncing = useIsSyncing();
 
     const onLastRoom = useFnRef(async () => {
         if (!user || !lastRoomId) return;
@@ -76,11 +73,11 @@ export default function Idx() {
                     </Button>
                 )}
 
-                <Button onClick={onNewRoom} disabled={syncing}>
+                <Button onClick={onNewRoom} disabled={!user || user.syncing}>
                     New room
                 </Button>
 
-                <Button to="/room/join" component={Link} disabled={syncing}>
+                <Button to="/room/join" component={Link} disabled={!user || user.syncing}>
                     Join room
                 </Button>
             </Group>

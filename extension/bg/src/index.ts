@@ -10,6 +10,7 @@ import {
     LeaveRoomData,
     ListenCb,
     OnVideoChangeData,
+    ReportSyncingData,
     sendToContent,
     SetWebsiteUrlData,
     SyncVideoData,
@@ -22,6 +23,7 @@ import getSyncingStatus from "./events/getSyncingStatus";
 import joinRoom from "./events/joinRoom";
 import leaveRoom from "./events/leaveRoom";
 import onVideoChange from "./events/onVideoChange";
+import reportSyncing from "./events/reportSyncing";
 import setWebsiteUrl from "./events/setWebsiteUrl";
 import syncVideo from "./events/syncVideo";
 import keepAliveChrome from "./utils/keepAliveChrome";
@@ -79,6 +81,10 @@ const onMessage: ListenCb = async ({ type, data }) => {
         // popup -> background
         case "SET_WEBSITE_URL":
             return await setWebsiteUrl(data as SetWebsiteUrlData);
+
+        // popup -> background
+        case "REPORT_SYNCING":
+            return await reportSyncing(data as ReportSyncingData);
 
         // content -> background
         case "ON_VIDEO_CHANGE":

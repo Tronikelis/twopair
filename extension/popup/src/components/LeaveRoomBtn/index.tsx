@@ -3,7 +3,6 @@ import React, { ComponentPropsWithoutRef, forwardRef, MouseEvent } from "react";
 
 import { sendToBg } from "~/comms";
 import { STORAGE_LAST_ROOM_ID } from "~/popup/config/const";
-import useIsSyncing from "~/popup/hooks/useIsSyncing";
 import useStorage from "~/popup/hooks/useStorage";
 import useUser from "~/popup/hooks/useUser";
 
@@ -12,7 +11,6 @@ const LeaveRoomBnt = forwardRef<
     ButtonProps & ComponentPropsWithoutRef<"button">
 >(({ onClick: _onClick, children, ...props }, ref) => {
     const user = useUser();
-    const syncing = useIsSyncing();
 
     const [lastRoomId] = useStorage(STORAGE_LAST_ROOM_ID, "");
 
@@ -25,7 +23,13 @@ const LeaveRoomBnt = forwardRef<
 
     return (
         <Box>
-            <Button color="red" onClick={onLeave} disabled={!syncing} {...props} ref={ref}>
+            <Button
+                color="red"
+                onClick={onLeave}
+                disabled={!user || !user.syncing}
+                {...props}
+                ref={ref}
+            >
                 {children || "Leave"}
             </Button>
         </Box>

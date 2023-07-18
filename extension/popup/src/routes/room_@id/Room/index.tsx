@@ -44,6 +44,7 @@ export default function Room() {
                                         {x.username}
                                         {x.id === user?.id && " 👤"}
                                         {x.id === room.ownerId && " 👑"}
+                                        {x.syncing ? " ✅" : " 💤"}
                                     </List.Item>
                                 ))}
                             </List>

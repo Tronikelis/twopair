@@ -8,6 +8,8 @@ import {
     JoinRoomClient,
     JoinRoomServer,
     LeaveRoomClient,
+    ReportSyncingClient,
+    ReportSyncingServer,
     SetWebsiteUrlClient,
     SetWebsiteUrlServer,
 } from "backend/src/types/socket.io";
@@ -22,6 +24,7 @@ export type MessageType =
     | "SET_WEBSITE_URL"
     | "ON_VIDEO_CHANGE"
     | "GET_SYNCING_STATUS"
+    | "REPORT_SYNCING"
     | "PING";
 
 export interface GetVideoElementsRes {
@@ -68,6 +71,9 @@ export interface OnVideoChangeData {
 }
 export type OnVideoChangeRes = undefined;
 
+export type ReportSyncingData = ReportSyncingClient;
+export type ReportSyncingRes = ReportSyncingServer;
+
 export type Data = {
     GET_VIDEO_ELEMENTS: GetVideoElementsData;
     SYNC_VIDEO: SyncVideoData;
@@ -78,6 +84,7 @@ export type Data = {
     SET_WEBSITE_URL: SetWebsiteUrlData;
     ON_VIDEO_CHANGE: OnVideoChangeData;
     GET_SYNCING_STATUS: GetSyncingStatusData;
+    REPORT_SYNCING: ReportSyncingData;
     PING: undefined;
 };
 
@@ -91,5 +98,6 @@ export type Res = {
     SET_WEBSITE_URL: SetWebsiteUrlRes;
     ON_VIDEO_CHANGE: OnVideoChangeRes;
     GET_SYNCING_STATUS: GetSyncingStatusRes;
+    REPORT_SYNCING: ReportSyncingRes;
     PING: undefined;
 };
