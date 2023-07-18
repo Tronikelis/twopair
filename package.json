@@ -11,7 +11,7 @@
         "extension:browser:dev": "cd extension && web-ext run --verbose --devtools",
         "lint": "eslint -c ./.eslintrc.cjs .",
         "build:check": "cd extension && npm run build:check && cd .. && cd backend && npm run build:check",
-        "build": "npm backend:build"
+        "build": "npm run backend:build"
     },
     "workspaces": [
         "backend",
