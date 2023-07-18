@@ -14,10 +14,13 @@ export default function SelectVideo() {
 
     async function onSyncVideo(videoId: string) {
         if (!roomId) return;
+
         await sendToBg("SYNC_VIDEO", {
             videoId,
             roomId,
         });
+
+        await sendToBg("REPORT_SYNCING", { syncing: true });
     }
 
     return (

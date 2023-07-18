@@ -10,6 +10,7 @@ export interface RoomObj {
 export interface User {
     id: string;
     username: string;
+    syncing: boolean;
 }
 
 export interface GetRoomServer {
@@ -52,3 +53,8 @@ export interface SetWebsiteUrlClient {
 export interface SetWebsiteUrlServer {
     room: RoomObj | undefined;
 }
+
+export type ReportSyncingServer = undefined;
+export type ReportSyncingClient = {
+    syncing: boolean;
+};

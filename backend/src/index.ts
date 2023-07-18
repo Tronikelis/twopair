@@ -5,6 +5,7 @@ import {
     GET_ROOM_ACK,
     JOIN_ROOM_ACK,
     LEAVE_ROOM_ACK,
+    REPORT_SYNCING_ACK,
     SET_WEBSITE_URL_ACK,
     SYNC_ROOM,
 } from "./config/events.js";
@@ -13,6 +14,7 @@ import disconnect from "./events/disconnect.js";
 import getRoomAck from "./events/getRoomAck.js";
 import joinRoomAck from "./events/joinRoomAck.js";
 import leaveRoomAck from "./events/leaveRoomAck.js";
+import reportSyncingAck from "./events/reportSyncingAck.js";
 import setWebsiteUrlAck from "./events/setWebsiteUrlAck.js";
 import syncRoom from "./events/syncRoom.js";
 import logger from "./utils/logger.js";
@@ -49,6 +51,7 @@ function main() {
         socket.on(LEAVE_ROOM_ACK, leaveRoomAck(socket, db));
         socket.on(SYNC_ROOM, syncRoom(socket, db));
         socket.on(SET_WEBSITE_URL_ACK, setWebsiteUrlAck(socket, db));
+        socket.on(REPORT_SYNCING_ACK, reportSyncingAck(socket, db));
     });
 
     const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;

@@ -9,8 +9,8 @@ import onVideoChange from "./events/onVideoChange";
 import syncVideo from "./events/syncVideo";
 
 // keep background script alive (this works?)
-setInterval(() => {
-    sendToBg("PING", undefined).catch(noop);
+setInterval(async () => {
+    await sendToBg("PING", undefined);
 }, 500);
 
 // eslint-disable-next-line @typescript-eslint/require-await
@@ -35,3 +35,9 @@ const onMessage: ListenCb = async ({ type, data }) => {
 
 // this HAS to be in global scope because chrome does not register it otherwise
 browser.runtime.onMessage.addListener(onMessage);
+
+window.addEventListener("beforeunload", () => {
+    // https://stackoverflow.com/questions/17188058/using-onbeforeunload-without-dialog
+    sendToBg("REPORT_SYNCING", { syncing: false }).catch(noop);
+    return undefined;
+});

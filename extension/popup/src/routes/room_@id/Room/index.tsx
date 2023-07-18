@@ -11,6 +11,15 @@ import useUser from "~/popup/hooks/useUser";
 
 import { roomAtom } from "../store";
 
+const legend = {
+    me: "👤",
+    owner: "👑",
+    syncing: {
+        true: "✅",
+        false: "💤",
+    },
+};
+
 export default function Room() {
     const { id: roomId } = useParams();
 
@@ -42,8 +51,11 @@ export default function Room() {
                                 {room.users.map(x => (
                                     <List.Item key={x.id}>
                                         {x.username}
-                                        {x.id === user?.id && " 👤"}
-                                        {x.id === room.ownerId && " 👑"}
+                                        {x.id === user?.id && ` ${legend.me}`}
+                                        {x.id === room.ownerId && ` ${legend.owner}`}
+                                        {x.syncing
+                                            ? ` ${legend.syncing.true}`
+                                            : ` ${legend.syncing.false}`}
                                     </List.Item>
                                 ))}
                             </List>
