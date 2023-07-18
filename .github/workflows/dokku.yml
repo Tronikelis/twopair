@@ -42,7 +42,7 @@ jobs:
                   push: false
 
             - name: Deploy to dokku
-              uses: dokku/github-action@v1
+              uses: dokku/github-action@v1.4.0
               with:
                   git_push_flags: "--force"
                   git_remote_url: "ssh://dokku@${{ secrets.HOST }}:22/twopair"
