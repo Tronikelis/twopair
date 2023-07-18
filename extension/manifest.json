@@ -1,10 +1,10 @@
 {
     "$schema": "https://json.schemastore.org/chrome-manifest",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "manifest_version": 3,
 
     "name": "Twopair",
-    "description": "This open source browser extension let's you watch any video on any website together with your friends",
+    "description": "Simple video synchronization extension to watch videos together with your friends on Youtube, Netflix and more video players online.",
     "icons": {
         "16": "./media/icon_16x16.png",
         "48": "./media/icon_48x48.png",
