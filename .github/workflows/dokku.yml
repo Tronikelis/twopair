@@ -22,25 +22,6 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Setup Node.js environment
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18
-
-            - name: Install dependencies
-              run: npm ci
-
-            - name: Build backend
-              run: npm run backend:build
-
-            - name: Allow /dist
-              run: sed -i "s/dist\///g" .gitignore
-
-            - name: Add and Commit
-              uses: EndBug/add-and-commit@v9
-              with:
-                  push: false
-
             - name: Deploy to dokku
               uses: dokku/github-action@v1.4.0
               with:
