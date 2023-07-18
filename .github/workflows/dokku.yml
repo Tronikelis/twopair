@@ -42,10 +42,8 @@ jobs:
                   push: false
 
             - name: Deploy to dokku
-              uses: vitalyliber/dokku-github-action@v7.1
-              env:
-                  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-                  FORCE_DEPLOY: true
-                  BRANCH: master
-                  HOST: ${{ secrets.HOST }}
-                  PROJECT: twopair
+              uses: dokku/github-action@v1
+              with:
+                  git_push_flags: "--force"
+                  git_remote_url: "ssh://dokku@${{ secrets.HOST }}:22/twopair"
+                  ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
