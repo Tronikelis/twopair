@@ -1,6 +1,6 @@
 <h1 align="center">Twopair</h1>
 
-This [open source](https://github.com/Tronikelis/twopair) browser extension let's you watch any video on any website together with your friends
+Simple video synchronization extension to watch videos together with your friends on Youtube, Netflix and many more video players online.
 
 
 
