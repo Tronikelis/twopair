@@ -39,8 +39,8 @@ export default function ShareWebsiteUrl() {
             </ExternalLink>
 
             <Box>
-                <Button onClick={onShareUrl} size="xs" variant="subtle">
-                    Share my URL
+                <Button onClick={onShareUrl} size="xs" variant="outline">
+                    Share video URL
                 </Button>
             </Box>
         </Stack>

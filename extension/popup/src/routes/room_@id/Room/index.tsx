@@ -1,4 +1,4 @@
-import { Box, List, Paper, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Group, List, Paper, Stack, Text, Title } from "@mantine/core";
 import { useAtom } from "jotai";
 import React from "react";
 import { useParams } from "react-router-dom";
@@ -8,12 +8,14 @@ import useEffectAsync from "~/popup/hooks/useEffectAsync";
 import useFnRef from "~/popup/hooks/useFnRef";
 import useInterval from "~/popup/hooks/useInterval";
 import useUser from "~/popup/hooks/useUser";
+import notify from "~/popup/utils/notify";
+import tryCatch from "~/utils/tryCatch";
 
 import { roomAtom } from "../store";
 
 const legend = {
-    me: "👤",
-    owner: "👑",
+    me: "[me]",
+    owner: "", // this does not have any impact currently
     syncing: {
         true: "✅",
         false: "💤",
@@ -35,11 +37,28 @@ export default function Room() {
     useInterval(getRoom, 1e3);
     useEffectAsync(getRoom, []);
 
+    async function onCopyRoomId() {
+        if (!roomId) return;
+
+        const [err] = await tryCatch(() => navigator.clipboard.writeText(roomId));
+        if (err) {
+            notify.err({ message: "Can't copy" });
+            return;
+        }
+
+        notify.actions({ message: "Copied" });
+    }
+
     return (
         <Stack>
             <Box>
                 <Title order={5}>Room</Title>
-                <Text>{roomId}</Text>
+                <Group spacing="xs">
+                    <Text>{roomId}</Text>
+                    <Button size="xs" variant="outline" onClick={onCopyRoomId}>
+                        Copy
+                    </Button>
+                </Group>
             </Box>
 
             <Paper p="xs" withBorder>
