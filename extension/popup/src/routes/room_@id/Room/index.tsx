@@ -1,6 +1,6 @@
 import { Box, Button, Group, List, Paper, Stack, Text, Title } from "@mantine/core";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { sendToBg } from "~/comms";
@@ -25,6 +25,8 @@ const legend = {
 export default function Room() {
     const { id: roomId } = useParams();
 
+    const [buttonMessage, setButtonMessage] = useState("Copy");
+
     const [room, setRoom] = useAtom(roomAtom);
     const user = useUser();
 
@@ -46,7 +48,7 @@ export default function Room() {
             return;
         }
 
-        notify.actions({ message: "Copied" });
+        setButtonMessage("Copied");
     }
 
     return (
@@ -56,7 +58,7 @@ export default function Room() {
                 <Group spacing="xs">
                     <Text>{roomId}</Text>
                     <Button size="xs" variant="outline" onClick={onCopyRoomId}>
-                        Copy
+                        {buttonMessage}
                     </Button>
                 </Group>
             </Box>

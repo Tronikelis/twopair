@@ -40,7 +40,7 @@ export default function ShareWebsiteUrl() {
 
             <Box>
                 <Button onClick={onShareUrl} size="xs" variant="outline">
-                    Share video URL
+                    Set video URL
                 </Button>
             </Box>
         </Stack>
