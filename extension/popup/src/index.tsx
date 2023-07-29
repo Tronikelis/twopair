@@ -42,9 +42,9 @@ export default function Main() {
 
         // from my research if the input is "files" this gets run only once
         await browser.scripting.executeScript({
-            target: { tabId: tab.id },
+            target: { tabId: tab.id, allFrames: true },
             files: ["/content_script/dist/index.js"],
-            injectImmediately: true,
+            injectImmediately: false,
         });
     }, []);
 

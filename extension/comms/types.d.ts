@@ -13,6 +13,7 @@ import {
     SetWebsiteUrlClient,
     SetWebsiteUrlServer,
 } from "backend/src/types/socket.io";
+import type browser from "webextension-polyfill";
 
 export type MessageType =
     | "GET_VIDEO_ELEMENTS"
@@ -25,7 +26,20 @@ export type MessageType =
     | "ON_VIDEO_CHANGE"
     | "GET_SYNCING_STATUS"
     | "REPORT_SYNCING"
-    | "PING";
+    | "GET_FRAMES"
+    | "PING"
+    | "_PROXY_TO_CONTENT";
+
+export type ContentValidTypes = Extract<
+    MessageType,
+    "GET_VIDEO_ELEMENTS" | "SYNC_VIDEO" | "ON_VIDEO_CHANGE" | "LEAVE_ROOM"
+>;
+export type BackgroundValidTypes = MessageType;
+
+export type ContentResponse<T> = {
+    data: T;
+    tabId: number;
+};
 
 export interface GetVideoElementsRes {
     syncingId: string | undefined;
@@ -74,6 +88,18 @@ export type OnVideoChangeRes = undefined;
 export type ReportSyncingData = ReportSyncingClient;
 export type ReportSyncingRes = ReportSyncingServer;
 
+export type GetFramesData = undefined;
+export type GetFramesRes = {
+    frames: browser.WebNavigation.GetAllFramesCallbackDetailsItemType[];
+};
+
+export type _ProxyToContentData = {
+    frameId: number;
+    type: ContentValidTypes;
+    data: Data[ContentValidTypes];
+};
+export type _ProxyToContentRes<T> = T;
+
 export type Data = {
     GET_VIDEO_ELEMENTS: GetVideoElementsData;
     SYNC_VIDEO: SyncVideoData;
@@ -85,7 +111,9 @@ export type Data = {
     ON_VIDEO_CHANGE: OnVideoChangeData;
     GET_SYNCING_STATUS: GetSyncingStatusData;
     REPORT_SYNCING: ReportSyncingData;
+    GET_FRAMES: GetFramesData;
     PING: undefined;
+    _PROXY_TO_CONTENT: _ProxyToContentData;
 };
 
 export type Res = {
@@ -99,5 +127,7 @@ export type Res = {
     ON_VIDEO_CHANGE: OnVideoChangeRes;
     GET_SYNCING_STATUS: GetSyncingStatusRes;
     REPORT_SYNCING: ReportSyncingRes;
+    GET_FRAMES: GetFramesRes;
     PING: undefined;
+    _PROXY_TO_CONTENT: _ProxyToContentRes;
 };

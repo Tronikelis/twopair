@@ -1,6 +1,14 @@
 import browser from "webextension-polyfill";
 
-import { LeaveRoomData, ListenCb, OnVideoChangeData, sendToBg, SyncVideoData } from "~/comms";
+import {
+    GetVideoElementsRes,
+    LeaveRoomData,
+    ListenCb,
+    OnVideoChangeData,
+    proxyToFrame,
+    sendToBg,
+    SyncVideoData,
+} from "~/comms";
 import noop from "~/utils/noop";
 
 import getVideoElements from "./events/getVideoElements";
@@ -15,6 +23,34 @@ setInterval(async () => {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 const onMessage: ListenCb = async ({ type, data }) => {
+    const { frames: childFrames } = await sendToBg("GET_FRAMES", undefined).then(x => ({
+        frames: x.frames.filter(x => x.frameId !== 0),
+    }));
+
+    // command & control
+    if (window === window.top) {
+        switch (type) {
+            case "GET_VIDEO_ELEMENTS": {
+                const elements = getVideoElements(undefined);
+                const responses = await Promise.all(
+                    childFrames.map(x =>
+                        proxyToFrame(x.frameId, "GET_VIDEO_ELEMENTS", undefined)
+                    )
+                );
+
+                const videos = [...elements.videos];
+                for (const x of responses) {
+                    videos.push(...x.videos);
+                }
+
+                return {
+                    syncingId: elements.syncingId,
+                    videos,
+                } as GetVideoElementsRes;
+            }
+        }
+    }
+
     switch (type) {
         case "GET_VIDEO_ELEMENTS":
             return getVideoElements(undefined);

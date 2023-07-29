@@ -9,9 +9,8 @@ import { socket } from "../socket.io";
 
 export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoomRes> {
     if (globals.syncingTabId === undefined) {
-        throw new Error(
-            "trying to leave a room when not in a room, syncingTabId is undefined"
-        );
+        console.warn("trying to leave a room when not in a room, syncingTabId is undefined");
+        return;
     }
 
     const [err] = await tryCatch(() =>
@@ -20,7 +19,7 @@ export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoom
             input,
             // sending this event to the currently syncing tab
             // for it to remove event listeners from the video
-            globals.syncingTabId
+            { tabId: globals.syncingTabId, frameId: undefined }
         )
     );
     if (err) {

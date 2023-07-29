@@ -22,7 +22,7 @@
         "type": "module"
     },
 
-    "permissions": ["storage", "scripting", "activeTab"],
+    "permissions": ["storage", "scripting", "activeTab", "webNavigation"],
 
     "minimum_chrome_version": "110",
     "browser_specific_settings": {

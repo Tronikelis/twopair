@@ -1,7 +1,9 @@
 import browser from "webextension-polyfill";
 
 import {
+    _ProxyToContentData,
     CreateRoomData,
+    GetFramesData,
     GetRoomData,
     GetSyncingStatusData,
     GetVideoElementsData,
@@ -18,6 +20,7 @@ import {
 import tryCatch from "~/utils/tryCatch";
 
 import createRoom from "./events/createRoom";
+import getFrames from "./events/getFrames";
 import getRoom from "./events/getRoom";
 import getSyncingStatus from "./events/getSyncingStatus";
 import joinRoom from "./events/joinRoom";
@@ -89,6 +92,16 @@ const onMessage: ListenCb = async ({ type, data }) => {
         // content -> background
         case "ON_VIDEO_CHANGE":
             return onVideoChange(data as OnVideoChangeData);
+
+        // content -> background
+        case "GET_FRAMES":
+            return await getFrames(data as GetFramesData);
+
+        // content -> background -> content
+        case "_PROXY_TO_CONTENT": {
+            const { data: payload, frameId, type } = data as _ProxyToContentData;
+            return await sendToContent(type, payload, { frameId, tabId: undefined });
+        }
 
         // keep background script alive by sending filler events
         case "PING":

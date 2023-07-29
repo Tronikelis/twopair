@@ -38,7 +38,7 @@ export function listenToSocket() {
             "ON_VIDEO_CHANGE",
             data satisfies OnVideoChangeData,
             // changing the video on the correct tab
-            globals.syncingTabId
+            { tabId: globals.syncingTabId, frameId: undefined }
         );
     });
 

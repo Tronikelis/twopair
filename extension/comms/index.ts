@@ -1,6 +1,13 @@
 import browser from "webextension-polyfill";
 
-import type { Data, MessageType, Res } from "./types";
+import type {
+    BackgroundValidTypes,
+    ContentResponse,
+    ContentValidTypes,
+    Data,
+    MessageType,
+    Res,
+} from "./types";
 
 export type * from "./types";
 
@@ -12,22 +19,15 @@ export type ListenCb = ({
     data: Data[MessageType];
 }) => Promise<Res[MessageType]>;
 
-type ContentValidTypes = Extract<
-    MessageType,
-    "GET_VIDEO_ELEMENTS" | "SYNC_VIDEO" | "ON_VIDEO_CHANGE" | "LEAVE_ROOM"
->;
-type BackgroundValidTypes = MessageType;
-
-type ContentResponse<T> = {
-    data: T;
-    tabId: number;
+type SendToContentOptions = {
+    tabId: number | undefined;
+    frameId: number | undefined;
 };
 
 export async function sendToContent<Type extends ContentValidTypes>(
     type: Type,
     data: Data[Type],
-    /** send to a specific tab */
-    tabId: number | undefined
+    { frameId, tabId }: SendToContentOptions = { frameId: undefined, tabId: undefined }
 ): Promise<ContentResponse<Res[Type]>> {
     const tabs = await browser.tabs.query({
         currentWindow: true,
@@ -37,7 +37,12 @@ export async function sendToContent<Type extends ContentValidTypes>(
     const tab = tabId !== undefined ? await browser.tabs.get(tabId) : tabs[0];
     if (!tab?.id) throw new Error("this tab does not have an id, throwing");
 
-    const res = (await browser.tabs.sendMessage(tab.id, { type, data })) as Res[Type];
+    const res = (await browser.tabs.sendMessage(
+        tab.id,
+        { type, data },
+        { frameId }
+    )) as Res[Type];
+
     return {
         data: res,
         tabId: tab.id,
@@ -49,5 +54,15 @@ export async function sendToBg<Type extends BackgroundValidTypes>(
     data: Data[Type]
 ): Promise<Res[Type]> {
     const res = (await browser.runtime.sendMessage(undefined, { type, data })) as Res[Type];
+    return res;
+}
+
+/** Sends something to a specific content script in the current tab, use only from content_scripts !!! */
+export async function proxyToFrame<Type extends ContentValidTypes>(
+    frameId: number,
+    type: Type,
+    data: Data[Type]
+): Promise<Res[Type]> {
+    const res = (await sendToBg("_PROXY_TO_CONTENT", { frameId, type, data })) as Res[Type];
     return res;
 }
