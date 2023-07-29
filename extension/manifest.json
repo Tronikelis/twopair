@@ -22,6 +22,10 @@
         "type": "module"
     },
 
+    "externally_connectable": {
+        "matches": ["*"]
+    },
+
     "permissions": ["storage", "scripting", "activeTab", "webNavigation"],
 
     "minimum_chrome_version": "110",

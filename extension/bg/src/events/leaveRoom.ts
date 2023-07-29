@@ -9,7 +9,7 @@ import { socket } from "../socket.io";
 
 export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoomRes> {
     if (globals.syncingTabId === undefined) {
-        console.warn("trying to leave a room when not in a room, syncingTabId is undefined");
+        console.error("trying to leave a room when not in a room, syncingTabId is undefined");
         return;
     }
 
@@ -23,7 +23,7 @@ export default async function leaveRoom(input: LeaveRoomData): Promise<LeaveRoom
         )
     );
     if (err) {
-        console.warn(err);
+        console.error(err);
     }
 
     await socket.emitWithAck(LEAVE_ROOM_ACK, input satisfies LeaveRoomClient);

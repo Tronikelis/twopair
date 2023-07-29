@@ -27,6 +27,8 @@ const onMessage: ListenCb = async ({ type, data }) => {
         frames: x.frames.filter(x => x.frameId !== 0),
     }));
 
+    console.log({ childFrames });
+
     // command & control
     if (window === window.top) {
         switch (type) {
@@ -37,10 +39,12 @@ const onMessage: ListenCb = async ({ type, data }) => {
                     childFrames.map(x => proxyToFrame(x.frameId, type, undefined))
                 );
 
+                console.log({ responses });
+
                 const videos = [...elements.videos];
                 for (const x of responses) {
                     if (x.status === "rejected") continue;
-                    videos.push(...x.value.videos);
+                    videos.push(...x.value.data.videos);
                 }
 
                 return {

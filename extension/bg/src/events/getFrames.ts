@@ -9,7 +9,7 @@ export default async function getFrames(_input: GetFramesData): Promise<GetFrame
     // uuuuggghhh
     const [tab] = await browser.tabs.query({ active: true });
     if (tab?.id === undefined) {
-        console.warn("active tab is undefined");
+        console.error("active tab is undefined");
         return { frames: [] };
     }
 

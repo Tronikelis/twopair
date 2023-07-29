@@ -50,7 +50,7 @@ const onMessage: ListenCb = async ({ type, data }) => {
                 sendToContent("GET_VIDEO_ELEMENTS", data as GetVideoElementsData, undefined)
             );
             if (err) {
-                console.warn(err);
+                console.error(err);
                 return { syncingId: undefined, videos: [] } as GetVideoElementsRes;
             }
 

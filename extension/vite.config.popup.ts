@@ -1,9 +1,14 @@
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { ConfigEnv, defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig({
-    plugins: [react(), tsconfigPaths()],
-    root: "./popup",
-    base: "",
-});
+export default ({ mode }: ConfigEnv) => {
+    return defineConfig({
+        plugins: [react(), tsconfigPaths()],
+        root: "./popup",
+        base: "",
+        build: {
+            minify: mode === "production" ? "esbuild" : false,
+        },
+    });
+};

@@ -63,7 +63,14 @@ export async function proxyToFrame<Type extends ContentValidTypes>(
     frameId: number,
     type: Type,
     data: Data[Type]
-): Promise<Res[Type]> {
-    const res = (await sendToBg("_PROXY_TO_CONTENT", { frameId, type, data })) as Res[Type];
+): Promise<ContentResponse<Res[Type]>> {
+    const res = (await sendToBg("_PROXY_TO_CONTENT", {
+        frameId,
+        type,
+        data,
+    })) as ContentResponse<Res[Type]>;
+
+    console.log("CALLING proxyToFrame", { frameId, type, data });
+
     return res;
 }

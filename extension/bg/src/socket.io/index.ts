@@ -30,7 +30,7 @@ export function listenToSocket() {
 
     socket.on(SYNC_ROOM, async (data: SyncRoomServer) => {
         if (globals.syncingTabId === undefined) {
-            console.warn("ignoring sync events if not synced myself");
+            console.error("ignoring sync events if not synced myself");
             return;
         }
 

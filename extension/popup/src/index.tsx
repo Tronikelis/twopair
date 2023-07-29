@@ -36,7 +36,7 @@ export default function Main() {
     useEffectAsync(async () => {
         const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
         if (!tab || tab.id === undefined) {
-            console.warn("did not find a tab to inject the script into");
+            console.error("did not find a tab to inject the script into");
             return;
         }
 
@@ -44,7 +44,7 @@ export default function Main() {
         await browser.scripting.executeScript({
             target: { tabId: tab.id, allFrames: true },
             files: ["/content_script/dist/index.js"],
-            injectImmediately: false,
+            injectImmediately: true,
         });
     }, []);
 
