@@ -40,7 +40,8 @@ export async function sendToContent<Type extends ContentValidTypes>(
     const res = (await browser.tabs.sendMessage(
         tab.id,
         { type, data },
-        { frameId }
+        // sending to the top frame "0" by default always !!!
+        { frameId: frameId === undefined ? 0 : frameId }
     )) as Res[Type];
 
     return {

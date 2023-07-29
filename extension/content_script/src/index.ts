@@ -32,15 +32,15 @@ const onMessage: ListenCb = async ({ type, data }) => {
         switch (type) {
             case "GET_VIDEO_ELEMENTS": {
                 const elements = getVideoElements(undefined);
-                const responses = await Promise.all(
-                    childFrames.map(x =>
-                        proxyToFrame(x.frameId, "GET_VIDEO_ELEMENTS", undefined)
-                    )
+
+                const responses = await Promise.allSettled(
+                    childFrames.map(x => proxyToFrame(x.frameId, type, undefined))
                 );
 
                 const videos = [...elements.videos];
                 for (const x of responses) {
-                    videos.push(...x.videos);
+                    if (x.status === "rejected") continue;
+                    videos.push(...x.value.videos);
                 }
 
                 return {
@@ -48,6 +48,38 @@ const onMessage: ListenCb = async ({ type, data }) => {
                     videos,
                 } as GetVideoElementsRes;
             }
+
+            case "SYNC_VIDEO": {
+                await Promise.allSettled(
+                    childFrames.map(x => proxyToFrame(x.frameId, type, data as SyncVideoData))
+                );
+
+                syncVideo(data as SyncVideoData);
+                return;
+            }
+
+            case "ON_VIDEO_CHANGE": {
+                await Promise.allSettled(
+                    childFrames.map(x =>
+                        proxyToFrame(x.frameId, type, data as OnVideoChangeData)
+                    )
+                );
+
+                onVideoChange(data as OnVideoChangeData);
+                return;
+            }
+
+            case "LEAVE_ROOM": {
+                await Promise.allSettled(
+                    childFrames.map(x => proxyToFrame(x.frameId, type, data as LeaveRoomData))
+                );
+
+                leaveRoom(data as LeaveRoomData);
+                return;
+            }
+
+            default:
+                throw new Error(`unknown type "${type}" in content script`);
         }
     }
 
